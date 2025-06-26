@@ -1,0 +1,79 @@
+.main-Admin{
+    height: 100vh;
+    background-image: url('E:\Coffee-App\coffee-react\public\assets\leafs.jpeg');
+    background-size: cover;
+    background-attachment: fixed;
+    overflow: hidden;
+}
+.AdminNavbar{
+     background-color: yellow;
+     background-image: url('E:\Coffee-App\coffee-react\public\assets\file_00000000d7d461f88010b4b2a71559b3.png');
+}
+.Admin_page{
+    width: 100vw;
+    padding-top: 10px;
+    background-color: white;
+}
+.Admin_page button{
+    border-radius: 5px;
+    padding: 5px 10px;
+}
+.main-Admin navbar ul{
+    list-style: none;
+}
+.main-Admin navbar ul a{
+    color: black;
+    text-decoration: none;
+    padding: 0px 20px;
+    font-size: 30px;
+    font-weight: 600;
+    width: 100%;
+}
+.main-Admin navbar ul a:hover,.main-Admin navbar ul a:active{
+    cursor: pointer;
+    background-color: grey;
+}
+.main-Admin .Dashboard{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.main-Admin .Dashboard h1{
+    height: 70%;
+    width: 80%;
+    border-radius: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    box-shadow: 0px 1px 5px 1px grey;
+}
+.main-Admin .Dashboard h1:hover{
+    cursor: pointer;
+    box-shadow: 0px 1px 10px 1px grey;
+}
+th,td{
+    border: 1px solid black;
+    padding: 2px 4px;
+    font-weight: 500;
+}
+.Admin_page th{
+    color: white;
+    background-color: rgb(25, 135, 84);
+    text-align: center;
+}
+.Admin_page td button{
+    width: 100px;
+    margin: 5px 5px;
+    font-size: large;
+    color: black;
+}
+td input{
+    color: black;
+    padding: 5px 10px;
+    margin: 5px;
+    font-weight: 500;
+}
+td input:disabled{
+    color: black;
+}

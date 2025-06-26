@@ -1,0 +1,48 @@
+.service{
+    width: 100%;
+    height: fit-content;
+}
+.service-inner-box{
+    background-color: var(--bOX-background-color);
+    width: 95%;
+    height: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    padding: 0% 2%;
+}
+.service-inner-box h1{
+    color: var(--color);
+}
+.inner-sevice-content{
+    width: 100%;
+}
+.Service-card{
+    color: var(--color);
+}
+.service-text{
+   width: 30%;
+   height: 40%;
+   display: flex;
+   flex-direction: column;
+   justify-content: center;
+   align-items: flex-start;
+   flex-grow: 1;
+   gap: 20px;
+   padding: 20px;
+   background-color: rgb(18, 18, 18);
+   transition: all .3s;
+}
+.service-text i{
+    font-size: 25px;
+    color: rgb(215, 186, 18);
+}
+.service-text h3{
+    font-size: 20px;
+}
+.service-text p{
+    line-height: 1.7rem;
+}
+.service-text:hover{
+    transform: scale(1.05);
+}

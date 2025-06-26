@@ -1,0 +1,43 @@
+.Cart-holder{
+    margin-top: 75px;
+}
+.cart-button{
+    padding: 10px 15px;
+    border-radius: 15px;
+}
+.promo{
+    height: 40px !important;
+    font-size: large;
+    padding: 0px 5px;
+    outline: none;
+    box-shadow: none !important;
+}
+.bill table tr{
+    margin: 10px 0px;
+    padding: 0px 5px;
+    width: 95%;
+    display: flex;
+    justify-content: space-around;
+}
+.bill table tr th{
+    width: 65%;
+    text-align: start;
+}
+.bill table tr td{
+    width: 40%;
+    text-align: end;
+}
+.Contact-information input,.ShippingAddress input,.Payment input{
+    height: 50px;
+    width: 100%;
+    padding-left: 10px;
+    border-radius: 5px;
+    border: none;
+    outline: none;
+    box-shadow: 0px 0px 2px 1px rgb(171, 171, 171);
+}
+.check-box{
+    height: 20px !important;
+    width: 20px !important;
+    box-shadow: none !important;
+}

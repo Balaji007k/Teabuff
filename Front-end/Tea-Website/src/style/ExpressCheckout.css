@@ -1,0 +1,88 @@
+.checkout-Cart-page::-webkit-scrollbar{
+  display: none;
+}
+
+.checkout-container {
+  width: 100%;
+  font-family: sans-serif;
+}
+
+.checkout-box {
+  border-radius: 10px;
+  padding: 20px;
+  padding-top: 30px; /* space below legend */
+  position: relative;
+  box-shadow: 0px 0px 2px 1px rgb(171, 171, 171);
+}
+
+/* Fix for legend floating like default browser behavior */
+.legend-title {
+  padding: 0 10px;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+/* Reset unwanted default styling (optional but helpful) */
+legend {
+  width: auto;
+  margin-left: 10px;
+}
+
+.buttons-wrapper {
+  display: flex;
+  gap: 10px;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.paypal-btn,
+.gpay-btn {
+  flex: 1;
+  min-height: 60px;
+  padding: 10px 0;
+  border: none;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-weight: 800;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.paypal-btn {
+  background-color: #ffc439;
+  color: #003087;
+}
+
+.paypal-btn img {
+  width: 20px;
+}
+
+.gpay-btn {
+  background-color: #000;
+  color: white;
+}
+
+.gpay-btn img {
+  width: 18px;
+}
+
+.divider {
+  display: flex;
+  align-items: center;
+  margin-top: 20px;
+  text-align: center;
+  color: black;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.divider::before,
+.divider::after {
+  content: "";
+  flex: 1;
+  margin: 0 10px;
+  box-shadow: 0px 0px 1px 1px rgb(171, 171, 171);
+}

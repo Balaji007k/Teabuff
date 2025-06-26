@@ -1,0 +1,89 @@
+.About-box{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  overflow: hidden;
+}
+.About-inner-box{
+  width: 95%;
+  min-height: 650px;
+  background-color: var(--bOX-background-color);
+  border-radius: 20px;
+  display: flex;
+  flex-wrap: wrap-reverse;
+  flex-direction: row-reverse;
+  justify-content: center;
+}
+.About-content{
+   min-width: 450px;
+   flex: 1 1 55%;
+   justify-content: center;
+   padding: 20px;
+   color: var(--color);
+}
+.about-text{
+  height: 100%;
+  gap: 20px;
+  justify-content: space-around;
+}
+.about-text p{
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 15;
+  line-height: 1.7rem;
+}
+.About-image{
+  min-width: 450px;
+  display: flex;
+  width: 45%;
+  justify-content: center;
+  align-items: center;
+}
+.shop{
+  width: 75%;
+  max-width: 600px;
+  height: 80%;
+  border-radius: 25px;
+}
+.About-btn{
+  height: fit-content;
+  padding: 10px 30px;
+  border-radius: 25px;
+  color: var(--btn-color);
+  background-color: var(--background-color);
+  border: none;
+  font-weight: 600;
+}
+.Image-slide{
+  height: fit-content;
+  display: flex;
+  align-items: center;
+  gap: 25px;
+}
+.Image-slide img{
+  width: 70px;
+  height: 80px;
+  border-radius: 15px;
+  margin-left: -35px;
+  transition: .2s;
+}
+.Image-slide img:hover{
+  margin-left: -20px;
+  cursor: pointer;
+}
+.plus-image{
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  border: 1px solid var(--color);
+}
+.plus-image:hover{
+  cursor: pointer;
+}
+.About-content h1{
+  font-weight: 700;
+}

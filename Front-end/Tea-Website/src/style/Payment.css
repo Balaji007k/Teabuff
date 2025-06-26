@@ -1,0 +1,21 @@
+.input-wrapper {
+  position: relative;
+}
+
+.input-wrapper input {
+  padding-right: 2rem;
+}
+
+.input-icon {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.5rem;
+}
+.valid-icon {
+  color: green;
+}
+.invalid-icon {
+  color: orange;
+}

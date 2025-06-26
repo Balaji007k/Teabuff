@@ -1,0 +1,56 @@
+.Userlogin{
+    width: 100%;
+    height: 100%;
+    min-height: 500px;
+    text-align: center;
+    color: var(--color);
+}
+.Userlogin-inner-box{
+    width: 85%;
+    height: 100%;
+    border-radius: 15px;
+    background-color: var(--bOX-background-color);
+}
+.login-form{
+    width: 85%;
+    height: 75%;
+    padding-top: 1rem;
+    background-color: transparent;
+}
+.login-way{
+    height: 15%;
+}
+.icon-login{
+    height: 10%;
+}
+.login-form input,.login-form button{
+    margin: 10px 0px;
+    padding: 10px 0px;
+    padding-bottom: 5px;
+    background-color: transparent;
+    outline: none;
+    border: none;
+    border-bottom: 1px solid grey;
+    color: var(--color);
+}
+.login-form h1,.login-form button{
+    border-radius: 15px;
+    font-size: 1.5em;
+    font-weight: 600;
+    border-bottom: 1px solid var(--background-color);
+}
+.login-form h1{
+    color: var(--color);
+    border: none;
+    text-shadow: 0px 1px 5px grey;
+}
+button{
+    color: black;
+    padding: 15px 0px;
+    font-size: x-large;
+    background-color: var(--background-color);
+    border: none;
+}
+.Userlogin-inner-box ul li:hover{
+    cursor: pointer;
+}

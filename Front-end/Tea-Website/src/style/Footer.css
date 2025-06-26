@@ -1,0 +1,39 @@
+.footer{
+   position: relative;
+   width: 100%;
+   height: fit-content;
+}
+.footer-inner-box{
+   width: 90%;
+   z-index: 1;
+   background-color: var(--bOX-background-color);
+   overflow: hidden;
+}
+.footer-inner-box a{
+  text-decoration: none !important;
+  color: var(--color);
+}
+.footer-content{
+   flex-wrap: wrap;
+   color: var(--color);
+}
+.footer-content .Footer-Details{
+   width: 20%;
+}
+.background-footer{
+    position: absolute;
+    height: 30%;
+    bottom: 0px;
+    background-color: rgb(81, 81, 90);
+}
+.footer input{
+   color: var(--color);
+   outline: none;
+   border: none;
+   border-bottom: 1px solid var(--color);
+   background-color: var(--bOX-background-color);
+}
+.footer .head,.Mail{
+   border: none;
+   border-bottom: 1px solid var(--color);
+}
