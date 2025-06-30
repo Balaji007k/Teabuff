@@ -46,7 +46,6 @@ export default function CheckOut({isAuthenticated,cart}){
         };
         const { Result, Error } = await ApiService.fetchData(`/NewCheckout/${isAuthenticated.userId}`,"POST",NewCheckut);
         if (Result){
-            alert('Order Placed Successfully')
             Navigate('/Payment')
         }
         else{
@@ -80,8 +79,8 @@ export default function CheckOut({isAuthenticated,cart}){
     if(isAuthenticated?.userId===id){return(
         <div className={` w-100 d-flex ${!small?'flex-row-reverse':'flex-column'} `}>
         <div className="checkout-Cart-page overflow-y-scroll" style={{flex:'1 1 40%',height:'880px'}}><PlaceOrder isAuthenticated={isAuthenticated} cart={cart}/></div>
-        <div className={` d-flex justify-content-center flex-grow-1 pb-3`} style={{marginTop:'75px',flex:'1 1 60%'}}>
-                    <div className=' d-flex flex-column gap-4' style={{ width: '80%' }}>
+        <div className={` d-flex justify-content-center flex-grow-1 pb-3`} style={{marginTop:!small&&'75px',flex:'1 1 60%'}}>
+                    <div className=' d-flex flex-column gap-4' style={{ width:!small? '80%' : '95%'}}>
                         <h2 className=" fw-bold">CheckOut</h2>
                         <form onSubmit={PostCheckOut} className=" d-flex flex-column gap-3">
                             <div className='Contact-information w-100 d-flex flex-column gap-3'>

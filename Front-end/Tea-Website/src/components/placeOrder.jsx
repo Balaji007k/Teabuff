@@ -86,7 +86,24 @@ function PlaceOrder({ isAuthenticated, cart }) {
     }
     if (isAuthenticated&&isAuthenticated.userId===id){ return (
         <div className={` d-flex gap-2 pb-3 ${Location.pathname==='/CheckOut/'+isAuthenticated?.userId?'flex-column-reverse':'flex-column'}`} style={{ marginTop: '75px'}}>
-            <div className=' d-flex flex-wrap-reverse justify-content-between' style={{ color: 'var(--Background-white-text)' }}>
+            {Location.pathname===`/CheckOut/${isAuthenticated.userId}`?
+            <div className=' w-100 d-flex justify-content-center'>
+            <table style={{width:'95%'}}>
+                <tr className=' text-center fs-4'>
+                    <th className=' fw-bold'>Item</th>
+                    <th className=' fw-bold'>Quantity</th>
+                    <th className=' fw-bold'>Total</th>
+                </tr>
+                {cart?.items.map((item) => (
+                    <tr className=' text-center' key={item._id}>
+                        <td className=' d-flex flex-column align-items-center'><img className=' rounded-2' src={item.Product_Url} alt='Loading'height={'150px'} width={'200px'}/><span>{item.itemName}</span></td>
+                        <td>{item.quantity}</td>
+                        <td><h5>Total ₹{((quantity[item.productId] ?? item.quantity) * item.itemPrice).toFixed(2)}</h5></td>
+                    </tr>
+                ))}
+            </table>
+            </div>
+            :<div className=' d-flex flex-wrap-reverse justify-content-between' style={{ color: 'var(--Background-white-text)' }}>
 
                 <div className={`w-100 d-flex justify-content-center`}>
                     <div className='Cart-Products w-100' style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(300px,1fr))', justifyItems: 'center' }}>
@@ -122,10 +139,11 @@ function PlaceOrder({ isAuthenticated, cart }) {
                         ))}
                     </div>
                 </div>
-            </div>
+            </div>}
+            
             {cart?.items?.length <= 0|| !cart ? <div className=' w-100 text-center fs-2'>No Cart Here</div> : <div className=' w-100 d-flex flex-column align-items-center flex-wrap w-100'>
-                {Order || Location.pathname==='/CheckOut/'+isAuthenticated?.userId? <h3>Selected Items {cart?.items.length}</h3>:<h3>Grand Total: ₹{(grandTotal)?.toFixed(2)}</h3> }
-                {(Order || Location.pathname==='/CheckOut/'+isAuthenticated?.userId)&&(
+                { Location.pathname==='/CheckOut/'+isAuthenticated?.userId&&<> <h3>Selected Items {cart?.items.length}</h3> </>}
+                {( Location.pathname==='/CheckOut/'+isAuthenticated?.userId)&&(
                     <>
                         <div className='d-flex justify-content-center align-items-center'>
                             <input className='promo' type="text" placeholder='Gift or promo code' /><button className='promo'>Apply</button>
@@ -177,7 +195,7 @@ function PlaceOrder({ isAuthenticated, cart }) {
                     </>
                 )}
                 <div className={`w-100 ${Location.pathname==='/CheckOut/'+isAuthenticated?.userId?'d-none':'d-block'} d-flex justify-content-center gap-2`}>
-                    {!Order && <><button className='cart-btn px-3' onClick={() => PostSaveCart(cart,quantity)}>Save Cart</button><button className='cart-btn px-3' onClick={() => OrderHandler()}>Place Order</button></>}{Order && <Link to={`/CheckOut/${isAuthenticated?.userId}`}><button className='cart-btn px-3'>Order Now</button></Link>}
+                    {!Order && <><button className='cart-btn px-3' onClick={() => PostSaveCart(cart,quantity)}>Save Cart</button><Link to={`/CheckOut/${isAuthenticated?.userId}`}><button className='cart-btn px-3' onClick={() => OrderHandler()}>Place Order</button></Link></>}
                 </div>
             </div>}
 

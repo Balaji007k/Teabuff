@@ -132,7 +132,6 @@ export const ThemeProvider = ({ children }) => {
         const NewComment = {UserId,userImage,username,ProductUserRating,comment}
         const { Result, Error } = await ApiService.fetchData(`/product/${Id}`,"PUT",NewComment);
         if (Result){
-            console.log(Result.avgRating,Result.updatedProduct)
             setUserProductReviews(Result.updatedProduct.comments[0])
             setProductAvgRating(Result.avgRating)
             setUpdatedProduct(Result.updatedProduct)
@@ -159,7 +158,6 @@ export const ThemeProvider = ({ children }) => {
               return;
             }
             if (quantity !== 0) {
-                console.log(Result)
               alert("Cart successfully Added")
               setUpdatedCart(Result?.usercart);
             }
@@ -180,7 +178,6 @@ export const ThemeProvider = ({ children }) => {
                     setAuthenticated(data);
                     await fetchCart(data.userId);
                     await fetchUserLikedState(data.userId)
-                    fetchProductReviews()
                     console.log("User is authenticated:", data.userId);
                 } else {
                     console.log("Not authenticated");

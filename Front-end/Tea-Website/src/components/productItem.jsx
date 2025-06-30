@@ -13,6 +13,7 @@ import PageNotFound from './AssetComponents/PageNotFound';
 function ProductItem({ isAuthenticated, Review, productsItem, cart, category }) {
 
   const { handleCart, PostUserLikedState, UserLikedState, UpdateProduct, UserProductReviews, fetchProductReviews, ProductAvgRating } = useTheme();
+  const [Readmore,setReadmore] = useState(false);
 
   const reviews = UserProductReviews?.User || [];
   const ratingCounts = [0, 0, 0, 0, 0]; // index 0 = 1-star, ..., index 4 = 5-star
@@ -61,8 +62,10 @@ function ProductItem({ isAuthenticated, Review, productsItem, cart, category }) 
   }
 
   useEffect(() => {
-    if (isAuthenticated && UserLikedState) {
+    if(isAuthenticated){
       fetchProductReviews(id);
+    }
+    if (isAuthenticated && UserLikedState) {
       const User = UserLikedState.find(u => u?.ProductId === id);
       setHeart(!!User?.likedState); // Set to true or false accordingly
     }
@@ -132,7 +135,7 @@ function ProductItem({ isAuthenticated, Review, productsItem, cart, category }) 
                         <h3 className=' fw-bold'>Quantity:</h3><button onClick={() => setquantity(quantity - 1)}>-</button>{quantity}<button onClick={() => setquantity(quantity + 1)}>+</button>
                       </span>
                       <div className=' w-100 d-flex align-items-center gap-3'>
-                        <button className='btn Cart-Button w-75 py-2' onClick={() => { handleCart(selectedProduct._id, selectedProduct.price, quantity, selectedProduct.title, isAuthenticated.userId, selectedProduct.description, selectedProduct.url, selectedProduct.rating, Heart) }}>Add to Cart</button><Link className=' w-25' to={quantity!==0&&`/${isAuthenticated?.userName+"Cart"}/${isAuthenticated?.userId}`}><button className='btn Cart-Button w-100 py-2' onClick={() => handleCart(selectedProduct._id, selectedProduct.price, quantity, selectedProduct.title, isAuthenticated.userId, selectedProduct.description, selectedProduct.url, selectedProduct.rating, Heart)}>Place Order</button></Link>
+                        <button className={`btn Cart-Button ${!small&&'w-75'} py-2`} onClick={() => { handleCart(selectedProduct._id, selectedProduct.price, quantity, selectedProduct.title, isAuthenticated.userId, selectedProduct.description, selectedProduct.url, selectedProduct.rating, Heart) }}>Add to Cart</button><Link className={!small&&'w-25'} to={quantity!==0&&`/${isAuthenticated?.userName+"Cart"}/${isAuthenticated?.userId}`}><button className='btn Cart-Button w-100 py-2' onClick={() => handleCart(selectedProduct._id, selectedProduct.price, quantity, selectedProduct.title, isAuthenticated.userId, selectedProduct.description, selectedProduct.url, selectedProduct.rating, Heart)}>Place Order</button></Link>
                         <span class={`material-symbols-outlined Product-icons heart ${Heart ? 'text-danger' : 'text-black'}`} onClick={() => PostUserLikedState(isAuthenticated.userId, selectedProduct._id, selectedProduct.title, selectedProduct.price, selectedProduct.description, selectedProduct.url, selectedProduct.categoryId, selectedProduct.rating, selectedProduct.ingredients, selectedProduct.features, selectedProduct.purchaseLink, !Heart && true, selectedProduct.comments)}>
                           favorite
                         </span>
@@ -188,12 +191,13 @@ function ProductItem({ isAuthenticated, Review, productsItem, cart, category }) 
                   </div>
 
                   <div className='User Reviews'>
+                    <div className='Comment-box d-flex flex-column gap-2'>
                     {UserProductReviews?.ProductId === selectedProduct?._id ? UserProductReviews.User.map(ProductReview => <div className=' d-flex flex-column gap-2'>
                       <div className=' d-flex align-items-center gap-2'><img src={ProductReview?.userImage} alt="loading" /><span className=' fs-4'>{ProductReview?.username}</span></div>
-                      <div className=' d-flex align-items-center gap-2 mt-2'>{Array.from({ length: 5 }, (_, i) => (
+                      <div className=' d-flex align-items-center gap-2 mt-1'>{Array.from({ length: 5 }, (_, i) => (
                         <i key={i} class="fa-solid fa-star" style={{ color: i + 1 <= ProductReview?.ProductUserRating ? 'gold' : 'grey' }}></i>
                       ))}</div>
-                      <p>{ProductReview.comment}</p>
+                      <div><p className={`${Readmore?'show':'hide'}`}>{ProductReview.comment}</p><span className=' fw-bold' style={{cursor:'pointer'}} onClick={()=>setReadmore(prev=>!prev)}>{!Readmore?'Readmore':'Readless'}</span></div>
                     </div>) : <div className=' d-flex flex-column gap-2'>
                       <div className=' d-flex align-items-center gap-2'><img src={selectedProductReview[0]?.image} alt="loading" /><span className=' fs-4'>{selectedProductReview[0]?.name ? selectedProductReview[0]?.name : 'Bot'}</span></div>
                       <div className=' d-flex align-items-center gap-2 mt-2'>{Array.from({ length: selectedProductReview[0]?.rating ? selectedProductReview[0]?.rating : 5 }, (_, i) => (
@@ -201,6 +205,7 @@ function ProductItem({ isAuthenticated, Review, productsItem, cart, category }) 
                       ))}</div>
                       <p>{selectedProductReview[0]?.review ? selectedProductReview[0]?.review : `${selectedProduct?.title} is very good!`}</p>
                     </div>}
+                    </div>
                     <div className=' d-flex align-items-center gap-2 my-2'><button className=' rounded-circle bg-white d-flex justify-content-center align-items-center' onClick={() => { handleEditcomment(); setRating(0) }} style={{ width: '40px', height: '40px', border: '1px solid black', boxShadow: 'none' }}><span>+</span></button>Comments</div>
                     <div className=' d-flex flex-column overflow-hidden' style={{ height: Editcomment ? '100%' : '0px' }}>
                       <div className='d-flex gap-2'>

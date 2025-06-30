@@ -39,11 +39,10 @@ exports.createUsers = async (req, res, next) => {
             phoneNumber
         };
 
-        const User = await usersModel.create(newUser);
+        await usersModel.create(newUser);
 
         res.status(201).json({
             message: "User created successfully",
-            User
         });
     } catch (error) {
         console.error("Create User Error:", error);

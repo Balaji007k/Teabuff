@@ -151,6 +151,21 @@
     border-radius: 15px;
     padding: 10px;
 }
+.Comment-box{
+    max-height: 200px;
+    overflow-y: scroll;
+}
+.Comment-box p{
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.Comment-box .show{
+  -webkit-line-clamp: auto;
+}
+.Comment-box .hide{
+  -webkit-line-clamp: 4;
+}
 .User.Reviews{
     width: 45%;
     display: flex;

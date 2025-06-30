@@ -11,6 +11,8 @@ export default function ProductFilters({ productsItem, category, Products, id })
 
 
   const handleCategorySelect = async (categoryId) => {
+    setValue(categoryId);
+
     if (productsItem.length > 0) {
       if (categoryId !== 0) {
         const filtered = await productsItem.filter(product => product.categoryId === parseInt(categoryId));
@@ -77,7 +79,6 @@ export default function ProductFilters({ productsItem, category, Products, id })
             value={value}
             className='text-white w-100 h-100'
             onChange={(e) => handleCategorySelect(parseInt(e.target.value))}
-            required
           >
             <optgroup className='bg-black text-white'>
               <option value={0} hidden selected>Category</option>
