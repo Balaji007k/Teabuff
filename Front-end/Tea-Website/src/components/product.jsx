@@ -105,7 +105,7 @@ function Product({ isAuthenticated, productsItem, category }) {
             </button>
           </div>
         </div>
-        <h1>Popular</h1>
+        {SearchItem==""&&<><h1>Popular</h1>
         <div className='product content d-flex align-items-center'>
           <div className='Next left-scroll' onClick={popularPrv}>
             <span class="material-symbols-outlined">
@@ -144,50 +144,6 @@ function Product({ isAuthenticated, productsItem, category }) {
           </div>
 
           <div className='Next right-scroll' onClick={popularNext}>
-            <span class="material-symbols-outlined">
-              arrow_forward_ios
-            </span>
-          </div>
-        </div>
-
-
-        <h1>Recommended</h1>
-        <div className='product content d-flex align-items-center'>
-          <div className='Next left-scroll' onClick={handlePrev}>
-            <span class="material-symbols-outlined">
-              arrow_back_ios
-            </span>
-          </div>
-
-          {/* SCROLLABLE CONTAINER */}
-          <div
-            className="slider-container d-flex flex-wrap"
-            ref={sliderRef}
-          >
-            <div
-              className="scroll-items"
-              style={{
-                display: 'flex',
-                gap: '20px',
-                maxHeight: small ? '545px' : 'auto'
-              }}
-            >
-              {items && items.length > 0 ? (
-                <>
-                  {items.map((e) => (
-                    e.categoryId !== 1 && (
-                      <ProductCard isAuthenticated={isAuthenticated} e={e} Navigate={Navigate}/>
-                    )
-                  ))}
-                  <ViewMore/>
-                </>
-              ) : (
-                <EmptyProductCard/>
-              )}
-            </div>
-          </div>
-
-          <div className='Next right-scroll' onClick={handleNext}>
             <span class="material-symbols-outlined">
               arrow_forward_ios
             </span>
@@ -237,6 +193,101 @@ function Product({ isAuthenticated, productsItem, category }) {
             </span>
           </div>
         </div>
+
+
+        <h1>Recommended</h1>
+        <div className='product content d-flex align-items-center'>
+          <div className='Next left-scroll' onClick={handlePrev}>
+            <span class="material-symbols-outlined">
+              arrow_back_ios
+            </span>
+          </div>
+
+          {/* SCROLLABLE CONTAINER */}
+          <div
+            className="slider-container d-flex flex-wrap"
+            ref={sliderRef}
+          >
+            <div
+              className="scroll-items"
+              style={{
+                display: 'flex',
+                gap: '20px',
+                maxHeight: small ? '545px' : 'auto'
+              }}
+            >
+              {items && items.length > 0 ? (
+                <>
+                  {items.map((e) => (
+                    e.categoryId !== 1 && e.rating >=2.5 && (
+                      <ProductCard isAuthenticated={isAuthenticated} e={e} Navigate={Navigate}/>
+                    )
+                  ))}
+                  <ViewMore/>
+                </>
+              ) : (
+                <EmptyProductCard/>
+              )}
+            </div>
+          </div>
+
+          <div className='Next right-scroll' onClick={handleNext}>
+            <span class="material-symbols-outlined">
+              arrow_forward_ios
+            </span>
+          </div>
+        </div>
+        </>
+        }
+
+
+        {SearchItem!=""&&<>
+        <h1>Searching Item</h1>
+        <div className='product content d-flex align-items-center'>
+          <div className='Next left-scroll' onClick={popularPrv}>
+            <span class="material-symbols-outlined">
+              arrow_back_ios
+            </span>
+          </div>
+
+          {/* SCROLLABLE CONTAINER */}
+          <div
+            className="slider-container d-flex flex-wrap"
+            ref={Popularref}
+          >
+            <div
+              className="scroll-items"
+              style={{
+                display: 'flex',
+                gap: '20px',
+                maxHeight: small ? '545px' : 'auto'
+              }}
+            >
+              {items && items.length > 0 ? (
+                <>
+                  {items.map((e) => (
+                    (
+                     <ProductCard isAuthenticated={isAuthenticated} e={e} Navigate={Navigate}/>
+                    )
+                  ))}
+                  <ViewMore/>
+                </>
+              ) : (
+                <EmptyProductCard/>
+                
+              )}
+
+            </div>
+          </div>
+
+          <div className='Next right-scroll' onClick={popularNext}>
+            <span class="material-symbols-outlined">
+              arrow_forward_ios
+            </span>
+          </div>
+        </div>
+        </>
+        }
 
 
         <div className='product exp d-flex justify-content-around my-3'>

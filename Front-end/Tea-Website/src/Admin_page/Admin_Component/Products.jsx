@@ -109,7 +109,7 @@ function Products({ productsItem }) {
         <thead>
           <tr>
             <th>Search</th>
-            <td><input type='text' placeholder='Search Id or Title' onKeyUp={()=>HandleSearch(Search)} onChange={(e)=>setSearch(e.target.value)}/></td>
+            <td><input type='text' placeholder='🔎 product Id or Title' onKeyUp={()=>HandleSearch(Search)} onChange={(e)=>setSearch(e.target.value)}/></td>
           </tr>
           <tr>
             <th>ProductId</th>

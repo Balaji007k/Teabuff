@@ -170,7 +170,7 @@ function ProductItem({ isAuthenticated, Review, productsItem, cart, category }) 
                   <div className='User Rating'>
                     <div className='d-flex flex-column align-items-center' style={{ width: '40%' }}>
                       <div className=' d-flex align-items-end'><h1 className='Rating-value'>{Number(ProductAvgRating).toFixed(1)}</h1><span>/5</span></div>
-                      <p>({UserProductReviews?.ProductId === selectedProduct?._id&&UserProductReviews?.User?.length||0} New Reviews)</p>
+                      <p>( <b className=' opacity-75'>{UserProductReviews?.ProductId === selectedProduct?._id&&UserProductReviews?.User?.length||0}</b> {UserProductReviews?.User?.length>1?'Reviews':'Review'} )</p>
                     </div>
                     <div className='d-flex flex-column align-items-start gap-1' style={{ width: '60%' }}>
                       {[5, 4, 3, 2, 1].map((star) => (

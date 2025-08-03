@@ -8,6 +8,7 @@ const ThemeContext = createContext();
 //  reate the provider
 export const ThemeProvider = ({ children }) => {
     const [Review, setReview] = useState([]);
+    const [AllReview, setAllReview] = useState([]);
     const [cart, setUpdatedCart] = useState(null);
     const [isAuthenticated, setAuthenticated] = useState(null);
     const [image, setImage] = useState([]);
@@ -18,6 +19,12 @@ export const ThemeProvider = ({ children }) => {
     const [isLoading, setIsLoading] = useState(true);
     const [UserLikedState, setUserLikedState] = useState(null);
     const [UpdatedProduct, setUpdatedProduct] = useState(null);
+
+    const fetchAllReviews = async () => {
+        const { Result, Error } = await ApiService.fetchData('/allreviews');
+        if (!Error) setAllReview(Result?.reviews);
+        else console.error(Error);
+    };
 
     const fetchReviews = async () => {
         const { Result, Error } = await ApiService.fetchData('/reviews');
@@ -183,6 +190,7 @@ export const ThemeProvider = ({ children }) => {
                     console.log("Not authenticated");
                 }
                 await Promise.all([
+                    fetchAllReviews(),
                     fetchReviews(),
                     fetchShops(),
                     fetchProducts(),
@@ -204,13 +212,13 @@ export const ThemeProvider = ({ children }) => {
     )
 
     if (!isAuthenticated) return !isLoading && (
-        <ThemeContext.Provider value={{ Review, image, productsItem, category }}>
+        <ThemeContext.Provider value={{ AllReview, Review, image, productsItem, category }}>
             {children}
         </ThemeContext.Provider>
     );
 
     if (isAuthenticated) return !isLoading && (
-        <ThemeContext.Provider value={{ isAuthenticated, Review, image, productsItem, category, cart, handleCart, setUpdatedCart, PostSaveCart, PostUserLikedState, UserLikedState, UpdateProduct, UserProductReviews, fetchProductReviews, ProductAvgRating, UpdatedProduct }}>
+        <ThemeContext.Provider value={{ isAuthenticated, AllReview, Review, image, productsItem, category, cart, handleCart, setUpdatedCart, PostSaveCart, PostUserLikedState, UserLikedState, UpdateProduct, UserProductReviews, fetchProductReviews, ProductAvgRating, UpdatedProduct }}>
             {children}
         </ThemeContext.Provider>
     );

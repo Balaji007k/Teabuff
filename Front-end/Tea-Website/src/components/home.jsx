@@ -28,9 +28,9 @@ function Home({ userInput, isAuthenticated }) {
                 <a href='#Product_id'><button className='explore-button'>Explore Now <i class="fa-solid fa-arrow-right ms-2"></i></button></a>
                 <div className='share'>
                   <div className='icons d-flex gap-4 fs-4 my-2'>
-                    <i class="fa-brands fa-instagram"></i>
-                    <i class="fa-brands fa-facebook"></i>
-                    <i class="fa-brands fa-youtube"></i>
+                    <a href='#'><i class="fa-brands fa-instagram"></i></a>
+                    <a href='#'><i class="fa-brands fa-facebook"></i></a>
+                    <a href='#'><i class="fa-brands fa-youtube"></i></a>
                   </div>
                   <p className='d-inline' style={{ borderBottom: '2px solid #CACA12' }}>Follow us</p>
                 </div>

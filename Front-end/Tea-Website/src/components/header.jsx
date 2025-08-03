@@ -93,7 +93,7 @@ function Header({ userinputFocus, isAuthenticated, cart }) {
                         <ul className="py-0 d-flex flex-column justify-content-around px-2 mx-2 w-100 h-100">
                             <div>
                                 <div className="w-100 d-flex flex-column align-items-center">
-                                <img src="hi.jpg" alt="Loading" height={'100px'} width={'100px'} className=" rounded-circle bg-black" />
+                                <img src="hi.jpg" alt="No Image" height={'100px'} width={'100px'} className=" rounded-circle bg-black" />
                                 <span className=" fs-3 text-black">{isAuthenticated?.userName}</span>
                             </div>
                             <div className=" w-100">
