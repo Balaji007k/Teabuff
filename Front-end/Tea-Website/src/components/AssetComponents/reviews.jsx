@@ -72,8 +72,8 @@ useEffect(() => {
             >
               <h6 className="fw-bold">{user.title}</h6>
               <div className="star d-flex align-items-center gap-1" style={{ fontSize: '14px' }}>
-                {Array.from({ length: user.ProductUserRating }, (_, i) => (
-                  <i key={i} className="fa-solid fa-star text-warning"></i>
+                {Array.from({ length: 5 }, (_, i) => (
+                  <i key={i} className={`fa-solid fa-star ${i + 1 <=user.ProductUserRating?"text-warning":"text-white"}`}></i>
                 ))}
               </div>
               <div className="user d-flex align-items-center gap-2">
