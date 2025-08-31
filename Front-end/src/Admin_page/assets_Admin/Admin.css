@@ -1,13 +1,13 @@
 .main-Admin{
     height: 100vh;
-    background-image: url('E:\Coffee-App\coffee-react\public\assets\leafs.jpeg');
+    background-image: url('assets/leafs.jpeg');
     background-size: cover;
     background-attachment: fixed;
     overflow: hidden;
 }
 .AdminNavbar{
      background-color: yellow;
-     background-image: url('E:\Coffee-App\coffee-react\public\assets\file_00000000d7d461f88010b4b2a71559b3.png');
+     background-image: url('assets/file_00000000d7d461f88010b4b2a71559b3.png');
 }
 .Admin_page{
     width: 100vw;

@@ -79,7 +79,7 @@ useEffect(() => {
               <div className="user d-flex align-items-center gap-2">
                 <img
                   // src={user.userImage}
-                  src="src/assets/user.png"
+                  src="assets/user.png"
                   className="user-image"
                   alt={user.username}
                   style={{ width: '30px', height: '30px', borderRadius: '50%' }}

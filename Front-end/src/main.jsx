@@ -7,7 +7,7 @@ import { ThemeProvider } from './ThemeContext';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
     <ThemeProvider>
-      <BrowserRouter>
+      <BrowserRouter basename="/Teabuff/">
         <App />
       </BrowserRouter>
     </ThemeProvider>

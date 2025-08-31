@@ -34,7 +34,7 @@ function About({image}) {
             </div>
           </div>
           <div className="About-image" data-aos="fade-right" data-aos-duration="600">
-            {filteredItem.length === 0? <img src="src/assets/Tea_shop.jpeg" className='shop' alt="Image 7" /> :
+            {filteredItem.length === 0? <img src="assets/Tea_shop.jpeg" className='shop' alt="Image 7" /> :
               <img src={filteredItem.url} className='shop' alt="Image 7" />}
           </div>
         </div>

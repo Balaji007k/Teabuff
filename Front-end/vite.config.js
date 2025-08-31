@@ -4,5 +4,5 @@ import react from '@vitejs/plugin-react'
 
 export default defineConfig({
   plugins: [react()],
-  base: '/'   // use your repo name here
+  base: '/Teabuff/'   // use your repo name here
 })

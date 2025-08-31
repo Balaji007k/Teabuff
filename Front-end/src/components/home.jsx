@@ -47,7 +47,7 @@ function Home({ userInput, isAuthenticated }) {
         
         <div className='inner-image'>
           {(Location.pathname === '/Login' || Location.pathname === '/Register') ? <Login userInput={userInput} /> :
-            !small?<img src="src/assets/Tea.jpeg" className='img' alt="Tea-Img" data-aos="fade-left" data-aos-duration="1400" />:<img src="src/assets/Tea-Image.webp" className='img' alt="Coffee-Img" />
+            !small?<img src="assets/Tea.jpeg" className='img' alt="Tea-Img" data-aos="fade-left" data-aos-duration="1400" />:<img src="assets/Tea-Image.webp" className='img' alt="Coffee-Img" />
           }
         </div>
       </div>
