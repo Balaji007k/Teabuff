@@ -126,7 +126,7 @@ exports.LogoutUser = async (req, res) => {
       res.clearCookie("user", {
         httpOnly: true,
         secure: true,
-        sameSite: "strict",
+        sameSite: "None",
       });
 
       return res.status(200).json({ message: "Logout successfully" });
