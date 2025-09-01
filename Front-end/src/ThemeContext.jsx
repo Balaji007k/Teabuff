@@ -77,7 +77,7 @@ export const ThemeProvider = ({ children }) => {
             }
     
             try {
-                const response = await fetch(`http://localhost:5000/carts/${userId}`, {
+                const response = await fetch(`https://teabuff.onrender.com/carts/${userId}`, {
                     method: "PUT",
                     headers: {
                         "Content-Type": "application/json"
@@ -175,7 +175,7 @@ export const ThemeProvider = ({ children }) => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const res = await fetch('http://localhost:5000/dashboard', {
+                const res = await fetch('https://teabuff.onrender.com/dashboard', {
                     method: 'GET',
                     credentials: 'include'
                 });

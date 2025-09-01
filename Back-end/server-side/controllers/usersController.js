@@ -71,7 +71,7 @@ exports.verifyUser = async (req, res, next) => {
         res.cookie("user", token, {
             httpOnly: true, // Recommended
             secure: true, // Only for HTTPS
-            sameSite: "Strict",
+            sameSite: "None",
             maxAge: maxAge * 1000
         });
 

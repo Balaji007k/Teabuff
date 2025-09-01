@@ -1,12 +1,12 @@
 class ApiService {
-  static BASE_URL =
-    process.env.NODE_ENV === "production"
-      ? "https://teabuff.onrender.com" // Render live backend
-      : "http://localhost:5000";       // Local backend for development
+  // static BASE_URL =
+  //   process.env.NODE_ENV === "production"
+  //     ? "https://teabuff.onrender.com" // Render live backend
+  //     : "http://localhost:5000";       // Local backend for development
 
   static async fetchData(url, method = "GET", params = null) {
     try {
-      const response = await fetch(this.BASE_URL + url, {
+      const response = await fetch("https://teabuff.onrender.com" + url, {
         method: method,
         credentials: "include",
         headers: {
