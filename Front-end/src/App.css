@@ -14,7 +14,7 @@ htm{
   --bOX-background-color: rgb(0, 0, 0);
 }
 body{
-  background-image: url('assets/leafs.jpeg');
+  background-image: url('/Teabuff/assets/leafs.jpeg');
   background-size: cover;
   background-repeat: no-repeat;
   background-attachment: fixed;
