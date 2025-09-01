@@ -89,20 +89,51 @@ exports.verifyUser = async (req, res, next) => {
     }
 };
 
+//exports.LogoutUser = async (req, res) => {
+    //try {
+       // const id = req.params.id;
+       // const token = req.cookies.user;
+       // const decoded = jwt.verify(token, process.env.SECRET_KEY);
+       // if (decoded && decoded.id === id) {
+          //  res.clearCookie('user');
+          //  res.status(200).json({ message: 'Logout successfully' });
+       // } else {
+           // res.status(403).json({ message: 'Unauthorized logout attempt' });
+      //  }
+   // } catch (error) {
+       // res.status(500).json({ message: error.message });
+   // }
+//};
+
 exports.LogoutUser = async (req, res) => {
-    try {
-        const id = req.params.id;
-        const token = req.cookies.user;
-        const decoded = jwt.verify(token, process.env.SECRET_KEY);
-        if (decoded && decoded.id === id) {
-            res.clearCookie('user');
-            res.status(200).json({ message: 'Logout successfully' });
-        } else {
-            res.status(403).json({ message: 'Unauthorized logout attempt' });
-        }
-    } catch (error) {
-        res.status(500).json({ message: error.message });
+  try {
+    const id = req.params.id;
+    const token = req.cookies.user;
+
+    if (!token) {
+      return res.status(400).json({ message: "No active session" });
     }
+
+    jwt.verify(token, process.env.SECRET_KEY, (err, decoded) => {
+      if (err) {
+        return res.status(401).json({ message: "Invalid or expired token" });
+      }
+
+      if (decoded.id !== id) {
+        return res.status(403).json({ message: "Unauthorized logout attempt" });
+      }
+
+      res.clearCookie("user", {
+        httpOnly: true,
+        secure: true,
+        sameSite: "strict",
+      });
+
+      return res.status(200).json({ message: "Logout successfully" });
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 };
 
 
