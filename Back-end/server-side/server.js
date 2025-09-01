@@ -18,10 +18,15 @@ env.config({path: path.join(__dirname,'config.env')})
 
 app.use(express.json())
 
+
 app.use(cors({
-    origin: 'http://localhost:5173', // frontend URL
-    credentials: true // <-- allow cookies across domains
+    origin: [
+        'http://localhost:5173',          // local dev
+        'https://balaji007k.github.io'    // GitHub Pages live site
+    ],
+    credentials: true
 }));
+
 app.use(cookieParser());
 
 
