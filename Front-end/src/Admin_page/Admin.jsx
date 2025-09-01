@@ -11,7 +11,7 @@ function Admin({Review, productsItem, category}) {
     const Location = useLocation();
 
     useEffect(()=>{
-  fetch(`http://localhost:5000/users`)
+  fetch(`https://teabuff.onrender.com/users`)
     .then(res => res.json())
     .then(data => {
       if (Array.isArray(data)) {

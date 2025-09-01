@@ -2,6 +2,7 @@ import { useMediaQuery } from "react-responsive";
 import { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useLocation } from 'react-router-dom';
+import { Link as ScrollLink } from "react-scroll";
 
 function Header({ userinputFocus, isAuthenticated, cart }) {
 
@@ -26,7 +27,7 @@ function Header({ userinputFocus, isAuthenticated, cart }) {
     const Logout = async () => {
         const LogoutConfirm = window.confirm('Are you sure you want to Logout')
         if (LogoutConfirm) {
-            await fetch(`http://localhost:5000/Logout/${isAuthenticated.userId}`, {
+            await fetch(`https://teabuff.onrender.com/Logout/${isAuthenticated.userId}`, {
                 method: 'POST',
                 credentials: 'include',
                 headers: {
@@ -75,10 +76,10 @@ function Header({ userinputFocus, isAuthenticated, cart }) {
                 <nav ref={small?accountNavRef:null} className={`navbar ${small&&BarVisible?'show':'hide'}`}>
                     <ul className="nav-list p-0 m-0">
                         <li data-aos="fade-down" data-aos-duration="600">{Location.pathname==='/'?<a href="#">Home</a>:<Link to={"/"}>Home</Link>}</li>
-                        {Location.pathname === `/product/${id}` ? <li data-aos="fade-down" data-aos-duration="1000"><a href="#suggestItems">Suggested items</a></li> :Location.pathname==='/'?<li data-aos="fade-down" data-aos-duration="1000"><a href="#About">About</a></li>:<li data-aos="fade-down" data-aos-duration="2200"><Link to="/About">About</Link></li>}
+                        {Location.pathname === `/product/${id}` ? <li data-aos="fade-down" data-aos-duration="1000"><ScrollLink to="suggestItems">Suggested items</ScrollLink></li> :Location.pathname==='/'?<li data-aos="fade-down" data-aos-duration="1000"><ScrollLink to="About">About</ScrollLink></li>:<li data-aos="fade-down" data-aos-duration="2200"><Link to="/About">About</Link></li>}
                         {Location.pathname === `/product/${id}` ? <li data-aos="fade-down" data-aos-duration="1400"><Link to="/Menu">More items</Link></li>:<li data-aos="fade-down" data-aos-duration="1400"><Link to={'/Menu'}>Menu</Link></li>}
-                        {Location.pathname === `/product/${id}` ? null : Location.pathname==='/'?<li data-aos="fade-down" data-aos-duration="1800"><a href="#Service_id">Service</a></li>:<li data-aos="fade-down" data-aos-duration="1800"><Link to="/Service">Service</Link></li>}
-                        {Location.pathname === `/product/${id}` ? null : Location.pathname==='/'?<li data-aos="fade-down" data-aos-duration="2200"><a href="#Contact_id">Contact Us</a></li>:<li data-aos="fade-down" data-aos-duration="2200"><Link to="/Contact_Us">Contact Us</Link></li>}
+                        {Location.pathname === `/product/${id}` ? null : Location.pathname==='/'?<li data-aos="fade-down" data-aos-duration="1800"><ScrollLink to="Service_id">Service</ScrollLink></li>:<li data-aos="fade-down" data-aos-duration="1800"><Link to="/Service">Service</Link></li>}
+                        {Location.pathname === `/product/${id}` ? null : Location.pathname==='/'?<li data-aos="fade-down" data-aos-duration="2200"><ScrollLink to="Contact_id">Contact Us</ScrollLink></li>:<li data-aos="fade-down" data-aos-duration="2200"><Link to="/Contact_Us">Contact Us</Link></li>}
                         {small&&<li><Link to={'/WishList'}>Wishlist</Link></li>}
                         <li><Link to={`/${isAuthenticated?.userName+"Cart"}/${isAuthenticated ? isAuthenticated?.userId : 'No_user'}`}><i class="fa-solid fa-cart-shopping">  {!CartLength?0:CartLength} </i></Link></li>
                     </ul>
