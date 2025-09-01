@@ -35,7 +35,7 @@ function PlaceOrder({ isAuthenticated, cart }) {
         }
 
         try {
-            const response = await fetch(`http://localhost:5000/carts/${userId}/${productId}`, {
+            const response = await fetch(`https://teabuff.onrender.com/carts/${userId}/${productId}`, {
                 method: "DELETE"
             });
 

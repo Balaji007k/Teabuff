@@ -3,6 +3,7 @@ import ReviewSlider from './AssetComponents/reviews';
 import Login from '../components/login';
 import '../style/Login.css';
 import { useMediaQuery } from "react-responsive";
+import { Link as ScrollLink } from "react-scroll";
 
 
 function Home({ userInput, isAuthenticated }) {
@@ -25,7 +26,7 @@ function Home({ userInput, isAuthenticated }) {
             </div>
             <div className='inner-button'>
               {!small?<div className='btn-icon' data-aos="fade-right" data-aos-duration="1600">
-                <a href='#Product_id'><button className='explore-button'>Explore Now <i class="fa-solid fa-arrow-right ms-2"></i></button></a>
+                <ScrollLink to='Product_id'><button className='explore-button'>Explore Now <i class="fa-solid fa-arrow-right ms-2"></i></button></ScrollLink>
                 <div className='share'>
                   <div className='icons d-flex gap-4 fs-4 my-2'>
                     <a href='#'><i class="fa-brands fa-instagram"></i></a>
