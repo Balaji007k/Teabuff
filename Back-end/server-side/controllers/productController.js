@@ -18,7 +18,7 @@ exports.getSingleProduct = async(req,res)=>{
         product
     })
 }
-catch{
+    catch(error){
     res.status(404).json({ message: "Product not found", error: error.message });
 }
 }
@@ -88,7 +88,8 @@ exports.createProduct = async (req, res) => {
   } catch (error) {
     console.error("Error creating product:", error);
     if (error.code === 11000) {
-      res.status(400).json({ message: "Duplicate productId" });
+      const field = Object.keys(error.keyValue || {})[0];
+      return res.status(400).json({ message: `Duplicate value for field: ${field}` });
     } else {
       res.status(500).json({ message: "Item creation failed", error: error.message });
     }

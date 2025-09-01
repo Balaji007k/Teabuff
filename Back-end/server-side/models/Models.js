@@ -65,7 +65,7 @@ const categorySchema = new mongoose.Schema({
 const categoryModel = mongoose.model('category', categorySchema);
 
 const ProductReviewsSchema = mongoose.Schema({
-  UserId:{type:String,required:true,unique:true},
+  UserId:{type:String,required:true},
   userImage:{type:String,required:true},
   username:{type:String,required:true},
   ProductUserRating:{type:Number,default:0},
