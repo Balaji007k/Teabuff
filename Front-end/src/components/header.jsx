@@ -80,10 +80,10 @@ function Header({ userinputFocus, isAuthenticated, cart }) {
                         {Location.pathname === `/product/${id}` ? <li data-aos="fade-down" data-aos-duration="1400"><Link to="/Menu">More items</Link></li>:<li data-aos="fade-down" data-aos-duration="1400"><Link to={'/Menu'}>Menu</Link></li>}
                         {Location.pathname === `/product/${id}` ? null : Location.pathname==='/'?<li data-aos="fade-down" data-aos-duration="1800"><ScrollLink to="Service_id">Service</ScrollLink></li>:<li data-aos="fade-down" data-aos-duration="1800"><Link to="/Service">Service</Link></li>}
                         {Location.pathname === `/product/${id}` ? null : Location.pathname==='/'?<li data-aos="fade-down" data-aos-duration="2200"><ScrollLink to="Contact_id">Contact Us</ScrollLink></li>:<li data-aos="fade-down" data-aos-duration="2200"><Link to="/Contact_Us">Contact Us</Link></li>}
-                        {small&&<><li><Link to={'/WishList'}>Wishlist</Link></li>
-                        <li><Link to={'/Login'}>Add Account</Link></li>
-                        <li onClick={() => Logout()}>Logout</li></>}
+                        {small&&<li><Link to={'/WishList'}>Wishlist</Link></li>}
                         <li><Link to={`/${isAuthenticated?.userName+"Cart"}/${isAuthenticated ? isAuthenticated?.userId : 'No_user'}`}><i class="fa-solid fa-cart-shopping">  {!CartLength?0:CartLength} </i></Link></li>
+                        {small&&<><li><Link to={'/Login'}>Add Account</Link></li>
+                        <li onClick={() => Logout()}>Logout</li></>}
                     </ul>
                 </nav>
                 <div className='logo button'>

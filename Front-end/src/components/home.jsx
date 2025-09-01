@@ -36,7 +36,7 @@ function Home({ userInput, isAuthenticated }) {
                   <p className='d-inline' style={{ borderBottom: '2px solid #CACA12' }}>Follow us</p>
                 </div>
               </div>:<div className='btn-icon'>
-                <a href='#Product_id'><button className='explore-button'>Explore Now <i class="fa-solid fa-arrow-right ms-2"></i></button></a></div>}
+                <ScrollLink to='Product_id'><button className='explore-button'>Explore Now <i class="fa-solid fa-arrow-right ms-2"></i></button></ScrollLink></div>}
               <div className='empty-box d-flex flex-column gap-2' data-aos="fade-right" data-aos-duration="800">
                 <div>
                   <ReviewSlider />
