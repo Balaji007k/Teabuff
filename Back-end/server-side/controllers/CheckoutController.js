@@ -69,7 +69,7 @@ exports.createNewCheckOut = async (req, res) => {
         await NewCheckout.save();
 }
 
-    res.json({message:"successfully Created"})
+    res.json({message:"successfully Shipping address submitted"})
 
   } catch (error) {
 

@@ -4,6 +4,7 @@ import { useMediaQuery } from "react-responsive";
 import ApiService from '../components/Service/ApiService/product-api';
 import PlaceOrder from "./placeOrder";
 import PageNotFound from "./AssetComponents/PageNotFound";
+import AlertMessage from "./AssetComponents/AlertMessage";
 
 export default function CheckOut({isAuthenticated,cart}){
     const small = useMediaQuery({maxWidth:600})
@@ -21,6 +22,7 @@ export default function CheckOut({isAuthenticated,cart}){
       const [phone,setphone] = useState("");
       const [CheckoutReUse,setCheckoutReUse] = useState(false);
       const [UserCheckOutData,setUserCheckOutData] = useState(null);
+      const [AlertMessageCheckOut,setAlertMessage] = useState([]);
 
       const fetchCheckOut = async () => {
         const { Result, Error } = await ApiService.fetchData(`/Checkouts/${isAuthenticated.userId}`);
@@ -31,7 +33,6 @@ export default function CheckOut({isAuthenticated,cart}){
       
       const PostCheckOut = async(e) => {
         e.preventDefault();
-        alert("working")
         const NewCheckut = {
             contactEmail,
       firstname,
@@ -46,7 +47,11 @@ export default function CheckOut({isAuthenticated,cart}){
         };
         const { Result, Error } = await ApiService.fetchData(`/NewCheckout/${isAuthenticated.userId}`,"POST",NewCheckut);
         if (Result){
-            Navigate('/Payment')
+            setAlertMessage({message:Result.message,state:true});
+            setTimeout(()=>{
+                setAlertMessage("");
+                Navigate('/Payment')
+            },3000);
         }
         else{
             console.log(Error)
@@ -68,7 +73,7 @@ export default function CheckOut({isAuthenticated,cart}){
     setcity(UserCheckOutData.city || '');
     setpostcode(UserCheckOutData.postcode || '');
     setphone(UserCheckOutData.phone || '');
-    setCheckoutReUse(true); // ✅ Add this line
+    setCheckoutReUse(true); // Add this line
   } else {
     setCheckoutReUse(false);
   }
@@ -77,6 +82,8 @@ export default function CheckOut({isAuthenticated,cart}){
     
 
     if(isAuthenticated?.userId===id){return(
+        <>
+        {AlertMessageCheckOut.message&&AlertMessageCheckOut?.message!==""&&<AlertMessage message={AlertMessageCheckOut}/>}
         <div className={` w-100 d-flex ${!small?'flex-row-reverse':'flex-column'} `}>
         <div className="checkout-Cart-page overflow-y-scroll" style={{flex:'1 1 40%',height:'880px'}}><PlaceOrder isAuthenticated={isAuthenticated} cart={cart}/></div>
         <div className={` d-flex justify-content-center flex-grow-1 pb-3`} style={{marginTop:!small&&'75px',flex:'1 1 60%'}}>
@@ -123,6 +130,7 @@ export default function CheckOut({isAuthenticated,cart}){
                     </div>
                 </div>
         </div>
+        </>
     )}
     else{
         return(

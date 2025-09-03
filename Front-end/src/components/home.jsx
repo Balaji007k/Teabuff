@@ -4,9 +4,11 @@ import Login from '../components/login';
 import '../style/Login.css';
 import { useMediaQuery } from "react-responsive";
 import { Link as ScrollLink } from "react-scroll";
+import AlertMessage from './AssetComponents/AlertMessage';
+import { useEffect } from 'react';
 
 
-function Home({ userInput, isAuthenticated }) {
+function Home({ userInput, isAuthenticated, AccoutState, PopupMessage }) {
 
   const small = useMediaQuery({maxWidth:600});
 
@@ -15,7 +17,9 @@ function Home({ userInput, isAuthenticated }) {
   const Location = useLocation();
 
   return (
+    <>
     <div className="outerbox" id="Home">
+      {PopupMessage.message&&PopupMessage.message!==""&&<AlertMessage message={PopupMessage} AccoutState={AccoutState}/>}
       <div className='inner-box'>
         <div className='inner-content d-flex justify-content-center'>
           <div className='inner-text'>
@@ -47,13 +51,14 @@ function Home({ userInput, isAuthenticated }) {
         </div>
         
         <div className='inner-image'>
-          {(Location.pathname === '/Login' || Location.pathname === '/Register') ? <Login userInput={userInput} /> :
+          {(Location.pathname === '/Login' || Location.pathname === '/Register') ? <Login userInput={userInput} AccoutState={AccoutState} /> :
             !small?<img src="assets/Tea.jpeg" className='img' alt="Tea-Img" data-aos="fade-left" data-aos-duration="1400" />:<img src="assets/Tea-Image.webp" className='img' alt="Coffee-Img" />
           }
         </div>
       </div>
 
     </div>
+    </>
   );
 }
 export default Home;

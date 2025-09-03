@@ -3,12 +3,13 @@ import { Link } from "react-router-dom";
 import { useLocation, useNavigate } from "react-router-dom";
 import ApiService from './Service/ApiService/product-api';
 
-function Login({ userInput }) {
+function Login({ userInput,AccoutState }) {
 
     const Location = useLocation();
     const Navigate = useNavigate();
     const errorTimerRef = useRef(null);
     const [errors,setErrors] = useState("");
+    //const [AccoutState,setAccoutState] = useState("");
 
     const [username,setuser] = useState("");
     const [email,setemail] = useState("");
@@ -25,7 +26,10 @@ const handleLogin = () => {
   const User = { email, password };
 
   if (User.email === "" || User.password === "") {
-    return alert("please enter email and password");
+      AccoutState({message:"please enter email and password",state:false});
+      return setTimeout(()=>{
+        AccoutState("");
+      },3000);
   }
 
   ApiService.fetchData('/login', "POST", User)
@@ -42,14 +46,22 @@ const handleLogin = () => {
         return;
       }
 
-      alert("Account successfully logged in");
-      console.log("Logged in user:", Result.user);
-      Navigate('/');
-      window.location.reload();
+      // alert("Account successfully logged in");
+      AccoutState({message:"Account successfully logged in",state:true});
+      setTimeout(()=>{
+        AccoutState("");
+        console.log("Logged in user:", Result.user);
+        Navigate('/');
+        window.location.reload();
+      },3000);
     })
     .catch(err => {
       console.error("Unexpected error:", err);
-      alert("Something went wrong.");
+      // alert("Something went wrong.");
+      AccoutState({message:"Something went wrong.",state:false});
+      setTimeout(()=>{
+        AccoutState("");
+      },3000);
     });
 };
 
@@ -66,21 +78,28 @@ const handleLogin = () => {
       ApiService.fetchData('/users',"POST",newUser)
       .then(({Error})=>{
         if (Error) {
-        alert("Login failed: " + Error);
+         AccoutState("Login failed: " + Error);
+      setTimeout(()=>{
+        AccoutState("");
+      },3000);
         return;
        }
-        alert("Account successfully created")
         setuser("")
         setemail("")
         setPass("")
         setPhone("")
+        AccoutState("Account successfully created");
+      setTimeout(()=>{
+        AccoutState("");
         Navigate('/Login')
+      },3000);
       })
       .catch(err => console.log(err));
 
     };
 
     return (
+      <>
         <div className='Userlogin d-flex flex-column align-items-center justify-content-end'>
             <div className="Userlogin-inner-box d-flex flex-column align-items-center justify-content-center gap-2">
                 <div className='login-form d-flex flex-column px-4'>
@@ -100,6 +119,7 @@ const handleLogin = () => {
                 </div>
             </div>
         </div>
+        </>
     )
 }
 

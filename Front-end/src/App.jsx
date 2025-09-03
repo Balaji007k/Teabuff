@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import Main from './mainComponent/main';
 import Header from './components/header';
@@ -21,15 +21,20 @@ import PageNotFound from './components/AssetComponents/PageNotFound';
 import Payment from './components/AssetComponents/Payment';
 
 function App() {
-  const { isAuthenticated, cart, image, Review, productsItem, category } = useTheme();
+  const { isAuthenticated, cart, image, Review, productsItem, category, AlertMessageTheme } = useTheme();
   const userInput = useRef();
   const location = useLocation();
+  const [AlertMessage,setAlertMessage] = useState([]);
 
   useEffect(() => {
     if (location.pathname === '/Login') {
       userInput.current?.focus();
     }
   }, [location.pathname]);
+
+  useEffect(()=>{
+    setAlertMessage(AlertMessageTheme);
+  },[AlertMessageTheme])
 
   const userinputFocus = () => {
     userInput.current?.focus();
@@ -43,21 +48,22 @@ function App() {
         <Header
           userinputFocus={userinputFocus}
           isAuthenticated={isAuthenticated}
+          setAlertMessage={setAlertMessage}
           cart={cart}
         />
       )}
       <Routes>
         <Route
           path="/"
-          element={<Main />}
+          element={<Main AlertMessageMain={AlertMessage}/>}
         />
         <Route
           path="/Login"
-          element={<Main userInput={userInput} />}
+          element={<Main userInput={userInput} AlertMessageMain={AlertMessage}/>}
         />
         <Route
           path="/Register"
-          element={<Main />}
+          element={<Main AlertMessageMain={AlertMessage}/>}
         />
         <Route
           path="/Menu"
@@ -69,7 +75,7 @@ function App() {
         />
         <Route
           path="/product/:id"
-          element={<ProductItem cart={cart} category={category} productsItem={productsItem} isAuthenticated={isAuthenticated} Review={Review} />}
+          element={<ProductItem cart={cart} category={category} productsItem={productsItem} isAuthenticated={isAuthenticated} Review={Review} AlertMessageMain={AlertMessage} />}
         />
         <Route
           path={`/${isAuthenticated?.userName+"Cart"}/:id`}

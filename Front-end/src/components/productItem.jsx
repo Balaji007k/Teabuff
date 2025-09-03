@@ -9,8 +9,9 @@ import EmptyProductCard from './AssetComponents/EmptyProductCard';
 import ViewMore from './AssetComponents/ViewMore';
 import ProductFilters from './AssetComponents/ProductFilters';
 import PageNotFound from './AssetComponents/PageNotFound';
+import AlertMessage from './AssetComponents/AlertMessage';
 
-function ProductItem({ isAuthenticated, Review, productsItem, cart, category }) {
+function ProductItem({ isAuthenticated, Review, productsItem, cart, category, AlertMessageMain }) {
 
   const { handleCart, PostUserLikedState, UserLikedState, UpdateProduct, UserProductReviews, fetchProductReviews, ProductAvgRating } = useTheme();
   const [Readmore,setReadmore] = useState(false);
@@ -108,6 +109,7 @@ function ProductItem({ isAuthenticated, Review, productsItem, cart, category }) 
 
   if (isAuthenticated && selectedProduct) return (
     <>
+    {AlertMessageMain.message&&AlertMessageMain.message!==""&&<AlertMessage message={AlertMessageMain}/>}
       <div className='Product-Page-cart d-flex flex-column align-items-center' style={{ marginTop: '75px', color: 'var(--Background-white-text)' }}>
         <ProductFilters productsItem={productsItem} category={category} Products={Products} id={id} />
 
@@ -135,7 +137,7 @@ function ProductItem({ isAuthenticated, Review, productsItem, cart, category }) 
                         <h3 className=' fw-bold'>Quantity:</h3><button onClick={() => setquantity(quantity - 1)}>-</button>{quantity}<button onClick={() => setquantity(quantity + 1)}>+</button>
                       </span>
                       <div className=' w-100 d-flex align-items-center gap-3'>
-                        <button className={`btn Cart-Button ${!small&&'w-75'} py-2`} onClick={() => { handleCart(selectedProduct._id, selectedProduct.price, quantity, selectedProduct.title, isAuthenticated.userId, selectedProduct.description, selectedProduct.url, selectedProduct.rating, Heart) }}>Add to Cart</button><Link className={!small&&'w-25'} to={quantity!==0&&`/${isAuthenticated?.userName+"Cart"}/${isAuthenticated?.userId}`}><button className='btn Cart-Button w-100 py-2' onClick={() => handleCart(selectedProduct._id, selectedProduct.price, quantity, selectedProduct.title, isAuthenticated.userId, selectedProduct.description, selectedProduct.url, selectedProduct.rating, Heart)}>Place Order</button></Link>
+                        <button className={`btn Cart-Button ${!small&&'w-75'} py-2`} onClick={() => { handleCart(selectedProduct._id, selectedProduct.price, quantity, selectedProduct.title, isAuthenticated.userId, selectedProduct.description, selectedProduct.url, selectedProduct.rating, Heart) }}>Add to Cart</button><Link className={!small&&'w-25'} to={cart?.items.length!==0&&`/${isAuthenticated?.userName+"Cart"}/${isAuthenticated?.userId}`}><button className='btn Cart-Button w-100 py-2' onClick={() => handleCart(selectedProduct._id, selectedProduct.price, quantity, selectedProduct.title, isAuthenticated.userId, selectedProduct.description, selectedProduct.url, selectedProduct.rating, Heart, true)}>Place Order</button></Link>
                         <span class={`material-symbols-outlined Product-icons heart ${Heart ? 'text-danger' : 'text-black'}`} onClick={() => PostUserLikedState(isAuthenticated.userId, selectedProduct._id, selectedProduct.title, selectedProduct.price, selectedProduct.description, selectedProduct.url, selectedProduct.categoryId, selectedProduct.rating, selectedProduct.ingredients, selectedProduct.features, selectedProduct.purchaseLink, !Heart && true, selectedProduct.comments)}>
                           favorite
                         </span>

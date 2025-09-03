@@ -3,8 +3,9 @@ import { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useLocation } from 'react-router-dom';
 import { Link as ScrollLink } from "react-scroll";
+import ApiService from "./Service/ApiService/product-api";
 
-function Header({ userinputFocus, isAuthenticated, cart }) {
+function Header({ userinputFocus, isAuthenticated, cart, setAlertMessage }) {
 
     const small = useMediaQuery({maxWidth:600});
 
@@ -27,19 +28,34 @@ function Header({ userinputFocus, isAuthenticated, cart }) {
     const Logout = async () => {
         const LogoutConfirm = window.confirm('Are you sure you want to Logout')
         if (LogoutConfirm) {
-            await fetch(`https://teabuff.onrender.com/Logout/${isAuthenticated.userId}`, {
-                method: 'POST',
-                credentials: 'include',
-                headers: {
-                    'Content-Type': 'application/json',
-                }
-            })
-                .then(res => res.json())
-                .then(data => {
-                    alert(data.message)
+            // await fetch(`https://teabuff.onrender.com/Logout/${isAuthenticated.userId}`, {
+            //     method: 'POST',
+            //     credentials: 'include',
+            //     headers: {
+            //         'Content-Type': 'application/json',
+            //     }
+            // })
+            //     .then(res => res.json())
+            //     .then(data => {
+            //         alert(data.message)
+            //         window.location.reload();
+            //     })
+            //     .catch(err => console.log(err));
+
+            const payload = {
+                UserId:isAuthenticated.userId
+            };
+
+            const { Result, Error } = await ApiService.fetchData(`/Logout/${isAuthenticated.userId}`,"POST",payload);
+            console.log(Result);
+                setAlertMessage({message:Result?.message,state:true});
+                setTimeout(()=>{
+                    setAlertMessage("");
                     window.location.reload();
-                })
-                .catch(err => console.log(err));
+                },3000);
+            if(Error){
+                console.log(Error);
+            }
         }
     };
 

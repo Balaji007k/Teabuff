@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import '../../style/Payment.css'
 import { useMediaQuery } from "react-responsive";
 import { useNavigate } from "react-router-dom";
+import AlertMessage from "./AlertMessage";
 
 export default function Payment() {
   const small = useMediaQuery({ maxWidth: 600 })
@@ -11,6 +12,7 @@ export default function Payment() {
   const [cardNumber, setCardNumber] = useState("");
   const [expiry, setExpiry] = useState("");
   const [cvv, setCvv] = useState("");
+  const [AlertMessagePayment,setAlertMessage] = useState([]);
 
   const validateEmail = (val) =>
     /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val);
@@ -48,6 +50,8 @@ export default function Payment() {
   }, [])
 
   return (
+    <>
+    {AlertMessagePayment.message&&AlertMessagePayment?.message!==""&&<AlertMessage message={AlertMessagePayment} />}
     <div className=" d-flex justify-content-center" style={{ marginTop: "75px" }}>
       <div style={{ width: !small ? '75%' : '95%' }}>
         <h2 className="mb-5 px-2">ENTER YOUR PAYMENT INFORMATION</h2>
@@ -81,12 +85,17 @@ export default function Payment() {
               validateCVV(cvv);
 
             if (!isValid) {
-              alert("Please fill all fields correctly before submitting.");
-              return;
+              setAlertMessage({message:"Please fill all fields correctly before submitting.",state:false});
+              return setTimeout(()=>{
+                setAlertMessage("");
+            },3000);
             }
 
-            alert("Payment submitted!");
-            Navigate('/')
+            setAlertMessage({message:"Payment submitted!",state:true});
+            setTimeout(()=>{
+                setAlertMessage("");
+                Navigate('/')
+            },3000);
           }}
         >
           <div className="Payment d-flex flex-column gap-3 px-2">
@@ -159,5 +168,6 @@ export default function Payment() {
         </form>
       </div>
     </div>
+    </>
   );
 }

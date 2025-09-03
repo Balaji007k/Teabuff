@@ -1,16 +1,19 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useNavigate, useLocation, useParams } from 'react-router-dom';
 import '../style/PlaceOrder.css';
 import '../style/ExpressCheckout.css';
 import { useTheme } from '../ThemeContext';
 import PageNotFound from './AssetComponents/PageNotFound';
 import { useMediaQuery } from 'react-responsive';
+import ApiService from './Service/ApiService/product-api';
+import AlertMessage from './AssetComponents/AlertMessage';
 
 function PlaceOrder({ isAuthenticated, cart }) {
     const small = useMediaQuery({maxWidth:600});
     const {id} = useParams();
     const Location = useLocation();
-    const { setUpdatedCart,PostSaveCart } = useTheme();
+    const { setUpdatedCart,PostSaveCart, AlertMessageTheme } = useTheme();
+    const [AlertMessagePlaceOrder,setAlertMessage] = useState([]);
 
     const [quantity, setquantity] = useState({}); // track quantity by productId
     const Navigate = useNavigate();
@@ -35,21 +38,32 @@ function PlaceOrder({ isAuthenticated, cart }) {
         }
 
         try {
-            const response = await fetch(`https://teabuff.onrender.com/carts/${userId}/${productId}`, {
-                method: "DELETE"
-            });
+            // const response = await fetch(`https://teabuff.onrender.com/carts/${userId}/${productId}`, {
+            //     method: "DELETE"
+            // });
 
-            const data = await response.json();
-            alert(data.message);
-            setUpdatedCart(data.cart);
+            const { Result, Error } = await ApiService.fetchData(`/carts/${userId}/${productId}`,"DELETE");
+
+            console.log(Result.message)
+
+            setAlertMessage({message:Result.message,state:true})
+            setUpdatedCart(Result.cart);
         } catch (err) {
             console.error("Error removing item:", err);
-            alert("Failed to remove item.");
+            setAlertMessage({message:"Failed to remove item."+err,state:false});
         }
+        setTimeout(()=>{
+                setAlertMessage("");
+            },3000);
     };
 
     const OrderHandler = () => {
-        if (cart.items.length <= 0) return alert('No items in Cart');
+        if (cart.items.length <= 0) {
+             setAlertMessage({message:"No items in Cart",state:false});
+             setTimeout(()=>{
+                setAlertMessage("");
+             },3000);
+        }
         PostSaveCart(cart,quantity);
         setOrder(true);
     };
@@ -70,6 +84,10 @@ function PlaceOrder({ isAuthenticated, cart }) {
         window.scrollTo(0,0);
     }, [])
 
+    useEffect(()=>{
+        setAlertMessage(AlertMessageTheme);
+    },[AlertMessageTheme])
+
     const handleQuantityChange = (productId, delta) => {
         setOrder(false);
         setquantity(prev => ({
@@ -85,6 +103,8 @@ function PlaceOrder({ isAuthenticated, cart }) {
         return <PageNotFound Message={"Cart"} />
     }
     if (isAuthenticated&&isAuthenticated.userId===id){ return (
+        <>
+        {AlertMessagePlaceOrder.message&&AlertMessagePlaceOrder?.message!==""&&<AlertMessage message={AlertMessagePlaceOrder}/>}
         <div className={` d-flex gap-2 pb-3 ${Location.pathname==='/CheckOut/'+isAuthenticated?.userId?'flex-column-reverse':'flex-column'}`} style={{ marginTop: '75px'}}>
             {Location.pathname===`/CheckOut/${isAuthenticated.userId}`?
             <div className=' w-100 d-flex justify-content-center'>
@@ -200,6 +220,7 @@ function PlaceOrder({ isAuthenticated, cart }) {
             </div>}
 
         </div>
+        </>
     );
 }
 else{

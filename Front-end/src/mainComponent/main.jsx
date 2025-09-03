@@ -13,14 +13,19 @@ import Contact from '../components/contact';
 import Footer from '../components/footer';
 import Home from '../components/home';
 import { useTheme } from '../ThemeContext';
+import { useEffect, useState } from 'react';
 
-function Main({ userInput, AccountSet, createdAccount }) {
+function Main({ userInput, AccountSet, createdAccount, AlertMessageMain }) {
   const { isAuthenticated, Review, image, productsItem, category } = useTheme();
+  const [AlertMessage,setAlertMessage] = useState([]);
 
+  useEffect(()=>{
+    setAlertMessage(AlertMessageMain);
+  },[AlertMessageMain])
 
   return (
     <div className="App">
-      <Home userInput={userInput} Review={Review} isAuthenticated={isAuthenticated} AccountSet={AccountSet} createdAccount={createdAccount}/>
+      <Home userInput={userInput} Review={Review} isAuthenticated={isAuthenticated} AccountSet={AccountSet} createdAccount={createdAccount} AccoutState={setAlertMessage} PopupMessage={AlertMessage}/>
       <About image={image} />
       <Product productsItem={productsItem} category={category} isAuthenticated={isAuthenticated} />
       <Service />

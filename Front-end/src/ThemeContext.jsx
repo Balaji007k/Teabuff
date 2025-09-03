@@ -19,6 +19,7 @@ export const ThemeProvider = ({ children }) => {
     const [isLoading, setIsLoading] = useState(true);
     const [UserLikedState, setUserLikedState] = useState(null);
     const [UpdatedProduct, setUpdatedProduct] = useState(null);
+    const [AlertMessageTheme,setAlertMessage] = useState([]);
 
     const fetchAllReviews = async () => {
         const { Result, Error } = await ApiService.fetchData('/allreviews');
@@ -75,23 +76,20 @@ export const ThemeProvider = ({ children }) => {
                 }))
                 }
             }
-    
-            try {
-                const response = await fetch(`https://teabuff.onrender.com/carts/${userId}`, {
-                    method: "PUT",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify(payload)
-                });
-    
-                const data = await response.json();
-                alert(data.message);
-                setUpdatedCart(data?.UpdatedCart)
-            } catch (err) {
-                console.error("Error saving cart:", err);
+
+        try {
+        const { Result, Error } = await ApiService.fetchData(`/carts/${userId}`,"PUT",payload);
+                console.log(Result.message);
+                setAlertMessage({message:Result.message,state:true});
+                setUpdatedCart(Result?.UpdatedCart)
+                // setTimeout(()=>{
+                //     setAlertMessage("");
+                // },3000);
+                if(Error) console.log(Error);
+        } catch (error) {
+            console.error("Error saving cart:", err);
                 alert("Failed to save cart.");
-            }
+        }
         };
 
     const fetchUserLikedState = async (UserId) => {
@@ -153,42 +151,61 @@ export const ThemeProvider = ({ children }) => {
         else console.error(Error);
     };
 
-    const handleCart = (productId, itemPrice, quantity, itemName, userId, Description, Product_Url, Rating, likes) => {
-        if (quantity === 0) return alert("Minimum select one item")
-    
-        const newCart = { userId, productId, itemPrice, quantity, itemName, Product_Url, Rating, Description, likes }
-    
-        ApiService.fetchData('/carts', "POST", newCart)
-          .then(({ Result,Error }) => {
-            if (Error) {
-              alert("Login failed: " + Error);
-              return;
-            }
-            if (quantity !== 0) {
-              alert("Cart successfully Added")
-              setUpdatedCart(Result?.usercart);
-            }
-          })
-          .catch(err => console.log(err));
+
+    const handleCart = (productId, itemPrice, quantity, itemName, userId, Description, Product_Url, Rating, likes, placeOrder=false) => {
+  if (quantity === 0&&!placeOrder) {
+    setAlertMessage({ message: "Minimum select one item", state: false });
+    return ;
+  }
+
+  const newCart = { userId, productId, itemPrice, quantity, itemName, Product_Url, Rating, Description, likes };
+
+  ApiService.fetchData('/carts', "POST", newCart)
+    .then(({ Result, Error }) => {
+      if (Error) {
+        setAlertMessage({ message: "Login failed: " + Error, state: false });
+        return ;
       }
+
+      if (quantity !== 0) {
+        setAlertMessage({ message: "Cart successfully Added", state: true });
+        setUpdatedCart(Result?.usercart);
+      }
+    })
+    .catch(err => console.log(err));
+};
+
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const res = await fetch('https://teabuff.onrender.com/dashboard', {
-                    method: 'GET',
-                    credentials: 'include'
-                });
-                const data = await res.json();
-                
-                if (data.userId) {
-                    setAuthenticated(data);
-                    await fetchCart(data.userId);
-                    await fetchUserLikedState(data.userId)
-                    console.log("User is authenticated:", data.userId);
-                } else {
-                    console.log("Not authenticated");
-                }
+                // const res = await fetch('https://teabuff.onrender.com/dashboard', {
+                //     method: 'GET',
+                //     credentials: 'include'
+                // });
+                const { Result, Error } = await ApiService.fetchData('/dashboard');
+
+                if (Result.userId) {
+                    setAuthenticated(Result);
+                    await fetchCart(Result.userId);
+                    await fetchUserLikedState(Result.userId)
+                    console.log("User is authenticated:", Result.userId);
+                 }
+                // else {
+                //     console.log("Not authenticated "+Error);
+                // }
+                // await Promise.all([
+                //     fetchAllReviews(),
+                //     fetchReviews(),
+                //     fetchShops(),
+                //     fetchProducts(),
+                //     fetchCategories()
+                // ]);
+
+            } catch (err) {
+                console.log("'Not authenticated'",err);
+            } finally {
+                setIsLoading(false);
                 await Promise.all([
                     fetchAllReviews(),
                     fetchReviews(),
@@ -196,16 +213,19 @@ export const ThemeProvider = ({ children }) => {
                     fetchProducts(),
                     fetchCategories()
                 ]);
-
-            } catch (err) {
-                console.log("'Not authenticated'",err);
-            } finally {
-                setIsLoading(false);
             }
         };
 
         fetchData();
     }, []);
+
+    useEffect(() => {
+  if (AlertMessageTheme?.message) {
+    console.log(AlertMessageTheme)
+    const timer = setTimeout(() => setAlertMessage(""), 3000);
+    return () => clearTimeout(timer);
+  }
+}, [AlertMessageTheme]);
 
     if(isLoading)return(
         <LoadingPage/>
@@ -218,7 +238,7 @@ export const ThemeProvider = ({ children }) => {
     );
 
     if (isAuthenticated) return !isLoading && (
-        <ThemeContext.Provider value={{ isAuthenticated, AllReview, Review, image, productsItem, category, cart, handleCart, setUpdatedCart, PostSaveCart, PostUserLikedState, UserLikedState, UpdateProduct, UserProductReviews, fetchProductReviews, ProductAvgRating, UpdatedProduct }}>
+        <ThemeContext.Provider value={{ isAuthenticated, AllReview, Review, image, productsItem, category, cart, handleCart, setUpdatedCart, PostSaveCart, PostUserLikedState, UserLikedState, UpdateProduct, UserProductReviews, fetchProductReviews, ProductAvgRating, UpdatedProduct, AlertMessageTheme }}>
             {children}
         </ThemeContext.Provider>
     );
