@@ -33,8 +33,10 @@ function PlaceOrder({ isAuthenticated, cart }) {
         const userId = isAuthenticated?.userId;
 
         if (!userId) {
-            alert("User not authenticated");
-            return;
+            setAlertMessage({message:"User not authenticated",state:false})
+            return setTimeout(()=>{
+                setAlertMessage(null);
+            },3000);
         }
 
         try {
@@ -44,8 +46,6 @@ function PlaceOrder({ isAuthenticated, cart }) {
 
             const { Result, Error } = await ApiService.fetchData(`/carts/${userId}/${productId}`,"DELETE");
 
-            console.log(Result.message)
-
             setAlertMessage({message:Result.message,state:true})
             setUpdatedCart(Result.cart);
         } catch (err) {
@@ -53,7 +53,7 @@ function PlaceOrder({ isAuthenticated, cart }) {
             setAlertMessage({message:"Failed to remove item."+err,state:false});
         }
         setTimeout(()=>{
-                setAlertMessage("");
+                setAlertMessage(null);
             },3000);
     };
 
@@ -61,7 +61,7 @@ function PlaceOrder({ isAuthenticated, cart }) {
         if (cart.items.length <= 0) {
              setAlertMessage({message:"No items in Cart",state:false});
              setTimeout(()=>{
-                setAlertMessage("");
+                setAlertMessage(null);
              },3000);
         }
         PostSaveCart(cart,quantity);
@@ -104,7 +104,7 @@ function PlaceOrder({ isAuthenticated, cart }) {
     }
     if (isAuthenticated&&isAuthenticated.userId===id){ return (
         <>
-        {AlertMessagePlaceOrder.message&&AlertMessagePlaceOrder?.message!==""&&<AlertMessage message={AlertMessagePlaceOrder}/>}
+        {AlertMessagePlaceOrder&&AlertMessagePlaceOrder?.message&&<AlertMessage message={AlertMessagePlaceOrder}/>}
         <div className={` d-flex gap-2 pb-3 ${Location.pathname==='/CheckOut/'+isAuthenticated?.userId?'flex-column-reverse':'flex-column'}`} style={{ marginTop: '75px'}}>
             {Location.pathname===`/CheckOut/${isAuthenticated.userId}`?
             <div className=' w-100 d-flex justify-content-center'>

@@ -50,7 +50,7 @@ function Header({ userinputFocus, isAuthenticated, cart, setAlertMessage }) {
             console.log(Result);
                 setAlertMessage({message:Result?.message,state:true});
                 setTimeout(()=>{
-                    setAlertMessage("");
+                    setAlertMessage(null);
                     window.location.reload();
                 },3000);
             if(Error){

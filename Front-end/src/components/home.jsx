@@ -19,7 +19,7 @@ function Home({ userInput, isAuthenticated, AccoutState, PopupMessage }) {
   return (
     <>
     <div className="outerbox" id="Home">
-      {PopupMessage.message&&PopupMessage.message!==""&&<AlertMessage message={PopupMessage} AccoutState={AccoutState}/>}
+      {PopupMessage&&PopupMessage?.message&&<AlertMessage message={PopupMessage} AccoutState={AccoutState}/>}
       <div className='inner-box'>
         <div className='inner-content d-flex justify-content-center'>
           <div className='inner-text'>

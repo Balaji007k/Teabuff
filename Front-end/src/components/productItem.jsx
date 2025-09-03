@@ -109,7 +109,7 @@ function ProductItem({ isAuthenticated, Review, productsItem, cart, category, Al
 
   if (isAuthenticated && selectedProduct) return (
     <>
-    {AlertMessageMain.message&&AlertMessageMain.message!==""&&<AlertMessage message={AlertMessageMain}/>}
+    {AlertMessageMain&&AlertMessageMain.message&&<AlertMessage message={AlertMessageMain}/>}
       <div className='Product-Page-cart d-flex flex-column align-items-center' style={{ marginTop: '75px', color: 'var(--Background-white-text)' }}>
         <ProductFilters productsItem={productsItem} category={category} Products={Products} id={id} />
 

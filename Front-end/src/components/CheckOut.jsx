@@ -49,7 +49,7 @@ export default function CheckOut({isAuthenticated,cart}){
         if (Result){
             setAlertMessage({message:Result.message,state:true});
             setTimeout(()=>{
-                setAlertMessage("");
+                setAlertMessage(null);
                 Navigate('/Payment')
             },3000);
         }
@@ -83,7 +83,7 @@ export default function CheckOut({isAuthenticated,cart}){
 
     if(isAuthenticated?.userId===id){return(
         <>
-        {AlertMessageCheckOut.message&&AlertMessageCheckOut?.message!==""&&<AlertMessage message={AlertMessageCheckOut}/>}
+        {AlertMessageCheckOut&&AlertMessageCheckOut?.message&&<AlertMessage message={AlertMessageCheckOut}/>}
         <div className={` w-100 d-flex ${!small?'flex-row-reverse':'flex-column'} `}>
         <div className="checkout-Cart-page overflow-y-scroll" style={{flex:'1 1 40%',height:'880px'}}><PlaceOrder isAuthenticated={isAuthenticated} cart={cart}/></div>
         <div className={` d-flex justify-content-center flex-grow-1 pb-3`} style={{marginTop:!small&&'75px',flex:'1 1 60%'}}>

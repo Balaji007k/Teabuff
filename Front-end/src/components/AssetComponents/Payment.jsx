@@ -51,7 +51,7 @@ export default function Payment() {
 
   return (
     <>
-    {AlertMessagePayment.message&&AlertMessagePayment?.message!==""&&<AlertMessage message={AlertMessagePayment} />}
+    {AlertMessagePayment&&AlertMessagePayment?.message&&<AlertMessage message={AlertMessagePayment} />}
     <div className=" d-flex justify-content-center" style={{ marginTop: "75px" }}>
       <div style={{ width: !small ? '75%' : '95%' }}>
         <h2 className="mb-5 px-2">ENTER YOUR PAYMENT INFORMATION</h2>
@@ -87,13 +87,13 @@ export default function Payment() {
             if (!isValid) {
               setAlertMessage({message:"Please fill all fields correctly before submitting.",state:false});
               return setTimeout(()=>{
-                setAlertMessage("");
+                setAlertMessage(null);
             },3000);
             }
 
             setAlertMessage({message:"Payment submitted!",state:true});
             setTimeout(()=>{
-                setAlertMessage("");
+                setAlertMessage(null);
                 Navigate('/')
             },3000);
           }}
