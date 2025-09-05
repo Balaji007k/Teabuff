@@ -55,38 +55,44 @@ exports.createUsers = async (req, res, next) => {
 
 
 exports.verifyUser = async (req, res, next) => {
-    try {
-        const { email, password } = req.body;
+  try {
+    const { email, password } = req.body;
 
-        const users = await usersModel.find({});
-        const user = users.find(u => u.email === email);
+    // Search only the user you need
+    const user = await usersModel.findOne({ email });
 
-        if (!user) return res.status(404).json({ message: "user Not Found" });
-
-        const verifyed = await bcrypt.compare(password, user.password);
-        if (!verifyed) return res.status(404).json({ message: "password not match" });
-
-        const token = createToken(user._id, user.username);
-
-        res.cookie("user", token, {
-            httpOnly: true, // Recommended
-            secure: true, // Only for HTTPS
-            sameSite: "None",
-            maxAge: maxAge * 1000
-        });
-
-
-        res.status(200).json({
-            user: user.username,
-            token,
-            message: "success"
-        });
-    } catch (error) {
-        res.status(500).json({
-            message: "not verified",
-            error: error.message
-        });
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
     }
+
+    // Compare hashed password
+    const verified = await bcrypt.compare(password, user.password);
+    if (!verified) {
+      return res.status(400).json({ message: "Password does not match" });
+    }
+
+    // Create JWT token
+    const token = createToken(user._id, user.username);
+
+    // Set secure cookie
+    res.cookie("user", token, {
+      httpOnly: true,
+      secure: true,     // Only send on HTTPS
+      sameSite: "None", // Important if frontend & backend are different domains
+      maxAge: maxAge * 1000
+    });
+
+    return res.status(200).json({
+      user: user.username,
+      token,
+      message: "success"
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: "Verification failed",
+      error: error.message
+    });
+  }
 };
 
 //exports.LogoutUser = async (req, res) => {
