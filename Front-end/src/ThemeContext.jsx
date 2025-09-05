@@ -82,9 +82,6 @@ export const ThemeProvider = ({ children }) => {
                 console.log(Result.message);
                 setAlertMessage({message:Result.message,state:true});
                 setUpdatedCart(Result?.UpdatedCart)
-                // setTimeout(()=>{
-                //     setAlertMessage("");
-                // },3000);
                 if(Error) console.log(Error);
         } catch (error) {
             console.error("Error saving cart:", err);
@@ -221,8 +218,8 @@ export const ThemeProvider = ({ children }) => {
 
     useEffect(() => {
   if (AlertMessageTheme?.message) {
-    console.log(AlertMessageTheme)
-    const timer = setTimeout(() => setAlertMessage(""), 3000);
+    // console.log(AlertMessageTheme)
+    const timer = setTimeout(() => setAlertMessage(""), 1500);
     return () => clearTimeout(timer);
   }
 }, [AlertMessageTheme]);

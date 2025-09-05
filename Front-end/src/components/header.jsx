@@ -52,7 +52,7 @@ function Header({ userinputFocus, isAuthenticated, cart, setAlertMessage }) {
                 setTimeout(()=>{
                     setAlertMessage(null);
                     window.location.reload();
-                },3000);
+                },1500);
             if(Error){
                 console.log(Error);
             }

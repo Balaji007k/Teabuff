@@ -49,19 +49,19 @@ const handleLogin = () => {
       // alert("Account successfully logged in");
       AccoutState({message:"Account successfully logged in",state:true});
       setTimeout(()=>{
-        AccoutState("");
+        AccoutState(null);
         console.log("Logged in user:", Result.user);
         Navigate('/');
         window.location.reload();
-      },3000);
+      },1500);
     })
     .catch(err => {
       console.error("Unexpected error:", err);
       // alert("Something went wrong.");
       AccoutState({message:"Something went wrong.",state:false});
       setTimeout(()=>{
-        AccoutState("");
-      },3000);
+        AccoutState(null);
+      },1500);
     });
 };
 
@@ -90,9 +90,9 @@ const handleLogin = () => {
         setPhone("")
         AccoutState("Account successfully created");
       setTimeout(()=>{
-        AccoutState("");
+        AccoutState(null);
         Navigate('/Login')
-      },3000);
+      },1500);
       })
       .catch(err => console.log(err));
 

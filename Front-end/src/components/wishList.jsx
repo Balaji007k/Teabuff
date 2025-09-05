@@ -6,9 +6,10 @@ import { useMediaQuery } from "react-responsive";
 import Footer from "./footer";
 import EmptyProductCard from "./AssetComponents/EmptyProductCard";
 import PageNotFound from "./AssetComponents/PageNotFound";
+import AlertMessage from "./AssetComponents/AlertMessage";
 
 function Wishlist({ isAuthenticated }) {
-    const {UserLikedState,PostSaveCart} = useTheme();
+    const {UserLikedState,PostSaveCart,AlertMessageTheme} = useTheme();
     const Navigate = useNavigate();
     const small = useMediaQuery({ maxWidth:600 });
     const [LikedProducts,setLikedProducts] = useState();
@@ -31,6 +32,7 @@ function Wishlist({ isAuthenticated }) {
 
     return(
         <>
+        {AlertMessageTheme&&AlertMessageTheme?.message&&<AlertMessage message={AlertMessageTheme}/>}
         <div className='Extra-products-container py-3' style={{marginTop:'75px'}}>
             <h1 className=" fw-bold text-center">Wishlist</h1>
                 <div className='Extra-products'>

@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
 
 const AnimatedCounter = ({ endValue, label }) => {
-  const [count, setCount] = useState(0);
+  const [count, setCount] = useState("24/7");
   const { ref, inView } = useInView({ triggerOnce: true }); // run once when visible
 
   useEffect(() => {
@@ -16,7 +16,7 @@ const AnimatedCounter = ({ endValue, label }) => {
         } else {
           clearInterval(interval);
         }
-      }, 80);
+      }, 50);
     }
   }, [inView, endValue]);
 

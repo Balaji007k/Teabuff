@@ -154,13 +154,6 @@ function ProductItem({ isAuthenticated, Review, productsItem, cart, category, Al
                             </div>
                           </div>
                         </div>
-                        {/* <div className='div Shippings'>
-                          <div className=' w-100 d-flex justify-content-between'><h4 className=' fw-bold'>Ingredients:</h4>
-                            <span class="material-symbols-outlined Arrow">
-                              keyboard_arrow_up
-                            </span></div>
-                             <p>{selectedProduct.ingredients} </p>
-                        </div> */}
                       </div>
                     </div>
                   </div>

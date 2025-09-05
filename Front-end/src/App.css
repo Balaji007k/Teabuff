@@ -289,7 +289,7 @@ video{
   width: 100% !important;
   max-width: 450px !important;
   display: grid !important;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)) !important;
+  grid-template-columns: repeat(auto-fill, minmax(150px,1fr)) !important;
   justify-items: center;
   gap: 10px !important;
   padding: 10px !important;
@@ -434,12 +434,18 @@ form{
 /*End Home*/
 
 .Cart-Products{
-  display: flex !important;
-  justify-content: flex-start;
+  display: grid !important;
+  grid-template-columns: repeat(2,1fr) !important;
   gap: 15px;
   padding: 0px 10px;
   overflow: scroll;
+  margin-bottom: 86px;
 }
+.selected-item{
+  width: 100% !important;
+  padding-bottom: 0px !important;
+}
+
 .bill table tr{
   width: 100% !important;
   padding: 0px 10px !important;

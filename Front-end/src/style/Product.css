@@ -123,7 +123,12 @@
   padding: 20px;
   border-radius: 25px;
   background-color: var(--bOX-background-color);
+  overflow-x: scroll;
 }
+.exp::-webkit-scrollbar{
+  display: none;
+}
+
 .exp div{
   display: flex;
   flex-direction: column;

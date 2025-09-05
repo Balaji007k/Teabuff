@@ -34,15 +34,13 @@ function PlaceOrder({ isAuthenticated, cart }) {
 
         if (!userId) {
             setAlertMessage({message:"User not authenticated",state:false})
-            return setTimeout(()=>{
-                setAlertMessage(null);
-            },3000);
+            return ;
+            // setTimeout(()=>{
+            //     setAlertMessage(null);
+            // },1500);
         }
 
         try {
-            // const response = await fetch(`https://teabuff.onrender.com/carts/${userId}/${productId}`, {
-            //     method: "DELETE"
-            // });
 
             const { Result, Error } = await ApiService.fetchData(`/carts/${userId}/${productId}`,"DELETE");
 
@@ -52,21 +50,29 @@ function PlaceOrder({ isAuthenticated, cart }) {
             console.error("Error removing item:", err);
             setAlertMessage({message:"Failed to remove item."+err,state:false});
         }
-        setTimeout(()=>{
-                setAlertMessage(null);
-            },3000);
+        // setTimeout(()=>{
+        //         setAlertMessage(null);
+        //     },1500);
     };
 
     const OrderHandler = () => {
         if (cart.items.length <= 0) {
              setAlertMessage({message:"No items in Cart",state:false});
-             setTimeout(()=>{
-                setAlertMessage(null);
-             },3000);
+            //  setTimeout(()=>{
+            //     setAlertMessage(null);
+            //  },1500);
         }
         PostSaveCart(cart,quantity);
         setOrder(true);
     };
+
+    useEffect(() => {
+  if (AlertMessagePlaceOrder?.message) {
+    // console.log(AlertMessagePlaceOrder)
+    const timer = setTimeout(() => setAlertMessage(""), 1500);
+    return () => clearTimeout(timer);
+  }
+}, [AlertMessagePlaceOrder]);
 
 
     useEffect(() => {
@@ -214,8 +220,8 @@ function PlaceOrder({ isAuthenticated, cart }) {
                         </div>
                     </>
                 )}
-                <div className={`w-100 ${Location.pathname==='/CheckOut/'+isAuthenticated?.userId?'d-none':'d-block'} d-flex justify-content-center gap-2`}>
-                    {!Order && <><button className='cart-btn px-3' onClick={() => PostSaveCart(cart,quantity)}>Save Cart</button><Link to={`/CheckOut/${isAuthenticated?.userId}`}><button className='cart-btn px-3' onClick={() => OrderHandler()}>Place Order</button></Link></>}
+                <div className={`w-100 ${Location.pathname==='/CheckOut/'+isAuthenticated?.userId?'d-none':'d-block'} ${small&&'position-fixed bottom-0 py-2 bg-white'} d-flex justify-content-center gap-2`}>
+                    {!Order && <><button className={`cart-btn px-3 ${small&&'rounded-5 py-1'}`} onClick={() => PostSaveCart(cart,quantity)}>Save Cart</button><Link to={`/CheckOut/${isAuthenticated?.userId}`}><button className={`cart-btn px-3 ${small&&'rounded-5'}`} onClick={() => OrderHandler()}>Place Order</button></Link></>}
                 </div>
             </div>}
 

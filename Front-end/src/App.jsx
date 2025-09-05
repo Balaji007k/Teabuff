@@ -81,7 +81,7 @@ function App() {
           path={`/${isAuthenticated?.userName+"Cart"}/:id`}
           element={<PlaceOrder cart={cart} isAuthenticated={isAuthenticated} />}
         />
-        <Route path='/WishList' element={<Wishlist isAuthenticated={isAuthenticated}/>}/>
+        <Route path='/WishList' element={<Wishlist isAuthenticated={isAuthenticated}/>} />
         <Route path="/Admin" element={<Admin Review={Review} productsItem={productsItem} category={category}/>}>
           <Route
             path="UserDetails"

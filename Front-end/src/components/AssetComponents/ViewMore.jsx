@@ -10,7 +10,7 @@ export default function ViewMore() {
                 <button className='ViewMore fs-2' style={{color:"var(--btn-color)"}} onClick={() => Navigate('/Menu')}>
                     <i className="fa-solid fa-angles-right"></i>
                 </button>
-                <h1>View More</h1>
+                <b className=" fs-3">View More</b>
             </div>
         </div>
     )

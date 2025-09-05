@@ -123,7 +123,7 @@ function Product({ isAuthenticated, productsItem, category }) {
               style={{
                 display: 'flex',
                 gap: '20px',
-                maxHeight: small ? '545px' : 'auto'
+                maxHeight: small ? '550px' : 'auto'
               }}
             >
               {items && items.length > 0 ? (
@@ -169,7 +169,7 @@ function Product({ isAuthenticated, productsItem, category }) {
               style={{
                 display: 'flex',
                 gap: '20px',
-                maxHeight: small ? '545px' : 'auto'
+                maxHeight: small ? '550px' : 'auto'
               }}
             >
               {items && items.length > 0 ? (
@@ -213,7 +213,7 @@ function Product({ isAuthenticated, productsItem, category }) {
               style={{
                 display: 'flex',
                 gap: '20px',
-                maxHeight: small ? '545px' : 'auto'
+                maxHeight: small ? '550px' : 'auto'
               }}
             >
               {items && items.length > 0 ? (
@@ -260,7 +260,7 @@ function Product({ isAuthenticated, productsItem, category }) {
               style={{
                 display: 'flex',
                 gap: '20px',
-                maxHeight: small ? '545px' : 'auto'
+                maxHeight: small ? '550px' : 'auto'
               }}
             >
               {items && items.length > 0 ? (
@@ -291,10 +291,10 @@ function Product({ isAuthenticated, productsItem, category }) {
 
 
         <div className='product exp d-flex justify-content-around my-3'>
-          <div><AnimatedCounter endValue={30} label={'+'} /><h5>Lorem, ipsum dolor.</h5></div>
-          <div><AnimatedCounter endValue={50} label={'+'} /><h5>Lorem.</h5></div>
-          <div><AnimatedCounter endValue={15} label={'k'} /><h5>Lorem, ipsum dolor.</h5></div>
-          <div><AnimatedCounter endValue={45} label={'+'} /><h5>Lorem.</h5></div>
+          <div><AnimatedCounter endValue={3} label={'+'} /><h5>Projects Completed</h5></div>
+          <div><AnimatedCounter endValue={6} label={'+'} /><h5>Month Experience</h5></div>
+          <div><AnimatedCounter endValue={100} label={'%'} /><h5>Client satisfaction</h5></div>
+          <div><AnimatedCounter endValue={""} label={''} /><h5>Support Available</h5></div>
         </div>
       </div>
     </div>
