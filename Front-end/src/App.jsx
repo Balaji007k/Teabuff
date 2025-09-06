@@ -21,7 +21,7 @@ import PageNotFound from './components/AssetComponents/PageNotFound';
 import Payment from './components/AssetComponents/Payment';
 
 function App() {
-  const { isAuthenticated, cart, image, Review, productsItem, category, AlertMessageTheme } = useTheme();
+  const { isAuthenticated, cart, image, Review, productsItem, category, AlertMessageTheme, FastPlaceOrder } = useTheme();
   const userInput = useRef();
   const location = useLocation();
   const [AlertMessage,setAlertMessage] = useState([]);
@@ -102,7 +102,7 @@ function App() {
         </Route>
         <Route
             path="/CheckOut/:id"
-            element={<CheckOut isAuthenticated={isAuthenticated} cart={cart}/>}
+            element={<CheckOut isAuthenticated={isAuthenticated} cart={FastPlaceOrder&&FastPlaceOrder?.state?FastPlaceOrder.cart:cart}/>}
           />
           <Route
             path="/About"

@@ -32,12 +32,17 @@ function Menu({ isAuthenticated }) {
                 <div className='Extra-products-container py-3'>
                     <div className='Extra-products'>
                         <div className="scroll-items" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(270px,1fr))', justifyItems: 'center', gap: '20px', maxHeight:'100%'}}>
-                            {items.length > 0 ? items.map((e) => (
-                                <ProductCard isAuthenticated={isAuthenticated} e={e} Navigate={Navigate} />
-                            )) : (
-                                <EmptyProductCard />
-                            )
-                            }
+{items.length > 0 ? (
+items.map((e, idx) => (
+<ProductCard key={idx} isAuthenticated={isAuthenticated} e={e} Navigate={Navigate} />
+))
+) : productsItem && productsItem.length > 0 ? (
+productsItem.map((item, idx) => (
+<ProductCard key={idx} isAuthenticated={isAuthenticated} e={item} Navigate={Navigate} />
+))
+) : (
+<EmptyProductCard />
+)}
                         </div>
                     </div>
                 </div>

@@ -85,7 +85,7 @@ function Header({ userinputFocus, isAuthenticated, cart, setAlertMessage }) {
 
     return (
         <>
-            {Location.pathname === '/' || Location.pathname === '/Login' || Location.pathname === '/Register' || isAuthenticated ? (<div className='header' style={{ borderRadius: !small&&BarVisible ? '0px 0px 0px 20px' : '0px 0px 20px 20px' }}>
+            <div className='header' style={{ borderRadius: !small&&BarVisible ? '0px 0px 0px 20px' : '0px 0px 20px 20px' }}>
                 <div className="logo name">
                     <h1 className=" fs-3 m-0">Teabuff</h1>
                 </div>
@@ -138,8 +138,6 @@ function Header({ userinputFocus, isAuthenticated, cart, setAlertMessage }) {
                     </nav>}
                 </div>
             </div>
-            ) : null
-            }
         </>
     )
 }

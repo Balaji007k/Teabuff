@@ -33,6 +33,7 @@
   margin: 2vw;
   width: 100%;
   font-weight: 600;
+  cursor: pointer;
 }
 
 .nav-list li a.active::after {

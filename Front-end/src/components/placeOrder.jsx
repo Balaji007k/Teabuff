@@ -152,7 +152,7 @@ function PlaceOrder({ isAuthenticated, cart }) {
                                     </div>
                                     <div className='w-100 d-flex flex-column gap-3 justify-content-between align-items-center'>
                                         <span className='plus-cart fs-4 fw-bold w-75 d-flex justify-content-between align-items-center gap-2'>
-                                            <button onClick={() => handleQuantityChange(item.productId, -1)}>-</button>
+                                            {quantity[item.productId]<=1?<button className=' bg-body-secondary'>-</button>:<button onClick={() => handleQuantityChange(item.productId, -1)}>-</button>}
                                             {quantity[item.productId] ?? item.quantity}
                                             <button onClick={() => handleQuantityChange(item.productId, 1)}>+</button>
                                         </span>

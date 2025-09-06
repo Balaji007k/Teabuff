@@ -50,6 +50,7 @@ function ProductItem({ isAuthenticated, Review, productsItem, cart, category, Al
   const Navigate = useNavigate();
   const [Heart, setHeart] = useState(false);
 
+
   const ShowBar = () => {
     setShow(prev => !prev)
   }
@@ -61,6 +62,11 @@ function ProductItem({ isAuthenticated, Review, productsItem, cart, category, Al
   const Products = (Products) => {
     setProducts(Products)
   }
+
+  const PlaceOrder=(productId, itemPrice, quantity, itemName, userId, Description, Product_Url, Rating, likes, placeOrder)=>{
+    const Relocate = handleCart(productId, itemPrice, quantity, itemName, userId, Description, Product_Url, Rating, likes, placeOrder);
+    if (Relocate) Navigate(`/CheckOut/${isAuthenticated?.userId}`);
+  };
 
   useEffect(() => {
     if(isAuthenticated){
@@ -134,10 +140,10 @@ function ProductItem({ isAuthenticated, Review, productsItem, cart, category, Al
                       <h2>₹{selectedProduct.price}</h2>
                       <div className="Categories bg-white w-100 h-auto py-1 d-inline-flex align-items-center gap-2"><i class="fa-solid fa-circle-exclamation"></i><p>Order in <span className=' fw-bold'>02:30:25</span> to get next day delivery</p></div>
                       <span className=' w-100 fs-4 fw-bold w-75 d-flex justify-content-center align-items-center gap-3'>
-                        <h3 className=' fw-bold'>Quantity:</h3><button onClick={() => setquantity(quantity - 1)}>-</button>{quantity}<button onClick={() => setquantity(quantity + 1)}>+</button>
+                        <h3 className=' fw-bold'>Quantity:</h3>{quantity==0?<button className=' bg-body-secondary'>-</button>:<button onClick={() => setquantity(quantity - 1)}>-</button>}{quantity}<button onClick={() => setquantity(quantity + 1)}>+</button>
                       </span>
                       <div className=' w-100 d-flex align-items-center gap-3'>
-                        <button className={`btn Cart-Button ${!small&&'w-75'} py-2`} onClick={() => { handleCart(selectedProduct._id, selectedProduct.price, quantity, selectedProduct.title, isAuthenticated.userId, selectedProduct.description, selectedProduct.url, selectedProduct.rating, Heart) }}>Add to Cart</button><Link className={!small&&'w-25'} to={cart?.items.length!==0&&`/${isAuthenticated?.userName+"Cart"}/${isAuthenticated?.userId}`}><button className='btn Cart-Button w-100 py-2' onClick={() => handleCart(selectedProduct._id, selectedProduct.price, quantity, selectedProduct.title, isAuthenticated.userId, selectedProduct.description, selectedProduct.url, selectedProduct.rating, Heart, true)}>Place Order</button></Link>
+                        <button className={`btn Cart-Button ${!small&&'w-75'} py-2`} onClick={() => { handleCart(selectedProduct._id, selectedProduct.price, quantity, selectedProduct.title, isAuthenticated.userId, selectedProduct.description, selectedProduct.url, selectedProduct.rating, Heart, false) }}>Add to Cart</button>{cart?.items.length||quantity!==0?<button className={`btn Cart-Button ${small?'w-25':'w-100'} py-2`} onClick={() => PlaceOrder(selectedProduct._id, selectedProduct.price, quantity, selectedProduct.title, isAuthenticated.userId, selectedProduct.description, selectedProduct.url, selectedProduct.rating, Heart, true)}>Buy Now</button>:<button className=' bg-body-secondary'></button>}
                         <span class={`material-symbols-outlined Product-icons heart ${Heart ? 'text-danger' : 'text-black'}`} onClick={() => PostUserLikedState(isAuthenticated.userId, selectedProduct._id, selectedProduct.title, selectedProduct.price, selectedProduct.description, selectedProduct.url, selectedProduct.categoryId, selectedProduct.rating, selectedProduct.ingredients, selectedProduct.features, selectedProduct.purchaseLink, !Heart && true, selectedProduct.comments)}>
                           favorite
                         </span>

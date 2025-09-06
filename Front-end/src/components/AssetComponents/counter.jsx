@@ -16,7 +16,7 @@ const AnimatedCounter = ({ endValue, label }) => {
         } else {
           clearInterval(interval);
         }
-      }, 50);
+      }, 10);
     }
   }, [inView, endValue]);
 

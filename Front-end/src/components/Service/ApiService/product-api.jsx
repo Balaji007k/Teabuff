@@ -5,14 +5,16 @@ class ApiService {
   //     : "http://localhost:5000";       // Local backend for development
 
 
-  static async fetchData(url, method = "GET", params = null) {
+  
+  static async fetchData(url, method = "GET", params = null, headers=null) {
+    var const_headers = {
+          "Content-Type": "application/json",
+        };
     try {
       const response = await fetch("https://teabuff.onrender.com" + url, {
         method: method,
         credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: headers??const_headers,
         body:
           method === "POST" || method === "PUT"
             ? JSON.stringify(params)

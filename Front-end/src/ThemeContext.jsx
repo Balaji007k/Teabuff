@@ -20,6 +20,7 @@ export const ThemeProvider = ({ children }) => {
     const [UserLikedState, setUserLikedState] = useState(null);
     const [UpdatedProduct, setUpdatedProduct] = useState(null);
     const [AlertMessageTheme,setAlertMessage] = useState([]);
+    const [FastPlaceOrder,setFastPlaceOrder] = useState([]);
 
     const fetchAllReviews = async () => {
         const { Result, Error } = await ApiService.fetchData('/allreviews');
@@ -79,9 +80,9 @@ export const ThemeProvider = ({ children }) => {
 
         try {
         const { Result, Error } = await ApiService.fetchData(`/carts/${userId}`,"PUT",payload);
-                console.log(Result.message);
                 setAlertMessage({message:Result.message,state:true});
                 setUpdatedCart(Result?.UpdatedCart)
+                setFastPlaceOrder({cart:FastPlaceOrder.cart,state:false});
                 if(Error) console.log(Error);
         } catch (error) {
             console.error("Error saving cart:", err);
@@ -150,26 +151,47 @@ export const ThemeProvider = ({ children }) => {
 
 
     const handleCart = (productId, itemPrice, quantity, itemName, userId, Description, Product_Url, Rating, likes, placeOrder=false) => {
+
+  const newCart = { userId, productId, itemPrice, quantity, itemName, Product_Url, Rating, Description, likes };
   if (quantity === 0&&!placeOrder) {
     setAlertMessage({ message: "Minimum select one item", state: false });
     return ;
   }
-
-  const newCart = { userId, productId, itemPrice, quantity, itemName, Product_Url, Rating, Description, likes };
-
-  ApiService.fetchData('/carts', "POST", newCart)
+  else if(cart.items.length&&quantity==0&&placeOrder){
+    return true;
+}
+else if ((quantity>=0&&placeOrder&&!cart.items.length)||(placeOrder&&quantity!==0&&cart.items.length)){
+    ApiService.fetchData('/carts', "POST", newCart)
+    .then(({ Result, Error }) => {
+      if (Error) {
+        setAlertMessage({ message: "Login failed: " + Error, state: false });
+        return ;
+      }
+      setAlertMessage({ message: "Cart successfully added", state: true });
+      setUpdatedCart(Result?.usercart);
+      setFastPlaceOrder({cart:Result?.newItem,state:true});
+    })
+    .catch(err => console.log(err));
+    return true;
+}
+else if(placeOrder&&quantity==0&&!cart.items.length){
+    setAlertMessage({ message: "Minimum select one item", state: false });
+    return false;
+}
+else{
+    ApiService.fetchData('/carts', "POST", newCart)
     .then(({ Result, Error }) => {
       if (Error) {
         setAlertMessage({ message: "Login failed: " + Error, state: false });
         return ;
       }
 
-      if (quantity !== 0) {
-        setAlertMessage({ message: "Cart successfully Added", state: true });
+      setAlertMessage({ message: "Cart successfully added", state: true });
         setUpdatedCart(Result?.usercart);
-      }
     })
-    .catch(err => console.log(err));
+    .catch(err=>console.log(err));
+    return false;
+    }
 };
 
 
@@ -216,7 +238,8 @@ export const ThemeProvider = ({ children }) => {
         fetchData();
     }, []);
 
-    useEffect(() => {
+
+  useEffect(() => {
   if (AlertMessageTheme?.message) {
     // console.log(AlertMessageTheme)
     const timer = setTimeout(() => setAlertMessage(""), 1500);
@@ -235,10 +258,11 @@ export const ThemeProvider = ({ children }) => {
     );
 
     if (isAuthenticated) return !isLoading && (
-        <ThemeContext.Provider value={{ isAuthenticated, AllReview, Review, image, productsItem, category, cart, handleCart, setUpdatedCart, PostSaveCart, PostUserLikedState, UserLikedState, UpdateProduct, UserProductReviews, fetchProductReviews, ProductAvgRating, UpdatedProduct, AlertMessageTheme }}>
+        <ThemeContext.Provider value={{ isAuthenticated, AllReview, Review, image, productsItem, category, cart, handleCart, setUpdatedCart, PostSaveCart, PostUserLikedState, UserLikedState, UpdateProduct, UserProductReviews, fetchProductReviews, ProductAvgRating, UpdatedProduct, AlertMessageTheme, FastPlaceOrder}}>
             {children}
         </ThemeContext.Provider>
     );
+
 };
 
 export const useTheme = () => useContext(ThemeContext);

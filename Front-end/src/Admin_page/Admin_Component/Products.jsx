@@ -27,6 +27,11 @@ function Products({ productsItem }) {
 
   const [Edit, setEdit] = useState(null);
 
+  useEffect(()=>{
+console.log(productsItem);
+  },[productsItem])
+  
+
   const HandleSearch = async (Searched_item) => {
     if (productsItem.length > 0) {
       if (Searched_item !== "") {
@@ -101,9 +106,78 @@ function Products({ productsItem }) {
 
   useEffect(()=>{
     setSearchedProduct(productsItem);
-  },[])
+  },[productsItem]);
+
+
+  //test
+  // const [file, setFile] = useState(null);
+  // const [products, setProducts] = useState([]);
+  // const [message, setMessage] = useState("");
+
+  // // const fetchProducts = async () => {
+  // //   const res = await axios.get("http://localhost:5000/api/products");
+  // //   setProducts(res.data);
+  // // };
+
+  // const fetchShops = async () => {
+  //       const { Result, Error } = await ApiService.fetchData('/products');
+  //       if (Result) setProducts(Result);
+  //   };
+
+  // useEffect(() => {
+  //   fetchShops();
+  // }, []);
+
+  // const handleFileChange = (e) => {
+  //   setFile(e.target.files[0]);
+  // };
+
+  // const handleUpload = async () => {
+  //   if (!file) return setMessage("Please select a JSON file.");
+
+  //   const formData = new FormData();
+  //   formData.append("file", file);
+
+  //   try {
+  //     // const res = await axios.post(
+  //     //   "http://localhost:5000/api/import-products",
+  //     //   formData,
+  //     //   { headers: { "Content-Type": "multipart/form-data" } }
+  //     // );
+
+  //     const { Result, Error } = await ApiService.fetchData('/products','POST',formData,{ "Content-Type": "multipart/form-data" });
+
+  //     //setMessage(${res.data.importedCount} products imported!);
+  //     fetchShops(); // reload products from DB
+  //   } catch (err) {
+  //     setMessage("Error: " + err.message);
+  //   }
+  // };
 
   return (
+    <>
+    {/* test */}
+    {/* <div className="p-6">
+      <h2 className="text-xl font-bold mb-4">Admin - Import Products</h2>
+      <input type="file" accept=".json" onChange={handleFileChange} />
+      <button
+        onClick={handleUpload}
+        className="ml-2 px-4 py-2 bg-green-600 text-white rounded"
+      >
+        Upload JSON
+      </button>
+      {message && <p className="mt-2">{message}</p>}
+
+      <h3 className="mt-6 font-bold">Products</h3>
+      <ul>
+        {/* {products.map((p) => (
+          <li key={p._id}>
+            {p.title} - ₹{p.price} - ⭐ {p.rating}
+          </li>
+        ))} 
+      </ul>
+    </div> */}
+    {/* test */}
     <div className='Admin_page overflow-y-scroll'>
       <table>
         <thead>
@@ -321,6 +395,7 @@ function Products({ productsItem }) {
         </tbody>
       </table>
     </div>
+    </>
   );
 }
 
