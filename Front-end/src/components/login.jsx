@@ -35,8 +35,11 @@ const handleLogin = () => {
   ApiService.fetchData('/login', "POST", User)
     .then(({ Result, Error }) => {
       if (Error==="Failed to fetch"){
-        alert("Server failed to fetch!")
+        AccoutState({message:"Server failed to fetch!",state:false});
         console.log("Error: "+Error)
+        setTimeout(()=>{
+        AccoutState(null);
+      },1500);
       }
       if (Error) {
         setErrors(Error);

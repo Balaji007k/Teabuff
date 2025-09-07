@@ -19,13 +19,28 @@
     display: flex;
     justify-content: space-around;
 }
-.bill table tr th{
+.bill.total-page table tr th,.bill.items-page table tr th{
     width: 65%;
+    font-weight: 600;
+}
+.bill.total-page table tr td,.bill.items-page table tr td{
+    width: 40%;
+}
+.bill.total-page table tr th{
     text-align: start;
 }
-.bill table tr td{
-    width: 40%;
+.bill.total-page table tr td{
     text-align: end;
+}
+.bill.items-page table tr th{
+    text-align: center;
+}
+.bill.items-page table tr td{
+    text-align: center;
+    font-weight: 500;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 .Contact-information input,.ShippingAddress input,.Payment input{
     height: 50px;

@@ -242,6 +242,7 @@ video{
 }
 .About-btn-image{
   flex-direction: column;
+  gap: 10px !important;
 }
 .Image-slide{
   margin: 10px;

@@ -23,9 +23,12 @@ export default function CheckOut({isAuthenticated,cart}){
       const [CheckoutReUse,setCheckoutReUse] = useState(false);
       const [UserCheckOutData,setUserCheckOutData] = useState(null);
       const [AlertMessageCheckOut,setAlertMessage] = useState([]);
+      const [Loading,setLoading] = useState(false);
 
       const fetchCheckOut = async () => {
+        setLoading(true);
         const { Result, Error } = await ApiService.fetchData(`/Checkouts/${isAuthenticated.userId}`);
+        if(Result)setLoading(false);
         if (!Error) {setUserCheckOutData(Result?.UserCheckOut.ShippingDetails[0]);
         }
         else console.error(Error);
@@ -33,6 +36,7 @@ export default function CheckOut({isAuthenticated,cart}){
       
       const PostCheckOut = async(e) => {
         e.preventDefault();
+        setLoading(true);
         const NewCheckut = {
             contactEmail,
       firstname,
@@ -47,6 +51,7 @@ export default function CheckOut({isAuthenticated,cart}){
         };
         const { Result, Error } = await ApiService.fetchData(`/NewCheckout/${isAuthenticated.userId}`,"POST",NewCheckut);
         if (Result){
+            setLoading(false);
             setAlertMessage({message:Result.message,state:true});
             setTimeout(()=>{
                 setAlertMessage(null);

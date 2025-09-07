@@ -7,6 +7,7 @@ import PageNotFound from './AssetComponents/PageNotFound';
 import { useMediaQuery } from 'react-responsive';
 import ApiService from './Service/ApiService/product-api';
 import AlertMessage from './AssetComponents/AlertMessage';
+import LoadingPage from './AssetComponents/LoadingPage';
 
 function PlaceOrder({ isAuthenticated, cart }) {
     const small = useMediaQuery({maxWidth:600});
@@ -14,6 +15,7 @@ function PlaceOrder({ isAuthenticated, cart }) {
     const Location = useLocation();
     const { setUpdatedCart,PostSaveCart, AlertMessageTheme } = useTheme();
     const [AlertMessagePlaceOrder,setAlertMessage] = useState([]);
+    const [Loading,setLoading] = useState(false);
 
     const [quantity, setquantity] = useState({}); // track quantity by productId
     const Navigate = useNavigate();
@@ -30,6 +32,7 @@ function PlaceOrder({ isAuthenticated, cart }) {
     const Total = ((grandTotal - Discount) + Tax)?.toFixed(2)
 
     const handleCancelItem = async (productId) => {
+        setLoading(true);
         const userId = isAuthenticated?.userId;
 
         if (!userId) {
@@ -43,16 +46,13 @@ function PlaceOrder({ isAuthenticated, cart }) {
         try {
 
             const { Result, Error } = await ApiService.fetchData(`/carts/${userId}/${productId}`,"DELETE");
-
+            if(Result) {setLoading(false);}
             setAlertMessage({message:Result.message,state:true})
             setUpdatedCart(Result.cart);
         } catch (err) {
             console.error("Error removing item:", err);
             setAlertMessage({message:"Failed to remove item."+err,state:false});
         }
-        // setTimeout(()=>{
-        //         setAlertMessage(null);
-        //     },1500);
     };
 
     const OrderHandler = () => {
@@ -110,21 +110,21 @@ function PlaceOrder({ isAuthenticated, cart }) {
     }
     if (isAuthenticated&&isAuthenticated.userId===id){ return (
         <>
-        {AlertMessagePlaceOrder&&AlertMessagePlaceOrder?.message&&<AlertMessage message={AlertMessagePlaceOrder}/>}
+        {AlertMessagePlaceOrder&&AlertMessagePlaceOrder?.message?<AlertMessage message={AlertMessagePlaceOrder}/>:Loading&&<LoadingPage/>}
         <div className={` d-flex gap-2 pb-3 ${Location.pathname==='/CheckOut/'+isAuthenticated?.userId?'flex-column-reverse':'flex-column'}`} style={{ marginTop: '75px'}}>
             {Location.pathname===`/CheckOut/${isAuthenticated.userId}`?
-            <div className=' w-100 d-flex justify-content-center'>
-            <table style={{width:'95%'}}>
-                <tr className=' text-center fs-4'>
+            <div className='bill items-page w-100'>
+            <table className=' w-100 d-flex flex-column align-items-center'>
+                <tr className='text-center fs-4'>
                     <th className=' fw-bold'>Item</th>
                     <th className=' fw-bold'>Quantity</th>
                     <th className=' fw-bold'>Total</th>
                 </tr>
                 {cart?.items.map((item) => (
-                    <tr className=' text-center' key={item._id}>
-                        <td className=' d-flex flex-column align-items-center'><img className=' rounded-2' src={item.Product_Url} alt='Loading'height={'150px'} width={'200px'}/><span>{item.itemName}</span></td>
+                    <tr className=' fs-5' key={item._id}>
+                        <td className=' d-flex flex-column align-items-center'><img className=' rounded-2' src={item.Product_Url} alt='Loading'height={'100%'} width={'100%'}/><span>{item.itemName}</span></td>
                         <td>{item.quantity}</td>
-                        <td><h5>Total ₹{((quantity[item.productId] ?? item.quantity) * item.itemPrice).toFixed(2)}</h5></td>
+                        <td>₹{((quantity[item.productId] ?? item.quantity) * item.itemPrice).toFixed(2)}</td>
                     </tr>
                 ))}
             </table>
@@ -167,15 +167,15 @@ function PlaceOrder({ isAuthenticated, cart }) {
                 </div>
             </div>}
             
-            {cart?.items?.length <= 0|| !cart ? <div className=' w-100 text-center fs-2'>No Cart Here</div> : <div className=' w-100 d-flex flex-column align-items-center flex-wrap w-100'>
+            {cart?.items?.length <= 0|| !cart ? <div className=' w-100 text-center fs-2'>No Cart Here</div> : <div className=' w-100 d-flex flex-column align-items-center flex-wrap'>
                 { Location.pathname==='/CheckOut/'+isAuthenticated?.userId&&<> <h3>Selected Items {cart?.items.length}</h3> </>}
                 {( Location.pathname==='/CheckOut/'+isAuthenticated?.userId)&&(
                     <>
                         <div className='d-flex justify-content-center align-items-center'>
                             <input className='promo' type="text" placeholder='Gift or promo code' /><button className='promo'>Apply</button>
                         </div>
-                        <div className='bill w-100'>
-                            <table className=' w-100 d-flex flex-column align-items-center'>
+                        <div className='bill total-page w-100'>
+                            <table className='w-100 d-flex flex-column align-items-center'>
                                 <tr>
                                     <th>
                                         Subtotal
@@ -212,7 +212,7 @@ function PlaceOrder({ isAuthenticated, cart }) {
                                     <th>
                                         GrandTotal
                                     </th>
-                                    <td className=' fs-3'>
+                                    <td className=' fs-3 fw-bolder'>
                                         ₹{(Total)}
                                     </td>
                                 </tr>

@@ -46,8 +46,9 @@
 }
 button{
     color: black;
-    padding: 15px 0px;
+    padding: 10px 0px;
     font-size: x-large;
+    font-weight: 500;
     background-color: var(--background-color);
     border: none;
 }

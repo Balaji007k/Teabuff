@@ -15,7 +15,7 @@
   width: 90%;
   height: 90vh;
   gap: 2vw;
-  padding: 20px 2vw;
+  padding: 0px 2vw;
   border-radius: 20px;
 }
 .inner-box::-webkit-scrollbar{

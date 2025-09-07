@@ -11,6 +11,7 @@ import { useEffect } from 'react';
 function Home({ userInput, isAuthenticated, AccoutState, PopupMessage }) {
 
   const small = useMediaQuery({maxWidth:600});
+  
 
 
   const Navigate = useNavigate();
@@ -20,7 +21,7 @@ function Home({ userInput, isAuthenticated, AccoutState, PopupMessage }) {
     <>
     <div className="outerbox" id="Home">
       {PopupMessage&&PopupMessage?.message&&<AlertMessage message={PopupMessage} AccoutState={AccoutState}/>}
-      <div className='inner-box'>
+      <div className={`inner-box ${small&&'pt-5'} py-4`}>
         <div className='inner-content d-flex justify-content-center'>
           <div className='inner-text'>
             <div className='bold-text'>
