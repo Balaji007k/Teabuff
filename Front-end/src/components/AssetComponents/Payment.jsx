@@ -3,6 +3,7 @@ import '../../style/Payment.css'
 import { useMediaQuery } from "react-responsive";
 import { useNavigate } from "react-router-dom";
 import AlertMessage from "./AlertMessage";
+import LoadingPage from "./LoadingPage";
 
 export default function Payment() {
   const small = useMediaQuery({ maxWidth: 600 })
@@ -13,6 +14,7 @@ export default function Payment() {
   const [expiry, setExpiry] = useState("");
   const [cvv, setCvv] = useState("");
   const [AlertMessagePayment,setAlertMessage] = useState([]);
+  const [Loading,setLoading] = useState(false);
 
   const validateEmail = (val) =>
     /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val);
@@ -45,13 +47,17 @@ export default function Payment() {
     </span>
   );
 
+  useEffect(()=>{
+    if(AlertMessagePayment&&AlertMessagePayment.message) setLoading(false);
+  },[AlertMessagePayment])
+
   useEffect(() => {
     window.scrollTo(0, 0)
   }, [])
 
   return (
     <>
-    {AlertMessagePayment&&AlertMessagePayment?.message&&<AlertMessage message={AlertMessagePayment} />}
+    {AlertMessagePayment&&AlertMessagePayment?.message?<AlertMessage message={AlertMessagePayment} />:Loading&&<LoadingPage/>}
     <div className=" d-flex justify-content-center" style={{ marginTop: "75px" }}>
       <div style={{ width: !small ? '75%' : '95%' }}>
         <h2 className="mb-5 px-2">ENTER YOUR PAYMENT INFORMATION</h2>
@@ -77,6 +83,7 @@ export default function Payment() {
         <form
           onSubmit={(e) => {
             e.preventDefault();
+            setLoading(true);
             const isValid =
               validateEmail(email) &&
               validateCardHolder(cardHolder) &&
@@ -90,7 +97,6 @@ export default function Payment() {
                 setAlertMessage(null);
             },3000);
             }
-
             setAlertMessage({message:"Payment submitted!",state:true});
             setTimeout(()=>{
                 setAlertMessage(null);

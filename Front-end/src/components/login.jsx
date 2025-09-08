@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { useLocation, useNavigate } from "react-router-dom";
 import ApiService from './Service/ApiService/product-api';
 
-function Login({ userInput,AccoutState }) {
+function Login({ userInput,AccoutState,setLoading}) {
 
     const Location = useLocation();
     const Navigate = useNavigate();
@@ -17,6 +17,7 @@ function Login({ userInput,AccoutState }) {
     const [phoneNumber,setPhone] = useState("");
 
 const handleLogin = () => {
+  setLoading(true);
   setErrors("");
   if (errorTimerRef.current) {
     clearTimeout(errorTimerRef.current);
@@ -73,6 +74,7 @@ const handleLogin = () => {
 
 
     const newUser = async () => {
+      setLoading(true);
 
       const newUser = {username,email,password,phoneNumber}
 

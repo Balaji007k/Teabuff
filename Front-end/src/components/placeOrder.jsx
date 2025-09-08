@@ -66,6 +66,10 @@ function PlaceOrder({ isAuthenticated, cart }) {
         setOrder(true);
     };
 
+    useEffect(()=>{
+        if(AlertMessageTheme&&AlertMessageTheme.message) setLoading(false);
+    },[AlertMessageTheme])
+
     useEffect(() => {
   if (AlertMessagePlaceOrder?.message) {
     // console.log(AlertMessagePlaceOrder)
@@ -134,7 +138,6 @@ function PlaceOrder({ isAuthenticated, cart }) {
                 <div className={`w-100 d-flex justify-content-center`}>
                     <div className='Cart-Products w-100' style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(300px,1fr))', justifyItems: 'center' }}>
                         {cart?.items.map((item) => (
-                            <>
                                 <div key={item._id} className='selected-item d-flex flex-column align-items-center gap-4'>
                                     <div key={item.productId} className='product-item'>
                                         <img src={item.Product_Url} className='Shop-slid' alt={item.itemName} />
@@ -161,7 +164,6 @@ function PlaceOrder({ isAuthenticated, cart }) {
                                         </div>
                                     </div>
                                 </div>
-                            </>
                         ))}
                     </div>
                 </div>
@@ -221,7 +223,7 @@ function PlaceOrder({ isAuthenticated, cart }) {
                     </>
                 )}
                 <div className={`w-100 ${Location.pathname==='/CheckOut/'+isAuthenticated?.userId?'d-none':'d-block'} ${small&&'position-fixed bottom-0 py-2 bg-white'} d-flex justify-content-center gap-2`}>
-                    {!Order && <><button className={`cart-btn px-3 ${small&&'rounded-5 py-1'}`} onClick={() => PostSaveCart(cart,quantity)}>Save Cart</button><Link to={`/CheckOut/${isAuthenticated?.userId}`}><button className={`cart-btn px-3 ${small&&'rounded-5'}`} onClick={() => OrderHandler()}>Place Order</button></Link></>}
+                    {!Order && <><button className={`cart-btn px-3 ${small&&'rounded-5 py-1'}`} onClick={() => {PostSaveCart(cart,quantity);setLoading(true)}}>Save Cart</button><Link to={`/CheckOut/${isAuthenticated?.userId}`}><button className={`cart-btn px-3 ${small&&'rounded-5'}`} onClick={() => {OrderHandler();setLoading(true)}}>Place Order</button></Link></>}
                 </div>
             </div>}
 

@@ -47,7 +47,7 @@ export const ThemeProvider = ({ children }) => {
             const userId = isAuthenticated?.userId;
     
             if (!userId) {
-                alert("User not authenticated");
+                setAlertMessage({message:"User not authenticated",state:false});
                 return;
             }
             var payload;
@@ -154,7 +154,7 @@ export const ThemeProvider = ({ children }) => {
 
   const newCart = { userId, productId, itemPrice, quantity, itemName, Product_Url, Rating, Description, likes };
   if (quantity === 0&&!placeOrder) {
-    setAlertMessage({ message: "Minimum select one item", state: false });
+        setAlertMessage({ message: "Minimum select one item", state: false });
     return ;
   }
   else if(cart.items.length&&quantity==0&&placeOrder){
@@ -248,7 +248,7 @@ else{
 }, [AlertMessageTheme]);
 
     if(isLoading)return(
-        <LoadingPage/>
+        <LoadingPage Home={true}/>
     )
 
     if (!isAuthenticated) return !isLoading && (

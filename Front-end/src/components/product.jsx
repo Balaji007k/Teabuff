@@ -90,7 +90,7 @@ function Product({ isAuthenticated, productsItem, category }) {
               style={{ color: value === 0 ? 'grey' : 'var(--color)', backgroundColor: 'var(--bOX-background-color)' }}
             >
               <optgroup style={{ color: 'var(--color)' }}>
-                <option value={0} selected>All</option>
+                <option value={0} defaultValue>All</option>
                 {category.map((e) => (
                   <option key={e?.categoryId} value={e?.categoryId}>{e?.name}</option>
                 ))}
@@ -108,7 +108,7 @@ function Product({ isAuthenticated, productsItem, category }) {
         {SearchItem==""&&<><h1>Popular</h1>
         <div className='product content d-flex align-items-center'>
           <div className='Next left-scroll' onClick={popularPrv}>
-            <span class="material-symbols-outlined">
+            <span className="material-symbols-outlined">
               arrow_back_ios
             </span>
           </div>
@@ -130,7 +130,7 @@ function Product({ isAuthenticated, productsItem, category }) {
                 <>
                   {items.map((e) => (
                     e.rating >= 4.5 && (
-                     <ProductCard isAuthenticated={isAuthenticated} e={e} Navigate={Navigate}/>
+                     <ProductCard key={e._id} isAuthenticated={isAuthenticated} e={e} Navigate={Navigate}/>
                     )
                   ))}
                   <ViewMore/>
@@ -144,7 +144,7 @@ function Product({ isAuthenticated, productsItem, category }) {
           </div>
 
           <div className='Next right-scroll' onClick={popularNext}>
-            <span class="material-symbols-outlined">
+            <span className="material-symbols-outlined">
               arrow_forward_ios
             </span>
           </div>
@@ -154,7 +154,7 @@ function Product({ isAuthenticated, productsItem, category }) {
         <h1>Fresh Tea</h1>
         <div className='product content d-flex align-items-center'>
           <div className='Next left-scroll' onClick={HandlePrev}>
-            <span class="material-symbols-outlined">
+            <span className="material-symbols-outlined">
               arrow_back_ios
             </span>
           </div>
@@ -176,7 +176,7 @@ function Product({ isAuthenticated, productsItem, category }) {
                 <>
                   {items.map((e) => (
                     e.categoryId === 1 && (
-                      <ProductCard isAuthenticated={isAuthenticated} e={e} Navigate={Navigate}/>
+                      <ProductCard key={e._id} isAuthenticated={isAuthenticated} e={e} Navigate={Navigate}/>
                     )
                   ))}
                   <ViewMore/>
@@ -188,7 +188,7 @@ function Product({ isAuthenticated, productsItem, category }) {
           </div>
 
           <div className='Next right-scroll' onClick={HandleNext}>
-            <span class="material-symbols-outlined">
+            <span className="material-symbols-outlined">
               arrow_forward_ios
             </span>
           </div>
@@ -198,7 +198,7 @@ function Product({ isAuthenticated, productsItem, category }) {
         <h1>Recommended</h1>
         <div className='product content d-flex align-items-center'>
           <div className='Next left-scroll' onClick={handlePrev}>
-            <span class="material-symbols-outlined">
+            <span className="material-symbols-outlined">
               arrow_back_ios
             </span>
           </div>
@@ -220,7 +220,7 @@ function Product({ isAuthenticated, productsItem, category }) {
                 <>
                   {items.map((e) => (
                     e.categoryId !== 1 && e.rating >=2.5 && (
-                      <ProductCard isAuthenticated={isAuthenticated} e={e} Navigate={Navigate}/>
+                      <ProductCard key={e._id} isAuthenticated={isAuthenticated} e={e} Navigate={Navigate}/>
                     )
                   ))}
                   <ViewMore/>
@@ -232,7 +232,7 @@ function Product({ isAuthenticated, productsItem, category }) {
           </div>
 
           <div className='Next right-scroll' onClick={handleNext}>
-            <span class="material-symbols-outlined">
+            <span className="material-symbols-outlined">
               arrow_forward_ios
             </span>
           </div>
@@ -245,7 +245,7 @@ function Product({ isAuthenticated, productsItem, category }) {
         <h1>Searching Item</h1>
         <div className='product content d-flex align-items-center'>
           <div className='Next left-scroll' onClick={popularPrv}>
-            <span class="material-symbols-outlined">
+            <span className="material-symbols-outlined">
               arrow_back_ios
             </span>
           </div>
@@ -267,7 +267,7 @@ function Product({ isAuthenticated, productsItem, category }) {
                 <>
                   {items.map((e) => (
                     (
-                     <ProductCard isAuthenticated={isAuthenticated} e={e} Navigate={Navigate}/>
+                     <ProductCard key={e._id} isAuthenticated={isAuthenticated} e={e} Navigate={Navigate}/>
                     )
                   ))}
                   <ViewMore/>
@@ -281,7 +281,7 @@ function Product({ isAuthenticated, productsItem, category }) {
           </div>
 
           <div className='Next right-scroll' onClick={popularNext}>
-            <span class="material-symbols-outlined">
+            <span className="material-symbols-outlined">
               arrow_forward_ios
             </span>
           </div>

@@ -1,6 +1,6 @@
 class ApiService {
-  // static BASE_URL =
-  //   process.env.NODE_ENV === "production"
+
+  
   //     ? "https://teabuff.onrender.com" // Render live backend
   //     : "http://localhost:5000";       // Local backend for development
 

@@ -5,6 +5,7 @@ import ApiService from '../components/Service/ApiService/product-api';
 import PlaceOrder from "./placeOrder";
 import PageNotFound from "./AssetComponents/PageNotFound";
 import AlertMessage from "./AssetComponents/AlertMessage";
+import LoadingPage from "./AssetComponents/LoadingPage";
 
 export default function CheckOut({isAuthenticated,cart}){
     const small = useMediaQuery({maxWidth:600})
@@ -88,7 +89,7 @@ export default function CheckOut({isAuthenticated,cart}){
 
     if(isAuthenticated?.userId===id){return(
         <>
-        {AlertMessageCheckOut&&AlertMessageCheckOut?.message&&<AlertMessage message={AlertMessageCheckOut}/>}
+        {AlertMessageCheckOut&&AlertMessageCheckOut?.message?<AlertMessage message={AlertMessageCheckOut}/>:Loading&&<LoadingPage/>}
         <div className={` w-100 d-flex ${!small?'flex-row-reverse':'flex-column'} `}>
         <div className="checkout-Cart-page overflow-y-scroll" style={{flex:'1 1 40%',height:'880px'}}><PlaceOrder isAuthenticated={isAuthenticated} cart={cart}/></div>
         <div className={` d-flex justify-content-center flex-grow-1 pb-3`} style={{marginTop:!small&&'75px',flex:'1 1 60%'}}>
@@ -124,7 +125,7 @@ export default function CheckOut({isAuthenticated,cart}){
                                 </span>
                             </div>
                             <div className=' d-flex justify-content-between align-items-center'>
-                                <span onClick={()=>Navigate(-1)} className=' text-info d-flex align-items-center' style={{cursor:'pointer'}}><span class="material-symbols-outlined">
+                                <span onClick={()=>Navigate(-1)} className=' text-info d-flex align-items-center' style={{cursor:'pointer'}}><span className="material-symbols-outlined">
                                     chevron_left
                                 </span>Return to cart</span><button type="submit" className={`${small?'p-2':'p-3'} bg-success rounded-2`}>Confirm Order</button>
                             </div>

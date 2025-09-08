@@ -81,7 +81,7 @@ export default function ProductFilters({ productsItem, category, Products, id })
             onChange={(e) => handleCategorySelect(parseInt(e.target.value))}
           >
             <optgroup className='bg-black text-white'>
-              <option value={0} hidden selected>Category</option>
+              <option value={0} hidden defaultValue>Category</option>
               {category.map((e) => (
                 <option key={e?.categoryId} value={e?.categoryId}>{e?.name}</option>
               ))}
@@ -104,7 +104,7 @@ export default function ProductFilters({ productsItem, category, Products, id })
 
         <div className='Categories' style={{ width: '20%' }}><select className=' w-100 h-100' value={sort} onChange={(e) => handleSort(e.target.value)}>
           <optgroup className='bg-black text-white'>
-            <option value={false} selected hidden>Filter</option>
+            <option value={false} defaultValue hidden>Filter</option>
             <option value={'BestSelling'}>Bestselling</option>
             <option value={'LowToHigh'}>Low to High</option>
             <option value={'HighToLow'}>High to Low</option>

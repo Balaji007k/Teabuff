@@ -10,6 +10,7 @@ import ViewMore from './AssetComponents/ViewMore';
 import ProductFilters from './AssetComponents/ProductFilters';
 import PageNotFound from './AssetComponents/PageNotFound';
 import AlertMessage from './AssetComponents/AlertMessage';
+import LoadingPage from './AssetComponents/LoadingPage';
 
 function ProductItem({ isAuthenticated, Review, productsItem, cart, category, AlertMessageMain }) {
 
@@ -49,6 +50,7 @@ function ProductItem({ isAuthenticated, Review, productsItem, cart, category, Al
   const [Editcomment, setEditcomment] = useState(false);
   const Navigate = useNavigate();
   const [Heart, setHeart] = useState(false);
+  const [Loading,setLoading] = useState(false);
 
 
   const ShowBar = () => {
@@ -67,6 +69,10 @@ function ProductItem({ isAuthenticated, Review, productsItem, cart, category, Al
     const Relocate = handleCart(productId, itemPrice, quantity, itemName, userId, Description, Product_Url, Rating, likes, placeOrder);
     if (Relocate) Navigate(`/CheckOut/${isAuthenticated?.userId}`);
   };
+
+  useEffect(()=>{
+    if(AlertMessageMain&&AlertMessageMain.message) return setLoading(false);
+  },[AlertMessageMain]);
 
   useEffect(() => {
     if(isAuthenticated){
@@ -115,7 +121,7 @@ function ProductItem({ isAuthenticated, Review, productsItem, cart, category, Al
 
   if (isAuthenticated && selectedProduct) return (
     <>
-    {AlertMessageMain&&AlertMessageMain.message&&<AlertMessage message={AlertMessageMain}/>}
+    {AlertMessageMain&&AlertMessageMain.message?<AlertMessage message={AlertMessageMain}/>:Loading&&<LoadingPage/>}
       <div className='Product-Page-cart d-flex flex-column align-items-center' style={{ marginTop: '75px', color: 'var(--Background-white-text)' }}>
         <ProductFilters productsItem={productsItem} category={category} Products={Products} id={id} />
 
@@ -138,19 +144,19 @@ function ProductItem({ isAuthenticated, Review, productsItem, cart, category, Al
                     <div className=' d-flex flex-column gap-3'>
                       <h1>{selectedProduct.title}</h1>
                       <h2>₹{selectedProduct.price}</h2>
-                      <div className="Categories bg-white w-100 h-auto py-1 d-inline-flex align-items-center gap-2"><i class="fa-solid fa-circle-exclamation"></i><p>Order in <span className=' fw-bold'>02:30:25</span> to get next day delivery</p></div>
+                      <div className="Categories bg-white w-100 h-auto py-1 d-inline-flex align-items-center gap-2"><i className="fa-solid fa-circle-exclamation"></i><p>Order in <span className=' fw-bold'>{new Date().toLocaleDateString()}</span> to get next day delivery <span className=' fw-bold'>{new Date(Date.now() + 1 * 24 * 60 * 60 * 1000).toLocaleDateString()}</span></p></div>
                       <span className=' w-100 fs-4 fw-bold w-75 d-flex justify-content-center align-items-center gap-3'>
                         <h3 className=' fw-bold'>Quantity:</h3>{quantity==0?<button className=' bg-body-secondary'>-</button>:<button onClick={() => setquantity(quantity - 1)}>-</button>}{quantity}<button onClick={() => setquantity(quantity + 1)}>+</button>
                       </span>
                       <div className=' w-100 d-flex align-items-center justify-content-between gap-2'>
-                        <button className={`btn Cart-Button ${!small&&'w-50'} flex-grow-1 py-2`} onClick={() => { handleCart(selectedProduct._id, selectedProduct.price, quantity, selectedProduct.title, isAuthenticated.userId, selectedProduct.description, selectedProduct.url, selectedProduct.rating, Heart, false) }}>Add to Cart</button>{cart?.items.length||quantity!==0?<button className={`btn Cart-Button ${!small&&'w-50'} py-2`} onClick={() => PlaceOrder(selectedProduct._id, selectedProduct.price, quantity, selectedProduct.title, isAuthenticated.userId, selectedProduct.description, selectedProduct.url, selectedProduct.rating, Heart, true)}>Buy Now</button>:<button className=' bg-body-secondary'></button>}
-                        <span class={`material-symbols-outlined Product-icons heart ${Heart ? 'text-danger' : 'text-black'}`} onClick={() => PostUserLikedState(isAuthenticated.userId, selectedProduct._id, selectedProduct.title, selectedProduct.price, selectedProduct.description, selectedProduct.url, selectedProduct.categoryId, selectedProduct.rating, selectedProduct.ingredients, selectedProduct.features, selectedProduct.purchaseLink, !Heart && true, selectedProduct.comments)}>
+                        <button className={`btn Cart-Button ${!small&&'w-50'} flex-grow-1 py-2`} onClick={() => { handleCart(selectedProduct._id, selectedProduct.price, quantity, selectedProduct.title, isAuthenticated.userId, selectedProduct.description, selectedProduct.url, selectedProduct.rating, Heart, false) ;setLoading(true)}}>Add to Cart</button>{cart?.items.length||quantity!==0?<button className={`btn Cart-Button ${!small&&'w-50'} py-2`} onClick={() => {PlaceOrder(selectedProduct._id, selectedProduct.price, quantity, selectedProduct.title, isAuthenticated.userId, selectedProduct.description, selectedProduct.url, selectedProduct.rating, Heart, true);setLoading(true)}}>Buy Now</button>:<button className=' bg-body-secondary'></button>}
+                        <span className={`material-symbols-outlined Product-icons heart ${Heart ? 'text-danger' : 'text-black'}`} onClick={() => PostUserLikedState(isAuthenticated.userId, selectedProduct._id, selectedProduct.title, selectedProduct.price, selectedProduct.description, selectedProduct.url, selectedProduct.categoryId, selectedProduct.rating, selectedProduct.ingredients, selectedProduct.features, selectedProduct.purchaseLink, !Heart && true, selectedProduct.comments)}>
                           favorite
                         </span>
                       </div>
                       <div className=' d-flex flex-column gap-3'>
                         <div className='div Description'>
-                          <div className=' w-100 d-flex justify-content-between'><h4>Description & Ingredients</h4><span class="material-symbols-outlined Arrow" onClick={() => ShowBar()}>
+                          <div className=' w-100 d-flex justify-content-between'><h4>Description & Ingredients</h4><span className="material-symbols-outlined Arrow" onClick={() => ShowBar()}>
                             keyboard_arrow_up
                           </span></div>
                           <div className='overflow-hidden'>
@@ -193,16 +199,16 @@ function ProductItem({ isAuthenticated, Review, productsItem, cart, category, Al
 
                   <div className='User Reviews'>
                     <div className='Comment-box d-flex flex-column gap-2'>
-                    {UserProductReviews?.ProductId === selectedProduct?._id ? UserProductReviews.User.map(ProductReview => <div className=' d-flex flex-column gap-2'>
+                    {UserProductReviews?.ProductId === selectedProduct?._id ? UserProductReviews.User.map(ProductReview => <div key={ProductReview._id} className=' d-flex flex-column gap-2'>
                       <div className=' d-flex align-items-center gap-2'><img src={ProductReview?.userImage} alt="loading" /><span className=' fs-4'>{ProductReview?.username}</span></div>
                       <div className=' d-flex align-items-center gap-2 mt-1'>{Array.from({ length: 5 }, (_, i) => (
-                        <i key={i} class="fa-solid fa-star" style={{ color: i + 1 <= ProductReview?.ProductUserRating ? 'gold' : 'grey' }}></i>
+                        <i key={i} className="fa-solid fa-star" style={{ color: i + 1 <= ProductReview?.ProductUserRating ? 'gold' : 'grey' }}></i>
                       ))}</div>
                       <div><p className={`${Readmore?'show':'hide'}`}>{ProductReview.comment}</p><span className=' fw-bold' style={{cursor:'pointer'}} onClick={()=>setReadmore(prev=>!prev)}>{!Readmore?'Readmore':'Readless'}</span></div>
                     </div>) : <div className=' d-flex flex-column gap-2'>
                       <div className=' d-flex align-items-center gap-2'><img src={selectedProductReview[0]?.image} alt="loading" /><span className=' fs-4'>{selectedProductReview[0]?.name ? selectedProductReview[0]?.name : 'Bot'}</span></div>
                       <div className=' d-flex align-items-center gap-2 mt-2'>{Array.from({ length: selectedProductReview[0]?.rating ? selectedProductReview[0]?.rating : 5 }, (_, i) => (
-                        <i key={i} class="fa-solid fa-star"></i>
+                        <i key={i} className="fa-solid fa-star"></i>
                       ))}</div>
                       <p>{selectedProductReview[0]?.review ? selectedProductReview[0]?.review : `${selectedProduct?.title} is very good!`}</p>
                     </div>}
@@ -245,7 +251,7 @@ function ProductItem({ isAuthenticated, Review, productsItem, cart, category, Al
                   <>
                     {suggestedproducts.map((e) => (
                       id !== e._id && (
-                        <ProductCard isAuthenticated={isAuthenticated} e={e} Navigate={Navigate} />
+                        <ProductCard key={e._id} isAuthenticated={isAuthenticated} e={e} Navigate={Navigate} />
                       )
                     ))}
                     <ViewMore />

@@ -27,7 +27,7 @@ function About({image}) {
                     <img key={e._id} src={e.url} className='Shop-slid' alt="Image 3" onClick={() => handleImage(e._id)} />
                   ))}
                   <div className='plus-image'>
-                    <i class="fa-solid fa-plus"></i>
+                    <i className="fa-solid fa-plus"></i>
                   </div>
                 </div>
               </div>

@@ -97,7 +97,7 @@ function Header({ userinputFocus, isAuthenticated, cart, setAlertMessage }) {
                         {Location.pathname === `/product/${id}` ? null : Location.pathname==='/'?<li data-aos="fade-down" data-aos-duration="1800"><ScrollLink to="Service_id">Service</ScrollLink></li>:<li data-aos="fade-down" data-aos-duration="1800"><Link to="/Service">Service</Link></li>}
                         {Location.pathname === `/product/${id}` ? null : Location.pathname==='/'?<li data-aos="fade-down" data-aos-duration="2200"><ScrollLink to="Contact_id">Contact Us</ScrollLink></li>:<li data-aos="fade-down" data-aos-duration="2200"><Link to="/Contact_Us">Contact Us</Link></li>}
                         {small&&<li><Link to={'/WishList'}>Wishlist</Link></li>}
-                        <li><Link to={`/${isAuthenticated?.userName+"Cart"}/${isAuthenticated ? isAuthenticated?.userId : 'No_user'}`}><i class="fa-solid fa-cart-shopping">  {!CartLength?0:CartLength} </i></Link></li>
+                        <li><Link to={`/${isAuthenticated?.userName+"Cart"}/${isAuthenticated ? isAuthenticated?.userId : 'No_user'}`}><i className="fa-solid fa-cart-shopping">  {!CartLength?0:CartLength} </i></Link></li>
                         {small&&<><li><Link to={'/Login'}>Add Account</Link></li>
                         <li onClick={() => Logout()}>Logout</li></>}
                     </ul>
@@ -107,7 +107,7 @@ function Header({ userinputFocus, isAuthenticated, cart, setAlertMessage }) {
                         <Link to='/Login' onClick={() => userinputFocus()}>
                             <button className='lobu'>Login</button>
                         </Link>
-                    </nav> : <button ref={buttonRef} className='lobu fs-5' onClick={() => HideBar()}><i class="fa-solid fa-bars"></i></button>}
+                    </nav> : <button ref={buttonRef} className='lobu fs-5' onClick={() => HideBar()}><i className="fa-solid fa-bars"></i></button>}
                     {!small&&<nav ref={accountNavRef} className={`AccountNav ${BarVisible ? 'show' : 'hide'} position-fixed end-0`} style={{ top: '65px' }}>
                         <ul className="py-0 d-flex flex-column justify-content-around px-2 mx-2 w-100 h-100">
                             <div>
@@ -116,23 +116,23 @@ function Header({ userinputFocus, isAuthenticated, cart, setAlertMessage }) {
                                 <span className=" fs-3 text-black">{isAuthenticated?.userName}</span>
                             </div>
                             <div className=" w-100">
-                                {Location.pathname==='/'?<a href="#"><h3 className=' mt-1'><i class="fa-solid fa-house"></i>Home</h3></a>:<Link to={"/"}><h3 className=' mt-1'><i class="fa-solid fa-house"></i>Home</h3></Link>}
-                                <h3 onClick={()=>Hideprofile()}><i class="fa-solid fa-user"></i>Profile</h3>
+                                {Location.pathname==='/'?<a href="#"><h3 className=' mt-1'><i className="fa-solid fa-house"></i>Home</h3></a>:<Link to={"/"}><h3 className=' mt-1'><i className="fa-solid fa-house"></i>Home</h3></Link>}
+                                <h3 onClick={()=>Hideprofile()}><i className="fa-solid fa-user"></i>Profile</h3>
                                 <div className={`profile-details ${Showprofile?'show':'hide'} d-flex flex-column align-items-center`}>
                                     <input type="text" className="lobu rounded-0 m-0 bg-transparent" disabled placeholder="Name" value={isAuthenticated?.userName}/>
                                     <input type="text" className="lobu rounded-0 m-0 bg-transparent" disabled placeholder="Email"/>
                                     <input type="text" className="lobu rounded-0 m-0 bg-transparent" disabled placeholder="Password"/>
                                 </div>
-                                <h3><i class="fa-solid fa-gift"></i>Offers</h3>
-                                <Link to={'/WishList'}><h3><i class="fa-solid fa-heart"></i>WishList</h3></Link>
-                                {Location.pathname==='/'?<a href="#Contact_id"><h3><i class="fa-solid fa-phone"></i>Contact Us</h3></a>:<Link to={'/Contact_Us'}><h3><i class="fa-solid fa-phone"></i>Contact Us</h3></Link>}
-                                <Link to={'/Login'}><h3><i class="fa-solid fa-user-plus"></i>Add Account</h3></Link>
+                                <h3><i className="fa-solid fa-gift"></i>Offers</h3>
+                                <Link to={'/WishList'}><h3><i className="fa-solid fa-heart"></i>WishList</h3></Link>
+                                {Location.pathname==='/'?<a href="#Contact_id"><h3><i className="fa-solid fa-phone"></i>Contact Us</h3></a>:<Link to={'/Contact_Us'}><h3><i className="fa-solid fa-phone"></i>Contact Us</h3></Link>}
+                                <Link to={'/Login'}><h3><i className="fa-solid fa-user-plus"></i>Add Account</h3></Link>
                                 
                             </div>
                             </div>
                             <div>
-                                <h3><i class="fa-solid fa-gear"></i>Settings</h3>
-                                <h3 onClick={() => Logout()}><i class="fa-solid fa-right-from-bracket"></i>Logout</h3>
+                                <h3><i className="fa-solid fa-gear"></i>Settings</h3>
+                                <h3 onClick={() => Logout()}><i className="fa-solid fa-right-from-bracket"></i>Logout</h3>
                             </div>
                         </ul>
                     </nav>}
