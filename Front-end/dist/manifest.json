@@ -7,12 +7,12 @@
   "theme_color": "#4CAF50",
   "icons": [
     {
-      "src": "/Teabuff/assets/vecteezy_a-cup-of-tea-with-a-splash-of-liquid_53538770-CWwt8tv3.png",
+      "src": "/Teabuff/assets/favicon_io/android-chrome-192x192.png",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "/Teabuff/assets/vecteezy_a-cup-of-tea-with-a-splash-of-liquid_53538770-CWwt8tv3.png",
+      "src": "/Teabuff/assets/favicon_io/android-chrome-512x512.png",
       "sizes": "512x512",
       "type": "image/png"
     }
