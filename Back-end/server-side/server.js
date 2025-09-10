@@ -11,6 +11,7 @@ const categorys = require('./routes/categorys')
 const carts = require('./routes/cart')
 const shops = require('./routes/shops')
 const CheckOut = require('./routes/CheckOut')
+const OrderConfirmation = require('./routes/OrderConfirmation')
 const cors = require('cors')
 const {requireAuth} = require('./controllers/middleware/authMiddleware')
 const { name } = require('nodeman/lib/mustache')
@@ -54,6 +55,7 @@ app.use(reviews);
 app.use(shops);
 app.use(carts);
 app.use(CheckOut);
+app.use(OrderConfirmation);
 
 
 

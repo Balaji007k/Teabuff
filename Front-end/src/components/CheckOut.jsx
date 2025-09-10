@@ -56,7 +56,7 @@ export default function CheckOut({isAuthenticated,cart}){
             setAlertMessage({message:Result.message,state:true});
             setTimeout(()=>{
                 setAlertMessage(null);
-                Navigate('/Payment')
+                Navigate('/Payment', { state: { cart,NewCheckut } });
             },1500);
         }
         else{

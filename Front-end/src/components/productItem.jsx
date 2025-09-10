@@ -65,8 +65,8 @@ function ProductItem({ isAuthenticated, Review, productsItem, cart, category, Al
     setProducts(Products)
   }
 
-  const PlaceOrder=(productId, itemPrice, quantity, itemName, userId, Description, Product_Url, Rating, likes, placeOrder)=>{
-    const Relocate = handleCart(productId, itemPrice, quantity, itemName, userId, Description, Product_Url, Rating, likes, placeOrder);
+  const PlaceOrder=(productId, itemPrice, quantity, itemName, categoryId, userId, Description, Product_Url, Rating, likes, placeOrder)=>{
+    const Relocate = handleCart(productId, itemPrice, quantity, itemName, categoryId, userId, Description, Product_Url, Rating, likes, placeOrder);
     if (Relocate) Navigate(`/CheckOut/${isAuthenticated?.userId}`);
   };
 
@@ -90,6 +90,7 @@ function ProductItem({ isAuthenticated, Review, productsItem, cart, category, Al
       if (productsItem?.length > 0 && id) {
         const found = productsItem.find(item => item._id === id);
         setSelectedProduct(found);
+        // console.log(found)
         if (found) {
           const Filtered = Review.filter(reviews => reviews.review.toLowerCase().replace(/\s+/g, '').includes(found.title.toLowerCase().replace(/\s+/g, '')))
           setselectedProductReview(Filtered);
@@ -143,13 +144,13 @@ function ProductItem({ isAuthenticated, Review, productsItem, cart, category, Al
                   <div className='details-holder p-3'>
                     <div className=' d-flex flex-column gap-3'>
                       <h1>{selectedProduct.title}</h1>
-                      <h2>₹{selectedProduct.price}</h2>
+                      <h2>₹{selectedProduct.categoryId==1?<><del>{selectedProduct.price}</del> {selectedProduct.price/2}</>:<>{selectedProduct.price}</>}</h2>
                       <div className="Categories bg-white w-100 h-auto py-1 d-inline-flex align-items-center gap-2"><i className="fa-solid fa-circle-exclamation"></i><p>Order in <span className=' fw-bold'>{new Date().toLocaleDateString()}</span> to get next day delivery <span className=' fw-bold'>{new Date(Date.now() + 1 * 24 * 60 * 60 * 1000).toLocaleDateString()}</span></p></div>
                       <span className=' w-100 fs-4 fw-bold w-75 d-flex justify-content-center align-items-center gap-3'>
                         <h3 className=' fw-bold'>Quantity:</h3>{quantity==0?<button className=' bg-body-secondary'>-</button>:<button onClick={() => setquantity(quantity - 1)}>-</button>}{quantity}<button onClick={() => setquantity(quantity + 1)}>+</button>
                       </span>
                       <div className=' w-100 d-flex align-items-center justify-content-between gap-2'>
-                        <button className={`btn Cart-Button ${!small&&'w-50'} flex-grow-1 py-2`} onClick={() => { handleCart(selectedProduct._id, selectedProduct.price, quantity, selectedProduct.title, isAuthenticated.userId, selectedProduct.description, selectedProduct.url, selectedProduct.rating, Heart, false) ;setLoading(true)}}>Add to Cart</button>{cart?.items.length||quantity!==0?<button className={`btn Cart-Button ${!small&&'w-50'} py-2`} onClick={() => {PlaceOrder(selectedProduct._id, selectedProduct.price, quantity, selectedProduct.title, isAuthenticated.userId, selectedProduct.description, selectedProduct.url, selectedProduct.rating, Heart, true);setLoading(true)}}>Buy Now</button>:<button className=' bg-body-secondary'></button>}
+                        <button className={`btn Cart-Button ${!small&&'w-50'} flex-grow-1 py-2`} onClick={() => { handleCart(selectedProduct._id, selectedProduct.price, quantity, selectedProduct.title, selectedProduct.categoryId, isAuthenticated.userId, selectedProduct.description, selectedProduct.url, selectedProduct.rating, Heart, false) ;setLoading(true)}}>Add to Cart</button>{cart?.items.length||quantity!==0?<button className={`btn Cart-Button ${!small&&'w-50'} py-2`} onClick={() => {PlaceOrder(selectedProduct._id, selectedProduct.price, quantity, selectedProduct.title, isAuthenticated.userId, selectedProduct.description, selectedProduct.url, selectedProduct.rating, Heart, true);setLoading(true)}}>Buy Now</button>:<button className=' bg-body-secondary'></button>}
                         <span className={`material-symbols-outlined Product-icons heart ${Heart ? 'text-danger' : 'text-black'}`} onClick={() => PostUserLikedState(isAuthenticated.userId, selectedProduct._id, selectedProduct.title, selectedProduct.price, selectedProduct.description, selectedProduct.url, selectedProduct.categoryId, selectedProduct.rating, selectedProduct.ingredients, selectedProduct.features, selectedProduct.purchaseLink, !Heart && true, selectedProduct.comments)}>
                           favorite
                         </span>

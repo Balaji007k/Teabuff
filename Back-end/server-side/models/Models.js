@@ -17,6 +17,7 @@ const CartSchema = new mongoose.Schema({
   itemPrice:{type:Number, required:true},
   quantity: { type: Number, required: true },
   itemName: { type: String, required: true },
+  categoryId: { type: Number, required: true },
   Product_Url: {type:String,required:true},
   Rating: { type: Number, required: true },
   Description: {type:String,required:true},
@@ -143,4 +144,58 @@ const CheckOutData = new mongoose.Schema({
 // Create a model from the schema
 const CheckOutModel = mongoose.model('CheckOutData', CheckOutData);
 
-module.exports = {usersModel, userCartModel, reviewsModel, categoryModel, productsModel, shopModel, UserStateModel, CheckOutModel };
+const OrderSchemaDetails = new mongoose.Schema({
+  orderId: {
+    type: String,
+    required: true,
+    unique: true,
+  },
+  deliveryDate: {
+    type: Date,
+    required: true,
+  },
+  customerName: {
+    type: String,
+    required: true,
+  },
+  address: {
+    type: String,
+    required: true,
+  },
+  email: {
+    type: String,
+    required: true,
+  },
+
+  // Array of products
+  products: [
+    {
+      name: { type: String, required: true },
+      image: { type: String, required: true },
+      qty: { type: Number, required: true },
+      price: { type: Number, required: true },
+    },
+  ],
+
+  subtotal: { type: Number, required: true },
+  shipping: { type: Number, required: true },
+  tax: { type: Number, required: true },
+  total: { type: Number, required: true },
+
+  paymentType: { type: String, required: true }, // e.g. "Visa", "Mastercard"
+  cardEnding: { type: String, required: true }, // last 4 digits
+
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
+});
+
+const OrderSchema = new mongoose.Schema({
+  userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
+  OrderDetails: [OrderSchemaDetails],
+});
+
+const OrderConfirmationModel = mongoose.model("Order", OrderSchema);
+
+module.exports = {usersModel, userCartModel, reviewsModel, categoryModel, productsModel, shopModel, UserStateModel, CheckOutModel, OrderConfirmationModel };

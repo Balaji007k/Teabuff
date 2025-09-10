@@ -19,6 +19,7 @@ import About from './components/about';
 import Service from './components/service';
 import PageNotFound from './components/AssetComponents/PageNotFound';
 import Payment from './components/AssetComponents/Payment';
+import OrderConfirmation from './components/OrderConfirmation';
 
 function App() {
   const { isAuthenticated, cart, image, Review, productsItem, category, AlertMessageTheme, FastPlaceOrder } = useTheme();
@@ -119,6 +120,10 @@ function App() {
           <Route
             path="/Payment"
             element={<Payment/>}
+          />
+          <Route
+            path={`/MyOrders/:id`}
+            element={<OrderConfirmation/>}
           />
           <Route path="*" element={<PageNotFound Message={'Match Page'} />} />
       </Routes>

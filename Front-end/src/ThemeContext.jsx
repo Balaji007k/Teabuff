@@ -21,6 +21,7 @@ export const ThemeProvider = ({ children }) => {
     const [UpdatedProduct, setUpdatedProduct] = useState(null);
     const [AlertMessageTheme,setAlertMessage] = useState([]);
     const [FastPlaceOrder,setFastPlaceOrder] = useState([]);
+    const [OrderId,setOrderId] = useState(null);
 
     const fetchAllReviews = async () => {
         const { Result, Error } = await ApiService.fetchData('/allreviews');
@@ -150,9 +151,9 @@ export const ThemeProvider = ({ children }) => {
     };
 
 
-    const handleCart = (productId, itemPrice, quantity, itemName, userId, Description, Product_Url, Rating, likes, placeOrder=false) => {
+    const handleCart = (productId, itemPrice, quantity, itemName, categoryId, userId, Description, Product_Url, Rating, likes, placeOrder=false) => {
 
-  const newCart = { userId, productId, itemPrice, quantity, itemName, Product_Url, Rating, Description, likes };
+  const newCart = { userId, productId, itemPrice, quantity, itemName, categoryId, Product_Url, Rating, Description, likes };
   if (quantity === 0&&!placeOrder) {
         setAlertMessage({ message: "Minimum select one item", state: false });
     return ;
@@ -168,6 +169,7 @@ else if ((quantity>=0&&placeOrder&&!cart.items.length)||(placeOrder&&quantity!==
         return ;
       }
       setAlertMessage({ message: "Cart successfully added", state: true });
+    //   console.log("theme",Result)
       setUpdatedCart(Result?.usercart);
       setFastPlaceOrder({cart:Result?.newItem,state:true});
     })
@@ -185,7 +187,8 @@ else{
         setAlertMessage({ message: "Login failed: " + Error, state: false });
         return ;
       }
-
+    //   console.log("demo",newCart)
+    //   console.log("theme",Result)
       setAlertMessage({ message: "Cart successfully added", state: true });
         setUpdatedCart(Result?.usercart);
     })
@@ -193,6 +196,18 @@ else{
     return false;
     }
 };
+
+// Create new order (POST)
+const createOrder = async(orderData)=> {
+
+  const { Result, Error } = await ApiService.fetchData('/orders',"POST",orderData);
+  if(Result) {
+    // console.log(Result?.newOrder);
+    setOrderId(Result?.newOrder);
+    return true};
+  if(Error)console.log(Error);
+}
+
 
 
     useEffect(() => {
@@ -258,7 +273,7 @@ else{
     );
 
     if (isAuthenticated) return !isLoading && (
-        <ThemeContext.Provider value={{ isAuthenticated, AllReview, Review, image, productsItem, category, cart, handleCart, setUpdatedCart, PostSaveCart, PostUserLikedState, UserLikedState, UpdateProduct, UserProductReviews, fetchProductReviews, ProductAvgRating, UpdatedProduct, AlertMessageTheme, FastPlaceOrder}}>
+        <ThemeContext.Provider value={{ isAuthenticated, AllReview, Review, image, productsItem, category, cart, handleCart, setUpdatedCart, PostSaveCart, PostUserLikedState, UserLikedState, UpdateProduct, UserProductReviews, fetchProductReviews, ProductAvgRating, UpdatedProduct, AlertMessageTheme, FastPlaceOrder, createOrder, OrderId}}>
             {children}
         </ThemeContext.Provider>
     );

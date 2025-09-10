@@ -100,7 +100,7 @@ exports.getCartItem = async(req,res,next)=>{
 // };
 
 exports.createCartItem = async (req, res, next) => {
-  let { userId, productId, itemPrice, quantity, itemName, Product_Url, Rating, Description, likes } = req.body;
+  let { userId, productId, itemPrice, quantity, itemName, categoryId, Product_Url, Rating, Description, likes } = req.body;
 
   if (!quantity || quantity <= 0) {
     quantity = 1;
@@ -112,7 +112,7 @@ exports.createCartItem = async (req, res, next) => {
 
     if (!usercart) {
       // If no cart exists, create one
-      newItem = { productId, itemPrice, quantity, itemName, Product_Url, Rating, Description, likes };
+      newItem = { productId, itemPrice, quantity, itemName, categoryId, Product_Url, Rating, Description, likes };
       const NewCart = {
         userId,
         items: [newItem]
@@ -134,7 +134,7 @@ exports.createCartItem = async (req, res, next) => {
         newItem = usercart.items[itemIndex];
       } else {
         // If item doesn't exist, add new
-        newItem = { productId, itemPrice, quantity, itemName, Product_Url, Rating, Description, likes };
+        newItem = { productId, itemPrice, quantity, itemName, categoryId, Product_Url, Rating, Description, likes };
         usercart.items.push(newItem);
       }
       await usercart.save();
@@ -144,7 +144,8 @@ exports.createCartItem = async (req, res, next) => {
         usercart,
         newItem: {
           userId,
-          items: [newItem]
+          items: [newItem],
+          categoryId:categoryId,
         }
       });
     }

@@ -8,6 +8,7 @@ import { useMediaQuery } from 'react-responsive';
 import ApiService from './Service/ApiService/product-api';
 import AlertMessage from './AssetComponents/AlertMessage';
 import LoadingPage from './AssetComponents/LoadingPage';
+import ProductCard from './AssetComponents/ProductCard';
 
 function PlaceOrder({ isAuthenticated, cart }) {
     const small = useMediaQuery({maxWidth:600});
@@ -24,12 +25,12 @@ function PlaceOrder({ isAuthenticated, cart }) {
     // Compute total amount
     const grandTotal = cart?.items?.reduce((acc, item) => {
         const qty = quantity[item.productId] ?? item.quantity;
-        return acc + qty * item.itemPrice;
+        return acc + qty * (item.categoryId==1?item.itemPrice/2:item.itemPrice);
     }, 0);
 
-    const Discount = (grandTotal * 10 / 100);
+    //const Discount = (grandTotal * 10 / 100);
     const Tax = (grandTotal * 18 / 100);
-    const Total = ((grandTotal - Discount) + Tax)?.toFixed(2)
+    const Total = (grandTotal + Tax)?.toFixed(2)
 
     const handleCancelItem = async (productId) => {
         setLoading(true);
@@ -128,7 +129,7 @@ function PlaceOrder({ isAuthenticated, cart }) {
                     <tr className=' fs-5' key={item._id}>
                         <td className=' d-flex flex-column align-items-center'><img className=' rounded-2' src={item.Product_Url} alt='Loading'height={'100%'} width={'100%'}/><span>{item.itemName}</span></td>
                         <td>{item.quantity}</td>
-                        <td>₹{((quantity[item.productId] ?? item.quantity) * item.itemPrice).toFixed(2)}</td>
+                        <td>₹{((quantity[item.productId] ?? item.quantity) * (item.categoryId==1?item.itemPrice/2:item.itemPrice)).toFixed(2)}</td>
                     </tr>
                 ))}
             </table>
@@ -139,7 +140,7 @@ function PlaceOrder({ isAuthenticated, cart }) {
                     <div className='Cart-Products w-100' style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(300px,1fr))', justifyItems: 'center' }}>
                         {cart?.items.map((item) => (
                                 <div key={item._id} className='selected-item d-flex flex-column align-items-center gap-4'>
-                                    <div key={item.productId} className='product-item'>
+                                    {/* <div key={item.productId} className='product-item'>
                                         <img src={item.Product_Url} className='Shop-slid' alt={item.itemName} />
                                         <div className='d-flex flex-column w-100'>
                                             <div className='d-flex justify-content-between align-items-center'>
@@ -152,7 +153,8 @@ function PlaceOrder({ isAuthenticated, cart }) {
                                             </div>
                                         </div>
                                         <button className='order-button rounded-5 p-2 w-100 text-center' onClick={() => handleCancelItem(item.productId)}>Cancel</button>
-                                    </div>
+                                    </div> */}
+                                    <ProductCard key={item._id} isAuthenticated={isAuthenticated} e={item} Navigate={Navigate} cart={true} handleCancelItem={handleCancelItem}/>
                                     <div className='w-100 d-flex flex-column gap-3 justify-content-between align-items-center'>
                                         <span className='plus-cart fs-4 fw-bold w-75 d-flex justify-content-between align-items-center gap-2'>
                                             {quantity[item.productId]<=1?<button className=' bg-body-secondary'>-</button>:<button onClick={() => handleQuantityChange(item.productId, -1)}>-</button>}
@@ -160,7 +162,7 @@ function PlaceOrder({ isAuthenticated, cart }) {
                                             <button onClick={() => handleQuantityChange(item.productId, 1)}>+</button>
                                         </span>
 
-                                        <div className='d-flex align-items-center fs-5 fw-bolder'>Total <h5>₹{((quantity[item.productId] ?? item.quantity) * item.itemPrice).toFixed(2)}</h5>
+                                        <div className='d-flex align-items-center fs-5 fw-bolder'>Total <h5>₹{((quantity[item.productId] ?? item.quantity) * (item.categoryId==1?item.itemPrice/2:item.itemPrice)).toFixed(2)}</h5>
                                         </div>
                                     </div>
                                 </div>
@@ -186,14 +188,14 @@ function PlaceOrder({ isAuthenticated, cart }) {
                                         ₹{(grandTotal)?.toFixed(2)}
                                     </td>
                                 </tr>
-                                <tr>
+                                {/* <tr>
                                     <th>
                                         Welcome Offer - 10% Off
                                     </th>
                                     <td>
                                         - ₹{(Discount)?.toFixed(2)}
                                     </td>
-                                </tr>
+                                </tr> */}
                                 <tr>
                                     <th>
                                         Tax

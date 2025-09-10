@@ -5,6 +5,7 @@ import { useMediaQuery } from 'react-responsive';
 import ProductCard from './AssetComponents/ProductCard';
 import EmptyProductCard from './AssetComponents/EmptyProductCard';
 import ViewMore from './AssetComponents/ViewMore';
+import OfferSlider from './AssetComponents/OfferSlider';
 
 function Product({ isAuthenticated, productsItem, category }) {
   const small = useMediaQuery({ maxWidth: 600 })
@@ -78,6 +79,8 @@ function Product({ isAuthenticated, productsItem, category }) {
 
 
   return (
+    <>
+    <OfferSlider/>
     <div className='Product d-flex justify-content-center' id="Product_id">
       <div className='product-inner-box'>
         <div className='search'>
@@ -152,7 +155,7 @@ function Product({ isAuthenticated, productsItem, category }) {
 
 
         <h1>Fresh Tea</h1>
-        <div className='product content d-flex align-items-center'>
+        <div id='Fresh_Tea' className='product content d-flex align-items-center'>
           <div className='Next left-scroll' onClick={HandlePrev}>
             <span className="material-symbols-outlined">
               arrow_back_ios
@@ -298,6 +301,7 @@ function Product({ isAuthenticated, productsItem, category }) {
         </div>
       </div>
     </div>
+    </>
   );
 }
 

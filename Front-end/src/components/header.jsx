@@ -4,10 +4,12 @@ import { Link } from "react-router-dom";
 import { useLocation } from 'react-router-dom';
 import { Link as ScrollLink } from "react-scroll";
 import ApiService from "./Service/ApiService/product-api";
+import { useTheme } from "../ThemeContext";
 
 function Header({ userinputFocus, isAuthenticated, cart, setAlertMessage }) {
 
     const small = useMediaQuery({maxWidth:600});
+    const {OrderId} = useTheme();
 
     const [BarVisible, setBarVisible] = useState(false);
     const [Showprofile, setShowProfile] = useState(false);
@@ -99,6 +101,7 @@ function Header({ userinputFocus, isAuthenticated, cart, setAlertMessage }) {
                         {small&&<li><Link to={'/WishList'}>Wishlist</Link></li>}
                         <li><Link to={`/${isAuthenticated?.userName+"Cart"}/${isAuthenticated ? isAuthenticated?.userId : 'No_user'}`}><i className="fa-solid fa-cart-shopping">  {!CartLength?0:CartLength} </i></Link></li>
                         {small&&<><li><Link to={'/Login'}>Add Account</Link></li>
+                        <li><Link to={`/MyOrders/${OrderId}`}>My Orders</Link></li>
                         <li onClick={() => Logout()}>Logout</li></>}
                     </ul>
                 </nav>
@@ -127,6 +130,7 @@ function Header({ userinputFocus, isAuthenticated, cart, setAlertMessage }) {
                                 <Link to={'/WishList'}><h3><i className="fa-solid fa-heart"></i>WishList</h3></Link>
                                 {Location.pathname==='/'?<a href="#Contact_id"><h3><i className="fa-solid fa-phone"></i>Contact Us</h3></a>:<Link to={'/Contact_Us'}><h3><i className="fa-solid fa-phone"></i>Contact Us</h3></Link>}
                                 <Link to={'/Login'}><h3><i className="fa-solid fa-user-plus"></i>Add Account</h3></Link>
+                                <Link to={`/MyOrders/${isAuthenticated?.userId}`}><h3><i className="fa-solid fa-box-open"></i>My Orders</h3></Link>
                                 
                             </div>
                             </div>

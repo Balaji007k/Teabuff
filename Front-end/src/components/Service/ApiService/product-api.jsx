@@ -11,7 +11,7 @@ class ApiService {
           "Content-Type": "application/json",
         };
     try {
-      const response = await fetch("https://teabuff.onrender.com" + url, {
+      const response = await fetch("http://localhost:5000" + url, {
         method: method,
         credentials: "include",
         headers: headers??const_headers,
