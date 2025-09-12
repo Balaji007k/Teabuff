@@ -15,7 +15,6 @@ import LoadingPage from './AssetComponents/LoadingPage';
 function ProductItem({ isAuthenticated, Review, productsItem, cart, category, AlertMessageMain }) {
 
   const { handleCart, PostUserLikedState, UserLikedState, UpdateProduct, UserProductReviews, fetchProductReviews, ProductAvgRating } = useTheme();
-  const [Readmore,setReadmore] = useState(false);
 
   const reviews = UserProductReviews?.User || [];
   const ratingCounts = [0, 0, 0, 0, 0]; // index 0 = 1-star, ..., index 4 = 5-star
@@ -43,7 +42,7 @@ function ProductItem({ isAuthenticated, Review, productsItem, cart, category, Al
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [selectedProductReview, setselectedProductReview] = useState([]);
   const [suggestedproducts, setSuggestedProducts] = useState([]);
-  const [items, setProducts] = useState([]);
+  const [items, setProducts] = useState(null);
   const [Show, setShow] = useState(true);
   const [Rating, setRating] = useState(0);
   const [comment, setcomment] = useState('');
@@ -51,6 +50,7 @@ function ProductItem({ isAuthenticated, Review, productsItem, cart, category, Al
   const Navigate = useNavigate();
   const [Heart, setHeart] = useState(false);
   const [Loading,setLoading] = useState(false);
+  const [SearchItem, setSearchItem] = useState("");
 
 
   const ShowBar = () => {
@@ -133,9 +133,9 @@ function ProductItem({ isAuthenticated, Review, productsItem, cart, category, Al
     <>
     {AlertMessageMain&&AlertMessageMain.message?<AlertMessage message={AlertMessageMain}/>:Loading&&<LoadingPage/>}
       <div className='Product-Page-cart d-flex flex-column align-items-center' style={{ marginTop: '75px', color: 'var(--Background-white-text)' }}>
-        <ProductFilters productsItem={productsItem} category={category} Products={Products} id={id} />
+        <ProductFilters productsItem={productsItem} category={category} Products={Products} id={id} searchingProduct={setSearchItem}/>
 
-        {items.length === 0 &&
+        {(!items||items.length === 0) &&SearchItem==""&&
           <>
             <div className='w-100 my-4 d-flex flex-column align-items-center px-3'>
               <div className='Product-container d-flex justify-content-center gap-3' style={{ width: '95%' }}>
@@ -214,7 +214,7 @@ function ProductItem({ isAuthenticated, Review, productsItem, cart, category, Al
                       <div className=' d-flex align-items-center gap-2 mt-1'>{Array.from({ length: 5 }, (_, i) => (
                         <i key={i} className="fa-solid fa-star" style={{ color: i + 1 <= ProductReview?.ProductUserRating ? 'gold' : 'grey' }}></i>
                       ))}</div>
-                      <div><p className={`${Readmore?'show':'hide'}`}>{ProductReview.comment}</p><span className=' fw-bold' style={{cursor:'pointer'}} onClick={() => toggleReadMore(ProductReview._id)}>{!expanded[ProductReview._id] ? "Readmore" : "Readless"}</span></div>
+                      <div><p className={`${expanded[ProductReview._id]?'show':'hide'}`}>{ProductReview.comment}</p><span className=' fw-bold opacity-75' style={{cursor:'pointer'}} onClick={() => toggleReadMore(ProductReview._id)}>{!expanded[ProductReview._id] ? "Readmore" : "Readless..."}</span></div>
                     </div>) : <div className=' d-flex flex-column gap-2'>
                       <div className=' d-flex align-items-center gap-2'><img src={selectedProductReview[0]?.image} alt="loading" /><span className=' fs-4'>{selectedProductReview[0]?.name ? selectedProductReview[0]?.name : 'Bot'}</span></div>
                       <div className=' d-flex align-items-center gap-2 mt-2'>{Array.from({ length: selectedProductReview[0]?.rating ? selectedProductReview[0]?.rating : 5 }, (_, i) => (
@@ -251,7 +251,7 @@ function ProductItem({ isAuthenticated, Review, productsItem, cart, category, Al
 
       </div>
 
-      {items.length === 0 &&
+      {(!items||items.length === 0) &&SearchItem==""&&
         <>
           <div className='Extra-products-container' style={{ color: 'var(--Background-white-text)' }}>
             <div className='Extra-products' id='suggestItems'>
@@ -275,26 +275,21 @@ function ProductItem({ isAuthenticated, Review, productsItem, cart, category, Al
 
           </div>
         </>}
-
-      {items.length > 0 &&
-        <div>
-          <div className='scroll-items py-3 gap-3 bg-dark-subtle rounded-3 mt-4' style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(270px,1fr))', justifyItems: 'center', maxHeight: small ? '550px' : 'fit-content' }}>
-            {items.length > 0 ?
-              items.map((e) => (
-                e._id !== id ? (
-                  <>
-                    <ProductCard isAuthenticated={isAuthenticated} e={e} Navigate={Navigate} />
-                  </>) : <div className=' text-center'>Already Selected Item {selectedProduct?.title} {items.length === 1 && <b>Or No more Item Match Your search</b>}</div>
-              ))
-              :
+          
+            {items&&items.length > 0 ?
+            <div className='scroll-items py-3 gap-3 bg-dark-subtle rounded-3 mt-4' style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(270px,1fr))', justifyItems: 'center', maxHeight: small ? '550px' : 'fit-content' }}>
+               {items.map((e) => (
+                 e._id !== id ? (
+                   <>
+                     <ProductCard key={e._id} isAuthenticated={isAuthenticated} e={e} Navigate={Navigate} />
+                   </>) : <div key={e._id} className=' text-center'>Already Selected Item {selectedProduct?.title} {items.length === 1 && <b>Or No more Item Match Your search</b>}</div>
+               ))}
+                          </div>
+              :SearchItem!==""&&!items.length&&
               <>
                 <EmptyProductCard />
               </>
-
             }
-          </div>
-        </div>
-      }
       <Footer />
     </>
   );

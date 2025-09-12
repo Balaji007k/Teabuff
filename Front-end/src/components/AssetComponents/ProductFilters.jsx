@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
-export default function ProductFilters({ productsItem, category, Products, id }) {
+export default function ProductFilters({ productsItem, category, Products, id , searchingProduct }) {
 
   const [value, setValue] = useState(0);
   const Location = useLocation();
@@ -93,7 +93,7 @@ export default function ProductFilters({ productsItem, category, Products, id })
         <div>
           <div className='search justify-content-end'>
             <div className='top d-flex align-items-center w-auto'>
-              <input type='search' className='item search-tag' onKeyUp={() => handleSearch(SearchItem)} onChange={(e) => setSearchItem(e.target.value.trim().toLowerCase())} placeholder='search' />
+              <input type='search' className='item search-tag' onKeyUp={() => handleSearch(SearchItem)} onChange={(e) => {setSearchItem(e.target.value.trim().toLowerCase());searchingProduct(e.target.value.trim())}} placeholder='search' />
               <button type='submit' className='search-i' onClick={() => handleSearch(SearchItem)} >
                 <i className="fa-solid fa-magnifying-glass"></i>
               </button>

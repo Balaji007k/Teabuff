@@ -24,11 +24,13 @@ const getUserAllOrders = async(Id)=> {
   //console.log(Result);
   setOrderDetails(Result);
   if(!Result){
-    console.log(Error);
+    //console.log(Error);
     setLoading(false);
     setAlertMessage({message:Error,state:false})
-  }
-}
+    setTimeout(()=>{
+      Navigate('/');
+    },1500);
+}}
 
 // Get order by ID (GET)
 // const getSingleUserOrder = async()=> {
@@ -55,7 +57,7 @@ useEffect(()=>{
       MyOrders&&MyOrders.length?MyOrders.map((OrderDetails)=>(
         <div key={OrderDetails?._id} className="container mb-5" style={{marginTop:'75px'}}>
       <div className="card shadow border-0 p-4">
-        <h2 className="h5 fw-semibold mb-0">Ordered: <span className="text-secondary">{new Date(OrderDetails?.createdAt).toLocaleDateString()}
+        <h2 className="h5 fw-semibold mb-3">Ordered: <span className="text-secondary">{new Date(OrderDetails?.createdAt).toLocaleDateString()}
 </span></h2>
         {/* Header */}
 <div className="row border-bottom pb-3 mb-4 align-items-center text-center text-md-start">

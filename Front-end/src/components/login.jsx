@@ -42,7 +42,8 @@ const handleLogin = () => {
         AccoutState(null);
       },1500);
       }
-      if (Error) {
+      else if (Error) {
+        setLoading(false);
         setErrors(Error);
         errorTimerRef.current = setTimeout(() => {
           setErrors("");
@@ -70,30 +71,34 @@ const handleLogin = () => {
 };
 
 
-
-
-
     const newUser = async () => {
       setLoading(true);
 
       const newUser = {username,email,password,phoneNumber}
 
-      if(newUser.username === "" || newUser.email === "" || newUser.password === "" || newUser.phoneNumber === "") return alert("please enter all feild")
+      if(newUser.username === "" || newUser.email === "" || newUser.password === "" || newUser.phoneNumber === ""){
+        setLoading(false);
+        AccoutState({message:"please enter all feild",state:false});
+      return setTimeout(()=>{
+        AccoutState(null);
+      },1500);
+      }
 
       ApiService.fetchData('/users',"POST",newUser)
       .then(({Error})=>{
         if (Error) {
-         AccoutState("Login failed: " + Error);
+         AccoutState({message:Error,state:false});
       setTimeout(()=>{
-        AccoutState("");
-      },3000);
+        AccoutState(null);
+      },1500);
         return;
        }
         setuser("")
         setemail("")
         setPass("")
         setPhone("")
-        AccoutState("Account successfully created");
+        setLoading(false);
+        AccoutState({message:"Account successfully created",state:true});
       setTimeout(()=>{
         AccoutState(null);
         Navigate('/Login')
@@ -111,9 +116,9 @@ const handleLogin = () => {
                     {Location.pathname === '/Login' ? <h1>Login Here</h1> : <h1>Register Here</h1>}
                     {Location.pathname === '/Register' ?<input type="email" ref={userInput} value={username} onChange={(e)=>setuser(e.target.value)} placeholder="Enter Username Here" required />:null}
                     <input type="email" ref={userInput} value={email} onChange={(e)=>setemail(e.target.value)} placeholder="Enter Email Here" required />
-                    {errors === "user Not Found"?<p ref={errorTimerRef} className="text-danger">{errors}</p>:null}
+                    {errors === "User not found"&&<p ref={errorTimerRef} className="text-danger">{errors}</p>}
                     <input type="password" value={password} onChange={(e)=>setPass(e.target.value)}  minLength={8} placeholder="Enter Password Here" required />
-                    {errors === "password not match"?<p ref={errorTimerRef} className="text-danger">{errors}</p>:null}
+                    {errors === "Password does not match"&&<p ref={errorTimerRef} className="text-danger">{errors}</p>}
                     {Location.pathname === '/Register' ?
                         (<><input type="tel" name="phone" value={phoneNumber} onChange={(e)=>setPhone(e.target.value)} minLength={10} maxLength={10} placeholder="Enter Phone Number" pattern="[0-9]{10}" required={Location.pathname === '/Register'} /><button onClick={()=>newUser()}>Register</button></>) :
                         <button className="my-5" onClick={()=>handleLogin()}>Login</button>}
