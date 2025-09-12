@@ -22,7 +22,7 @@ export default function ProductCard({ isAuthenticated, e, Navigate, LikedState, 
             <div className='d-flex flex-column w-100'>
               <div className='d-flex justify-content-between align-items-center'>
                 <h4 className='card-text my-2'>{e.title||e.itemName}</h4>
-                <h4 className='display-product-text-price my-2'>₹{e.categoryId==1?<><del>{e.price||e.itemPrice}</del> {e.price/2||e.itemPrice/2}</>:<>{e.price||e.itemPrice}</>}</h4>
+                <h4 className='display-product-text-price my-2'>₹{e.categoryId==1?<><del>{(e.price||e.itemPrice).toFixed(2)}</del> ₹{(e.price/2||e.itemPrice/2).toFixed(2)}</>:<>{(e.price||e.itemPrice).toFixed(2)}</>}</h4>
               </div>
               <p className='Poduct-Description'>{e.description||e.Description}</p>
               <div className=' d-flex justify-content-between p-1'>

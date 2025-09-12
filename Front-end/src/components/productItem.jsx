@@ -65,6 +65,15 @@ function ProductItem({ isAuthenticated, Review, productsItem, cart, category, Al
     setProducts(Products)
   }
 
+  const [expanded, setExpanded] = useState({}); // object to track each review state
+
+  const toggleReadMore = (id) => {
+    setExpanded((prev) => ({
+      ...prev,
+      [id]: !prev[id], // toggle only this review
+    }));
+  };
+
   const PlaceOrder=(productId, itemPrice, quantity, itemName, categoryId, userId, Description, Product_Url, Rating, likes, placeOrder)=>{
     const Relocate = handleCart(productId, itemPrice, quantity, itemName, categoryId, userId, Description, Product_Url, Rating, likes, placeOrder);
     if (Relocate) Navigate(`/CheckOut/${isAuthenticated?.userId}`);
@@ -144,13 +153,13 @@ function ProductItem({ isAuthenticated, Review, productsItem, cart, category, Al
                   <div className='details-holder p-3'>
                     <div className=' d-flex flex-column gap-3'>
                       <h1>{selectedProduct.title}</h1>
-                      <h2>₹{selectedProduct.categoryId==1?<><del>{selectedProduct.price}</del> {selectedProduct.price/2}</>:<>{selectedProduct.price}</>}</h2>
+                      <h2>₹{selectedProduct.categoryId==1?<><del>{(selectedProduct.price).toFixed(2)}</del> {(selectedProduct.price/2).toFixed(2)}</>:<>{(selectedProduct.price).toFixed(2)}</>}</h2>
                       <div className="Categories bg-white w-100 h-auto py-1 d-inline-flex align-items-center gap-2"><i className="fa-solid fa-circle-exclamation"></i><p>Order in <span className=' fw-bold'>{new Date().toLocaleDateString()}</span> to get next day delivery <span className=' fw-bold'>{new Date(Date.now() + 1 * 24 * 60 * 60 * 1000).toLocaleDateString()}</span></p></div>
                       <span className=' w-100 fs-4 fw-bold w-75 d-flex justify-content-center align-items-center gap-3'>
                         <h3 className=' fw-bold'>Quantity:</h3>{quantity==0?<button className=' bg-body-secondary'>-</button>:<button onClick={() => setquantity(quantity - 1)}>-</button>}{quantity}<button onClick={() => setquantity(quantity + 1)}>+</button>
                       </span>
                       <div className=' w-100 d-flex align-items-center justify-content-between gap-2'>
-                        <button className={`btn Cart-Button ${!small&&'w-50'} flex-grow-1 py-2`} onClick={() => { handleCart(selectedProduct._id, selectedProduct.price, quantity, selectedProduct.title, selectedProduct.categoryId, isAuthenticated.userId, selectedProduct.description, selectedProduct.url, selectedProduct.rating, Heart, false) ;setLoading(true)}}>Add to Cart</button>{cart?.items.length||quantity!==0?<button className={`btn Cart-Button ${!small&&'w-50'} py-2`} onClick={() => {PlaceOrder(selectedProduct._id, selectedProduct.price, quantity, selectedProduct.title, isAuthenticated.userId, selectedProduct.description, selectedProduct.url, selectedProduct.rating, Heart, true);setLoading(true)}}>Buy Now</button>:<button className=' bg-body-secondary'></button>}
+                        <button className={`btn Cart-Button ${!small&&'w-50'} flex-grow-1 py-2`} onClick={() => { handleCart(selectedProduct._id, selectedProduct.price, quantity, selectedProduct.title, selectedProduct.categoryId, isAuthenticated.userId, selectedProduct.description, selectedProduct.url, selectedProduct.rating, Heart, false) ;setLoading(true)}}>Add to Cart</button>{cart?.items.length||quantity!==0?<button className={`btn Cart-Button ${!small&&'w-50'} py-2`} onClick={() => {PlaceOrder(selectedProduct._id, selectedProduct.price, quantity, selectedProduct.title, selectedProduct.categoryId, isAuthenticated.userId, selectedProduct.description, selectedProduct.url, selectedProduct.rating, Heart, true);setLoading(true)}}>Buy Now</button>:<button className=' bg-body-secondary'></button>}
                         <span className={`material-symbols-outlined Product-icons heart ${Heart ? 'text-danger' : 'text-black'}`} onClick={() => PostUserLikedState(isAuthenticated.userId, selectedProduct._id, selectedProduct.title, selectedProduct.price, selectedProduct.description, selectedProduct.url, selectedProduct.categoryId, selectedProduct.rating, selectedProduct.ingredients, selectedProduct.features, selectedProduct.purchaseLink, !Heart && true, selectedProduct.comments)}>
                           favorite
                         </span>
@@ -177,10 +186,10 @@ function ProductItem({ isAuthenticated, Review, productsItem, cart, category, Al
                 <div className='Product-Rating-Review d-flex justify-content-between'>
                   <div className='User Rating'>
                     <div className='d-flex flex-column align-items-center' style={{ width: '40%' }}>
-                      <div className=' d-flex align-items-end'><h1 className='Rating-value'>{Number(ProductAvgRating).toFixed(1)}</h1><span>/5</span></div>
+                      <div className=' d-flex align-items-end'><span className='Rating-value'>{Number(ProductAvgRating).toFixed(1)}</span><span>/5</span></div>
                       <p>( <b className=' opacity-75'>{UserProductReviews?.ProductId === selectedProduct?._id&&UserProductReviews?.User?.length||0}</b> {UserProductReviews?.User?.length>1?'Reviews':'Review'} )</p>
                     </div>
-                    <div className='d-flex flex-column align-items-start gap-1' style={{ width: '60%' }}>
+                    <div className='d-flex flex-column align-items-start gap-2' style={{ width: '60%' }}>
                       {[5, 4, 3, 2, 1].map((star) => (
                         <span key={star} className='starRating d-flex align-items-center gap-2'>
                           <i className="fa-solid fa-star" style={{ color: 'gold' }}></i>
@@ -205,7 +214,7 @@ function ProductItem({ isAuthenticated, Review, productsItem, cart, category, Al
                       <div className=' d-flex align-items-center gap-2 mt-1'>{Array.from({ length: 5 }, (_, i) => (
                         <i key={i} className="fa-solid fa-star" style={{ color: i + 1 <= ProductReview?.ProductUserRating ? 'gold' : 'grey' }}></i>
                       ))}</div>
-                      <div><p className={`${Readmore?'show':'hide'}`}>{ProductReview.comment}</p><span className=' fw-bold' style={{cursor:'pointer'}} onClick={()=>setReadmore(prev=>!prev)}>{!Readmore?'Readmore':'Readless'}</span></div>
+                      <div><p className={`${Readmore?'show':'hide'}`}>{ProductReview.comment}</p><span className=' fw-bold' style={{cursor:'pointer'}} onClick={() => toggleReadMore(ProductReview._id)}>{!expanded[ProductReview._id] ? "Readmore" : "Readless"}</span></div>
                     </div>) : <div className=' d-flex flex-column gap-2'>
                       <div className=' d-flex align-items-center gap-2'><img src={selectedProductReview[0]?.image} alt="loading" /><span className=' fs-4'>{selectedProductReview[0]?.name ? selectedProductReview[0]?.name : 'Bot'}</span></div>
                       <div className=' d-flex align-items-center gap-2 mt-2'>{Array.from({ length: selectedProductReview[0]?.rating ? selectedProductReview[0]?.rating : 5 }, (_, i) => (
@@ -215,7 +224,7 @@ function ProductItem({ isAuthenticated, Review, productsItem, cart, category, Al
                     </div>}
                     </div>
                     <div className=' d-flex align-items-center gap-2 my-2'><button className=' rounded-circle bg-white d-flex justify-content-center align-items-center' onClick={() => { handleEditcomment(); setRating(0) }} style={{ width: '40px', height: '40px', border: '1px solid black', boxShadow: 'none' }}><span>+</span></button>Comments</div>
-                    <div className=' d-flex flex-column overflow-hidden' style={{ height: Editcomment ? '100%' : '0px' }}>
+                    <div className=' d-flex flex-column overflow-hidden' style={{ height: !Editcomment && '0px' }}>
                       <div className='d-flex gap-2'>
                         Select Rating:
                         {[1, 2, 3, 4, 5].map((star, index) => (

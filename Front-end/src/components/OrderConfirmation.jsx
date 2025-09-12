@@ -55,6 +55,8 @@ useEffect(()=>{
       MyOrders&&MyOrders.length?MyOrders.map((OrderDetails)=>(
         <div key={OrderDetails?._id} className="container mb-5" style={{marginTop:'75px'}}>
       <div className="card shadow border-0 p-4">
+        <h2 className="h5 fw-semibold mb-0">Ordered: <span className="text-secondary">{new Date(OrderDetails?.createdAt).toLocaleDateString()}
+</span></h2>
         {/* Header */}
 <div className="row border-bottom pb-3 mb-4 align-items-center text-center text-md-start">
   <div className="col-12 col-md-8 mb-2 mb-md-0">
@@ -82,7 +84,7 @@ useEffect(()=>{
     <div className="col-12 col-md-4 mb-3">
       <p className="text-muted fw-medium mb-1">Order placed</p>
       <p className="text-success fw-semibold mb-1">
-        Value shipping <br /> Arrives by {OrderDetails?.deliveryDate}
+        Value shipping <br /> Arrives by {new Date(OrderDetails?.deliveryDate).toDateString()} {new Date(OrderDetails?.deliveryDate).toTimeString()}
       </p>
       <p className="small text-muted mb-0">Order #{OrderDetails?.orderId}</p>
     </div>
@@ -123,11 +125,11 @@ useEffect(()=>{
       <div className="flex-grow-1 text-center text-md-start">
         <p className="fw-medium mb-1">{product.name}</p>
         <p className="small text-muted mb-0">
-          Value shipping: Arrives by {OrderDetails?.deliveryDate}
+          Value shipping: Arrives by {new Date(OrderDetails?.deliveryDate).toLocaleDateString()}
         </p>
       </div>
       <p className="small mb-0">Qty: {product.qty}</p>
-      <p className="fw-medium mb-0">${(product.price * product.qty).toFixed(2)}</p>
+      <p className="fw-medium mb-0">₹{((product.categoryId==1?product.price/2:product.price) * product.qty).toFixed(2)}</p>
     </div>
   ))}
 </div>
@@ -140,19 +142,19 @@ useEffect(()=>{
             <h2 className="h6 fw-semibold mb-2">Order summary</h2>
             <div className="d-flex justify-content-between small mb-1">
               <span>Subtotal ({OrderDetails?.products?.length} item)</span>
-              <span>${OrderDetails?.subtotal.toFixed(2)}</span>
+              <span>₹{OrderDetails?.subtotal.toFixed(2)}</span>
             </div>
             <div className="d-flex justify-content-between small mb-1">
               <span>Value shipping</span>
-              <span>${OrderDetails?.shipping.toFixed(2)}</span>
+              <span>₹{OrderDetails?.shipping.toFixed(2)}</span>
             </div>
             <div className="d-flex justify-content-between small mb-1">
               <span>Est. tax</span>
-              <span>${OrderDetails?.tax.toFixed(2)}</span>
+              <span>₹{OrderDetails?.tax.toFixed(2)}</span>
             </div>
             <div className="d-flex justify-content-between fw-semibold border-top pt-2">
               <span>Total</span>
-              <span>${OrderDetails?.total.toFixed(2)}</span>
+              <span>₹{OrderDetails?.total.toFixed(2)}</span>
             </div>
           </div>
 

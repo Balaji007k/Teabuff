@@ -223,7 +223,7 @@ const createOrder = async(orderData)=> {
                     setAuthenticated(Result);
                     await fetchCart(Result.userId);
                     await fetchUserLikedState(Result.userId)
-                    console.log("User is authenticated:", Result.userId);
+                    console.log("User is authenticated:", Result.userName);
                  }
                 // else {
                 //     console.log("Not authenticated "+Error);

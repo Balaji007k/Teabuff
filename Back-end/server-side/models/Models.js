@@ -170,6 +170,7 @@ const OrderSchemaDetails = new mongoose.Schema({
   // Array of products
   products: [
     {
+      categoryId: { type: Number, required: true },
       name: { type: String, required: true },
       image: { type: String, required: true },
       qty: { type: Number, required: true },
