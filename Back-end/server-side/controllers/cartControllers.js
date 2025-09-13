@@ -99,7 +99,7 @@ exports.getCartItem = async(req,res,next)=>{
 //   }
 // };
 
-exports.createCartItem = async (req, res, next) => {
+exports.createCartItem = async (req, res) => {
   let { userId, productId, itemPrice, quantity, itemName, categoryId, Product_Url, Rating, Description, likes } = req.body;
 
   if (!quantity || quantity <= 0) {
@@ -121,7 +121,7 @@ exports.createCartItem = async (req, res, next) => {
 
       return res.json({
         success: true,
-        cart: NewCart   // 👈 return NewCart structure
+        cart: NewCart   // return NewCart structure
       });
     } else {
       // If cart exists
@@ -139,7 +139,7 @@ exports.createCartItem = async (req, res, next) => {
       }
       await usercart.save();
 
-      // 👇 respond in same structure
+      // respond in same structure
       return res.json({
         usercart,
         newItem: {

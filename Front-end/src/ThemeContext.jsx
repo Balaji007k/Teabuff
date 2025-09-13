@@ -20,7 +20,6 @@ export const ThemeProvider = ({ children }) => {
     const [UserLikedState, setUserLikedState] = useState(null);
     const [UpdatedProduct, setUpdatedProduct] = useState(null);
     const [AlertMessageTheme,setAlertMessage] = useState([]);
-    const [FastPlaceOrder,setFastPlaceOrder] = useState([]);
     const [OrderId,setOrderId] = useState(null);
 
     const fetchAllReviews = async () => {
@@ -43,7 +42,6 @@ export const ThemeProvider = ({ children }) => {
     };
 
     const PostSaveCart = async (cart,quantity) => {
-        //console.log(cart)
             if (cart?.items?.length <= 0) return alert('No items in Cart');
             const userId = isAuthenticated?.userId;
     
@@ -59,6 +57,7 @@ export const ThemeProvider = ({ children }) => {
                     itemName: item.itemName,
                     itemPrice: item.itemPrice,
                     quantity: quantity[item.productId] ?? item.quantity,
+                    categoryId: item.categoryId,
                     Product_Url: item.Product_Url,
                     Rating: item.Rating,
                     Description: item.Description
@@ -72,6 +71,7 @@ export const ThemeProvider = ({ children }) => {
                     itemName: item.title,
                     itemPrice: item.price,
                     quantity: quantity,
+                    categoryId: item.categoryId,
                     Product_Url: item.url,
                     Rating: item.rating,
                     Description: item.description
@@ -83,7 +83,6 @@ export const ThemeProvider = ({ children }) => {
         const { Result, Error } = await ApiService.fetchData(`/carts/${userId}`,"PUT",payload);
                 setAlertMessage({message:Result.message,state:true});
                 setUpdatedCart(Result?.UpdatedCart)
-                setFastPlaceOrder({cart:FastPlaceOrder.cart,state:false});
                 if(Error) console.log(Error);
         } catch (error) {
             console.error("Error saving cart:", err);
@@ -94,7 +93,7 @@ export const ThemeProvider = ({ children }) => {
     const fetchUserLikedState = async (UserId) => {
         const { Result, Error } = await ApiService.fetchData(`/users/State/${UserId}`);
         if (Result){
-            setUserLikedState(Result?.UserState)
+            setUserLikedState(Result?.UserState);
         }
         else console.log(Error);
     };
@@ -171,7 +170,7 @@ else if ((quantity>=0&&placeOrder&&!cart.items.length)||(placeOrder&&quantity!==
       setAlertMessage({ message: "Cart successfully added", state: true });
     //   console.log("theme",Result)
       setUpdatedCart(Result?.usercart);
-      setFastPlaceOrder({cart:Result?.newItem,state:true});
+      //setFastPlaceOrder({cart:Result?.newItem,state:true});
     })
     .catch(err => console.log(err));
     return true;
@@ -273,7 +272,7 @@ const createOrder = async(orderData)=> {
     );
 
     if (isAuthenticated) return !isLoading && (
-        <ThemeContext.Provider value={{ isAuthenticated, AllReview, Review, image, productsItem, category, cart, handleCart, setUpdatedCart, PostSaveCart, PostUserLikedState, UserLikedState, UpdateProduct, UserProductReviews, fetchProductReviews, ProductAvgRating, UpdatedProduct, AlertMessageTheme, FastPlaceOrder, createOrder, OrderId}}>
+        <ThemeContext.Provider value={{ isAuthenticated, AllReview, Review, image, productsItem, category, cart, handleCart, setUpdatedCart, PostSaveCart, PostUserLikedState, UserLikedState, UpdateProduct, UserProductReviews, fetchProductReviews, ProductAvgRating, UpdatedProduct, AlertMessageTheme, createOrder, OrderId}}>
             {children}
         </ThemeContext.Provider>
     );

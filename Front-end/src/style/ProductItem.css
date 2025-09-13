@@ -157,7 +157,7 @@
     padding: 10px;
 }
 .Comment-box{
-    max-height: 175px;
+    height: 175px;
     overflow-y: scroll;
 }
 .Comment-box p{

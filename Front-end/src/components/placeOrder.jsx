@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Link, useNavigate, useLocation, useParams } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import '../style/PlaceOrder.css';
 import '../style/ExpressCheckout.css';
 import { useTheme } from '../ThemeContext';
@@ -12,7 +12,6 @@ import ProductCard from './AssetComponents/ProductCard';
 
 function PlaceOrder({ isAuthenticated, cart }) {
     const small = useMediaQuery({maxWidth:600});
-    const {id} = useParams();
     const Location = useLocation();
     const { setUpdatedCart,PostSaveCart, AlertMessageTheme } = useTheme();
     const [AlertMessagePlaceOrder,setAlertMessage] = useState([]);
@@ -113,11 +112,11 @@ function PlaceOrder({ isAuthenticated, cart }) {
         }, 3000)
         return <PageNotFound Message={"Cart"} />
     }
-    if (isAuthenticated&&isAuthenticated.userId===id){ return (
+    if (isAuthenticated&&isAuthenticated.userId){ return (
         <>
         {AlertMessagePlaceOrder&&AlertMessagePlaceOrder?.message?<AlertMessage message={AlertMessagePlaceOrder}/>:Loading&&<LoadingPage/>}
-        <div className={` d-flex gap-2 pb-3 ${Location.pathname==='/CheckOut/'+isAuthenticated?.userId?'flex-column-reverse':'flex-column'}`} style={{ marginTop: '75px'}}>
-            {Location.pathname===`/CheckOut/${isAuthenticated.userId}`?
+        <div className={` d-flex gap-2 pb-3 ${Location.pathname==='/CheckOut'||Location.pathname===`/CheckOut/${cart?.ProductId}`?'flex-column-reverse':'flex-column'}`} style={{ marginTop: '75px'}}>
+            {Location.pathname===`/CheckOut`||Location.pathname===`/CheckOut/${cart?.ProductId}`?
             <div className='bill items-page w-100'>
             <table className=' w-100 d-flex flex-column align-items-center'>
                 <tr className='text-center fs-4'>
@@ -172,9 +171,9 @@ function PlaceOrder({ isAuthenticated, cart }) {
             </div>}
             
             {cart?.items?.length <= 0|| !cart ? <div className=' w-100 text-center fs-2'>No Cart Here</div> : <div className=' w-100 d-flex flex-column align-items-center flex-wrap'>
-                { Location.pathname==='/CheckOut/'+isAuthenticated?.userId&&<> <h3>Selected Items {cart?.items.length}</h3> </>}
-                {( Location.pathname==='/CheckOut/'+isAuthenticated?.userId)&&(
+                {( Location.pathname==='/CheckOut'||Location.pathname===`/CheckOut/${cart?.ProductId}`)&&(
                     <>
+                    <h3>Selected Items {cart?.items.length}</h3>
                         <div className='d-flex justify-content-center align-items-center'>
                             <input className='promo' type="text" placeholder='Gift or promo code' /><button className='promo'>Apply</button>
                         </div>
@@ -224,8 +223,8 @@ function PlaceOrder({ isAuthenticated, cart }) {
                         </div>
                     </>
                 )}
-                <div className={`w-100 ${Location.pathname==='/CheckOut/'+isAuthenticated?.userId?'d-none':'d-block'} ${small&&'position-fixed bottom-0 py-2 bg-white'} d-flex justify-content-center gap-2`}>
-                    {!Order && <><button className={`cart-btn px-3 ${small&&'rounded-5 py-1'}`} onClick={() => {PostSaveCart(cart,quantity);setLoading(true)}}>Save Cart</button><Link to={`/CheckOut/${isAuthenticated?.userId}`}><button className={`cart-btn px-3 ${small&&'rounded-5'}`} onClick={() => {OrderHandler();setLoading(true)}}>Place Order</button></Link></>}
+                <div className={`w-100 ${Location.pathname==='/CheckOut'||Location.pathname===`/CheckOut/${cart?.ProductId}`?'d-none':'d-block'} ${small&&'position-fixed bottom-0 py-2 bg-white'} d-flex justify-content-center gap-2`}>
+                    {!Order && <><button className={`cart-btn px-3 ${small&&'rounded-5 py-1'}`} onClick={() => {PostSaveCart(cart,quantity);setLoading(true)}}>Save Cart</button><Link to={`/CheckOut`}><button className={`cart-btn px-3 ${small&&'rounded-5'}`} onClick={() => {OrderHandler();setLoading(true)}}>Place Order</button></Link></>}
                 </div>
             </div>}
 

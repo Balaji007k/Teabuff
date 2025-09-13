@@ -16,7 +16,7 @@ function Wishlist({ isAuthenticated }) {
 
     useEffect(()=>{
         const LikedProducts = UserLikedState?.filter(Product=>Product.likedState===true)
-        setLikedProducts(LikedProducts)
+        setLikedProducts(LikedProducts);
     },[UserLikedState])
 
     useEffect(()=>{

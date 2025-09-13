@@ -26,7 +26,7 @@ export default function ProductCard({ isAuthenticated, e, Navigate, LikedState, 
               </div>
               <p className='Poduct-Description'>{e.description||e.Description}</p>
               <div className=' d-flex justify-content-between p-1'>
-                <p><i className="fa-solid fa-star text-warning me-1"></i>{UpdatedProduct?._id===e._id?Number(UpdatedProduct?.rating).toFixed(1):Number(e.rating||e.Rating).toFixed(1)}</p>
+                {!cart&&<p><i className="fa-solid fa-star text-warning me-1"></i>{UpdatedProduct?._id===e._id?Number(UpdatedProduct?.rating).toFixed(1):Number(e.rating||e.Rating).toFixed(1)}</p>}
                 {isAuthenticated?.userId && !cart && <p className='d-flex align-items-center'>
                   {Heart?<i className={`fa-solid fa-heart text-danger mx-1 fs-5`} onClick={() => { isAuthenticated?.userId && PostUserLikedState(isAuthenticated?.userId, e.ProductId || e._id, e.title, e.price, e.description, e.url, e.categoryId, e.rating, e.ingredients, e.features, e.purchaseLink, !Heart && true) }}></i>
                   :<i className='fa-solid fa-heart-crack text-white mx-1 fs-5' onClick={() => { isAuthenticated?.userId && PostUserLikedState(isAuthenticated?.userId, e.ProductId || e._id, e.title, e.price, e.description, e.url, e.categoryId, e.rating, e.ingredients, e.features, e.purchaseLink, !Heart && true) }}></i>}

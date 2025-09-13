@@ -76,7 +76,7 @@ function ProductItem({ isAuthenticated, Review, productsItem, cart, category, Al
 
   const PlaceOrder=(productId, itemPrice, quantity, itemName, categoryId, userId, Description, Product_Url, Rating, likes, placeOrder)=>{
     const Relocate = handleCart(productId, itemPrice, quantity, itemName, categoryId, userId, Description, Product_Url, Rating, likes, placeOrder);
-    if (Relocate) Navigate(`/CheckOut/${isAuthenticated?.userId}`);
+    if (Relocate) Navigate(`/CheckOut/${productId}`);
   };
 
   useEffect(()=>{

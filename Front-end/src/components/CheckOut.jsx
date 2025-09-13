@@ -6,11 +6,13 @@ import PlaceOrder from "./placeOrder";
 import PageNotFound from "./AssetComponents/PageNotFound";
 import AlertMessage from "./AssetComponents/AlertMessage";
 import LoadingPage from "./AssetComponents/LoadingPage";
+import { useLocation } from "react-router-dom";
 
 export default function CheckOut({isAuthenticated,cart}){
     const small = useMediaQuery({maxWidth:600})
 
     const Navigate = useNavigate();
+    const Location = useLocation();
     const {id} = useParams();
     const [contactEmail,setcontactEmail] = useState("");
       const [firstname,setfirstname] = useState("");
@@ -25,11 +27,21 @@ export default function CheckOut({isAuthenticated,cart}){
       const [UserCheckOutData,setUserCheckOutData] = useState(null);
       const [AlertMessageCheckOut,setAlertMessage] = useState([]);
       const [Loading,setLoading] = useState(false);
+      const [Filtered,setFiltered] = useState(null);
+
+      useEffect(()=>{
+        setFiltered(cart?.items.find((product)=>
+            product.productId==id
+        ))
+      },[cart])
+
 
       const fetchCheckOut = async () => {
         setLoading(true);
         const { Result, Error } = await ApiService.fetchData(`/Checkouts/${isAuthenticated.userId}`);
-        if(Result)setLoading(false);
+        if(Result){
+            setLoading(false);
+        };
         if (!Error) {setUserCheckOutData(Result?.UserCheckOut.ShippingDetails[0]);
         }
         else console.error(Error);
@@ -56,7 +68,8 @@ export default function CheckOut({isAuthenticated,cart}){
             setAlertMessage({message:Result.message,state:true});
             setTimeout(()=>{
                 setAlertMessage(null);
-                Navigate('/Payment', { state: { cart,NewCheckut } });
+                Navigate('/Payment', { state: { cart: Location.pathname === `/CheckOut/${Filtered?.productId}` ? { items: [Filtered] } : cart,  NewCheckut  } });
+               // Navigate('/Payment', { state: { Location.pathname==`/CheckOut/${Filtered?.productId}`?{items:[Filtered]}:cart,NewCheckut } });
             },1500);
         }
         else{
@@ -87,11 +100,11 @@ export default function CheckOut({isAuthenticated,cart}){
 
     
 
-    if(isAuthenticated?.userId===id){return(
+    if(isAuthenticated?.userId){return(
         <>
         {AlertMessageCheckOut&&AlertMessageCheckOut?.message?<AlertMessage message={AlertMessageCheckOut}/>:Loading&&<LoadingPage/>}
         <div className={` w-100 d-flex ${!small?'flex-row-reverse':'flex-column'} `}>
-        <div className="checkout-Cart-page overflow-y-scroll" style={{flex:'1 1 40%',height:'880px'}}><PlaceOrder isAuthenticated={isAuthenticated} cart={cart}/></div>
+        <div className="checkout-Cart-page overflow-y-scroll" style={{flex:'1 1 40%',height:'880px'}}><PlaceOrder isAuthenticated={isAuthenticated} cart={Location.pathname==`/CheckOut/${Filtered?.productId}`?{items:[Filtered],ProductId:Filtered?.productId}:cart}/></div>
         <div className={` d-flex justify-content-center flex-grow-1 pb-3`} style={{marginTop:!small&&'75px',flex:'1 1 60%'}}>
                     <div className=' d-flex flex-column gap-4' style={{ width:!small? '80%' : '95%'}}>
                         <h2 className=" fw-bold">CheckOut</h2>

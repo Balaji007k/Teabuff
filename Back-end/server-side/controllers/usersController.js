@@ -185,7 +185,7 @@ exports.CreateUserState = async (req, res) => {
     if (ProductIndex === -1) {
       User.UserState.push(State);
     } else {
-      User.UserState[ProductIndex].likedState = likedState;
+      User.UserState[ProductIndex] = State;
     }
 
     const NewState = await User.save();
