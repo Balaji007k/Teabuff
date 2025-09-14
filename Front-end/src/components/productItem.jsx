@@ -77,6 +77,7 @@ function ProductItem({ isAuthenticated, Review, productsItem, cart, category, Al
   const PlaceOrder=(productId, itemPrice, quantity, itemName, categoryId, userId, Description, Product_Url, Rating, likes, placeOrder)=>{
     const Relocate = handleCart(productId, itemPrice, quantity, itemName, categoryId, userId, Description, Product_Url, Rating, likes, placeOrder);
     if (Relocate) Navigate(`/CheckOut/${productId}`);
+    else Navigate(`/CheckOut`);
   };
 
   useEffect(()=>{
@@ -131,7 +132,7 @@ function ProductItem({ isAuthenticated, Review, productsItem, cart, category, Al
 
   if (isAuthenticated && selectedProduct) return (
     <>
-    {AlertMessageMain&&AlertMessageMain.message?<AlertMessage message={AlertMessageMain}/>:Loading&&<LoadingPage/>}
+    {AlertMessageMain&&AlertMessageMain.message?<AlertMessage message={AlertMessageMain}/>:Loading&&<LoadingPage />}
       <div className='Product-Page-cart d-flex flex-column align-items-center' style={{ marginTop: '75px', color: 'var(--Background-white-text)' }}>
         <ProductFilters productsItem={productsItem} category={category} Products={Products} id={id} searchingProduct={setSearchItem}/>
 

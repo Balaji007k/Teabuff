@@ -6,7 +6,7 @@ import { useLocation } from 'react-router-dom';
 import DashBoard from './Admin_Component/DashBoard'
 import ApiService from '../components/Service/ApiService/product-api';
 
-function Admin({Review, productsItem, category}) {
+function Admin({AllReview, productsItem, category}) {
 
     const [Users,setUser] = useState([]);
     const Location = useLocation();
@@ -44,7 +44,7 @@ function Admin({Review, productsItem, category}) {
     return (
         <div className='main-Admin d-flex w-100'>
             <AdminNavbar/>
-            {Location.pathname === '/Admin'&&<DashBoard Users={Users} Review={Review} productsItem={productsItem} category={category}/>}
+            {Location.pathname === '/Admin'&&<DashBoard Users={Users} AllReview={AllReview} productsItem={productsItem} category={category}/>}
             <Outlet context={Users}/>
         </div>
     )

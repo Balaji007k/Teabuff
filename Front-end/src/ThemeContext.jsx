@@ -1,6 +1,6 @@
 import LoadingPage from './components/AssetComponents/LoadingPage';
 import ApiService from './components/Service/ApiService/product-api';
-import { createContext, useState, useContext, useEffect } from "react";
+import { createContext, useState, useContext, useEffect, useMemo } from "react";
 
 //  Create the context
 const ThemeContext = createContext();
@@ -19,7 +19,7 @@ export const ThemeProvider = ({ children }) => {
     const [isLoading, setIsLoading] = useState(true);
     const [UserLikedState, setUserLikedState] = useState(null);
     const [UpdatedProduct, setUpdatedProduct] = useState(null);
-    const [AlertMessageTheme,setAlertMessage] = useState([]);
+    const [AlertMessageTheme,setAlertMessage] = useState(null);
     const [OrderId,setOrderId] = useState(null);
 
     const fetchAllReviews = async () => {
@@ -150,7 +150,7 @@ export const ThemeProvider = ({ children }) => {
     };
 
 
-    const handleCart = (productId, itemPrice, quantity, itemName, categoryId, userId, Description, Product_Url, Rating, likes, placeOrder=false) => {
+     const handleCart = (productId, itemPrice, quantity, itemName, categoryId, userId, Description, Product_Url, Rating, likes, placeOrder=false) => {
 
   const newCart = { userId, productId, itemPrice, quantity, itemName, categoryId, Product_Url, Rating, Description, likes };
   if (quantity === 0&&!placeOrder) {
@@ -158,7 +158,7 @@ export const ThemeProvider = ({ children }) => {
     return ;
   }
   else if(cart.items.length&&quantity==0&&placeOrder){
-    return true;
+    return false;
 }
 else if ((quantity>=0&&placeOrder&&!cart.items.length)||(placeOrder&&quantity!==0&&cart.items.length)){
     ApiService.fetchData('/carts', "POST", newCart)
@@ -196,6 +196,31 @@ else{
     }
 };
 
+// const handleCart = async (productId, itemPrice, quantity, itemName, categoryId, userId, Description, Product_Url, Rating, likes, placeOrder=false) => {
+//   if (quantity === 0 && !placeOrder) {
+//     setAlertMessage({ message: "Minimum select one item", state: false });
+//     return false;
+//   }
+
+//   const newCart = { userId, productId, itemPrice, quantity, itemName, categoryId, Product_Url, Rating, Description, likes };
+
+//   try {
+//     const { Result, Error } = await ApiService.fetchData('/carts', "POST", newCart);
+//     if (Error) {
+//       setAlertMessage({ message: "Cart update failed: " + Error, state: false });
+//       return false;
+//     }
+//     setUpdatedCart(Result?.usercart);
+//     setAlertMessage({ message: "Cart successfully updated", state: true });
+//     return true;
+//   } catch (err) {
+//     console.error("Cart error:", err);
+//     setAlertMessage({ message: "Something went wrong.", state: false });
+//     return false;
+//   }
+// };
+
+
 // Create new order (POST)
 const createOrder = async(orderData)=> {
 
@@ -209,48 +234,113 @@ const createOrder = async(orderData)=> {
 
 
 
+    // useEffect(() => {
+    //     const fetchData = async () => {
+    //         try {
+    //             // const res = await fetch('https://teabuff.onrender.com/dashboard', {
+    //             //     method: 'GET',
+    //             //     credentials: 'include'
+    //             // });
+    //             const { Result, Error } = await ApiService.fetchData('/dashboard');
+
+    //             if (Result.userId) {
+    //                 setAuthenticated(Result);
+    //                 await fetchCart(Result.userId);
+    //                 await fetchUserLikedState(Result.userId)
+    //                 console.log("User is authenticated:", Result.userName);
+    //              }
+    //             // else {
+    //             //     console.log("Not authenticated "+Error);
+    //             // }
+    //             // await Promise.all([
+    //             //     fetchAllReviews(),
+    //             //     fetchReviews(),
+    //             //     fetchShops(),
+    //             //     fetchProducts(),
+    //             //     fetchCategories()
+    //             // ]);
+
+    //         } catch (err) {
+    //             console.log("'Not authenticated'",err);
+    //         } finally {
+    //             setIsLoading(false);
+    //             await Promise.all([
+    //                 fetchAllReviews(),
+    //                 fetchReviews(),
+    //                 fetchShops(),
+    //                 fetchProducts(),
+    //                 fetchCategories()
+    //             ]);
+    //         }
+    //     };
+
+    //     fetchData();
+    // }, []);
+
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                // const res = await fetch('https://teabuff.onrender.com/dashboard', {
-                //     method: 'GET',
-                //     credentials: 'include'
-                // });
-                const { Result, Error } = await ApiService.fetchData('/dashboard');
+  const fetchData = async () => {
+    try {
+      const { Result } = await ApiService.fetchData('/dashboard');
+      if (Result.userId) {
+        setAuthenticated(Result);
+        await fetchCart(Result.userId);
+        await fetchUserLikedState(Result.userId);
+      }
+    } catch (err) {
+      console.log("'Not authenticated'", err);
+    } finally {
+      setIsLoading(false);
+      await Promise.all([
+        fetchAllReviews(),
+        fetchReviews(),
+        fetchShops(),
+        fetchProducts(),
+        fetchCategories()
+      ]);
+    }
+  };
+  fetchData();
+}, []);
 
-                if (Result.userId) {
-                    setAuthenticated(Result);
-                    await fetchCart(Result.userId);
-                    await fetchUserLikedState(Result.userId)
-                    console.log("User is authenticated:", Result.userName);
-                 }
-                // else {
-                //     console.log("Not authenticated "+Error);
-                // }
-                // await Promise.all([
-                //     fetchAllReviews(),
-                //     fetchReviews(),
-                //     fetchShops(),
-                //     fetchProducts(),
-                //     fetchCategories()
-                // ]);
 
-            } catch (err) {
-                console.log("'Not authenticated'",err);
-            } finally {
-                setIsLoading(false);
-                await Promise.all([
-                    fetchAllReviews(),
-                    fetchReviews(),
-                    fetchShops(),
-                    fetchProducts(),
-                    fetchCategories()
-                ]);
-            }
-        };
+const contextValue = useMemo(() => {
+  return {isAuthenticated,
+  AllReview,
+  Review,
+  image,
+  productsItem,
+  category,
+  cart,
+  handleCart,
+  setUpdatedCart,
+  PostSaveCart,
+  PostUserLikedState,
+  UserLikedState,
+  UpdateProduct,
+  UserProductReviews,
+  fetchProductReviews,
+  ProductAvgRating,
+  UpdatedProduct,
+  AlertMessageTheme,
+  createOrder,
+  OrderId}
+}, [
+  isAuthenticated,
+  AllReview,
+  Review,
+  image,
+  productsItem,
+  category,
+  cart,
+  UserLikedState,
+  UserProductReviews,
+  ProductAvgRating,
+  UpdatedProduct,
+  AlertMessageTheme,
+  OrderId
+]);
 
-        fetchData();
-    }, []);
+
 
 
   useEffect(() => {
@@ -271,8 +361,14 @@ const createOrder = async(orderData)=> {
         </ThemeContext.Provider>
     );
 
+    // if (isAuthenticated) return !isLoading && (
+    //     <ThemeContext.Provider value={{ isAuthenticated, AllReview, Review, image, productsItem, category, cart, handleCart, setUpdatedCart, PostSaveCart, PostUserLikedState, UserLikedState, UpdateProduct, UserProductReviews, fetchProductReviews, ProductAvgRating, UpdatedProduct, AlertMessageTheme, createOrder, OrderId}}>
+    //         {children}
+    //     </ThemeContext.Provider>
+    // );
+
     if (isAuthenticated) return !isLoading && (
-        <ThemeContext.Provider value={{ isAuthenticated, AllReview, Review, image, productsItem, category, cart, handleCart, setUpdatedCart, PostSaveCart, PostUserLikedState, UserLikedState, UpdateProduct, UserProductReviews, fetchProductReviews, ProductAvgRating, UpdatedProduct, AlertMessageTheme, createOrder, OrderId}}>
+        <ThemeContext.Provider value={contextValue}>
             {children}
         </ThemeContext.Provider>
     );

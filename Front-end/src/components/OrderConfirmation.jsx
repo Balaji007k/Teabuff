@@ -54,7 +54,7 @@ useEffect(()=>{
 
 
   return (
-      MyOrders&&MyOrders.length?MyOrders.map((OrderDetails)=>(
+      MyOrders&&MyOrders.length?MyOrders.slice().reverse().map((OrderDetails)=>(
         <div key={OrderDetails?._id} className="container mb-5" style={{marginTop:'75px'}}>
       <div className="card shadow border-0 p-4">
         <h2 className="h5 fw-semibold mb-3">Ordered: <span className="text-secondary">{new Date(OrderDetails?.createdAt).toLocaleDateString()}

@@ -1,46 +1,104 @@
 import { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
 import { useTheme } from "../ThemeContext";
-import { useMediaQuery } from "react-responsive";
+import "../style/Post.css"
 
-function Posts({ Review }) {
-    const [Like,setLike] = useState(0);
-    const {AllReview} = useTheme();
+function Posts() {
+  const { AllReview } = useTheme();
+  const [flattenedReviews, setFlattenedReviews] = useState([]);
+  const [likes, setLikes] = useState({}); // track likes per review
 
-    return (
-        <div style={{ marginTop: '65px' }}>
-            <div>
-                {AllReview.map(post => (
-                    <div
-                        key={post._id}
-                        className="d-flex flex-column ps-5 pt-5 gap-2 bg-black text-white"
-                        style={{ width: '100%' }}
-                    >
-                        <div className="star d-flex align-items-center gap-2" style={{ fontSize: '15px' }}>
-                            {Array.from({ length: post.comments[0].User[0].ProductUserRating }, (_, i) => (
-                                <i key={i} className="fa-solid fa-star"></i>
-                            ))}
-                        </div>
-                        <div className="user">
-                            <img
-                                src={post.comments[0].User[0].userImage}
-                                className="user-image"
-                                alt="Image 2"
-                                style={{ width: '40px', height: '40px', borderRadius: '50%' }}
-                            />
-                            <h5 className="mt-2">{post.comments[0].User[0].username}</h5>
-                        </div>
-                        <span className=" ps-5 m-0">{post.comments[0].User[0].comment}</span>
-                        <div className="ps-5 d-flex fs-6 gap-5">
-                            <div className=" d-flex align-items-center gap-1"><i class="fa-solid fa-heart" onClick={()=>setLike(1)}></i><span>{Like}</span></div>
-                            <div className=" d-flex align-items-center gap-1"><i class="fa-solid fa-comment"></i><span>Replay</span></div>
-                            <div className=" d-flex align-items-center gap-1"><i class="fa-solid fa-share-nodes"></i><span>Share</span></div>
-                        </div>
-                    </div>
-                ))}
+  useEffect(() => {
+    if (AllReview && AllReview.length > 0) {
+      const allReviews = [];
+
+      AllReview.forEach((product) => {
+        const { title, comments } = product;
+
+        comments.forEach((commentBlock) => {
+          commentBlock.User.forEach((userReview) => {
+            allReviews.push({
+              title,
+              ...userReview,
+            });
+          });
+        });
+      });
+
+      setFlattenedReviews(allReviews);
+    }
+  }, [AllReview]);
+
+  // toggle like per review
+  const handleLike = (id) => {
+    setLikes((prev) => ({
+      ...prev,
+      [id]: (prev[id] || 0) + 1,
+    }));
+  };
+
+  return (
+    <div className="container mb-4" style={{ marginTop: "75px" }}>
+      <div className="row g-3">
+        {flattenedReviews.map((review) => (
+          <div
+            key={review._id}
+            className="col-12 col-md-6" // 1 per row on mobile, 2 per row on desktop
+          >
+            <div className="card bg-dark text-white shadow-sm h-100 rounded-4">
+              <div className="card-body d-flex flex-column gap-2">
+                {/* Title */}
+                <h6 className="fw-bold">{review.title}</h6>
+
+                {/* Rating stars */}
+                <div
+                  className="d-flex align-items-center gap-1"
+                  style={{ fontSize: "14px", color: "#FFD700" }}
+                >
+                  {Array.from({ length: review.ProductUserRating }, (_, i) => (
+                    <i key={i} className="fa-solid fa-star"></i>
+                  ))}
+                </div>
+
+                {/* User info */}
+                <div className="d-flex align-items-center gap-2">
+                  <img
+                    src={"assets/user.png"}
+                    className="rounded-circle"
+                    alt={review.username}
+                    style={{ width: "40px", height: "40px", objectFit: "cover" }}
+                  />
+                  <h6 className="mb-0">{review.username}</h6>
+                </div>
+
+                {/* Comment */}
+                <p className="ps-1 mb-1">{review.comment}</p>
+
+                {/* Actions */}
+                <div className="d-flex justify-content-between pt-2">
+                  <div
+                    className="d-flex align-items-center gap-1"
+                    style={{ cursor: "pointer" }}
+                    onClick={() => handleLike(review._id)}
+                  >
+                    <i className="fa-solid fa-heart"></i>
+                    <span>{likes[review._id] || 0}</span>
+                  </div>
+                  <div className="d-flex align-items-center gap-1">
+                    <i className="fa-solid fa-comment"></i>
+                    <span>Reply</span>
+                  </div>
+                  <div className="d-flex align-items-center gap-1">
+                    <i className="fa-solid fa-share-nodes"></i>
+                    <span>Share</span>
+                  </div>
+                </div>
+              </div>
             </div>
-        </div>
-    )
+          </div>
+        ))}
+      </div>
+    </div>
+  );
 }
 
 export default Posts;

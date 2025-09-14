@@ -1,0 +1,47 @@
+/* Sidebar container */
+.admin-navbar {
+  width: 20vw;
+  min-width: 200px;
+  max-width: 250px;
+  height: 100vh;
+  background: #f8f9fa;
+  border-right: 1px solid #ddd;
+}
+
+/* Navigation links */
+.admin-navbar .nav-link {
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: #333;
+  padding: 8px 12px;
+  border-radius: 6px;
+  transition: background 0.2s ease-in-out, color 0.2s ease-in-out;
+}
+
+.admin-navbar .nav-link:hover,
+.admin-navbar .nav-link.active {
+  background-color: #198754; /* Bootstrap green */
+  color: #fff;
+}
+
+/* 📱 Mobile responsiveness */
+@media (max-width: 768px) {
+  .admin-navbar {
+    width: 100%;
+    height: auto;
+    border-right: none;
+    border-bottom: 1px solid #ddd;
+    flex-direction: row;
+  }
+
+  .admin-navbar .nav {
+    flex-direction: row;
+    justify-content: space-around;
+    width: 100%;
+  }
+
+  .admin-navbar .nav-link {
+    font-size: 0.95rem;
+    padding: 6px 8px;
+  }
+}

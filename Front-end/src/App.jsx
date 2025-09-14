@@ -22,10 +22,10 @@ import Payment from './components/AssetComponents/Payment';
 import OrderConfirmation from './components/OrderConfirmation';
 
 function App() {
-  const { isAuthenticated, cart, image, Review, productsItem, category, AlertMessageTheme } = useTheme();
+  const { isAuthenticated, cart, image, Review, AllReview, productsItem, category, AlertMessageTheme } = useTheme();
   const userInput = useRef();
   const location = useLocation();
-  const [AlertMessage,setAlertMessage] = useState([]);
+  const [AlertMessage,setAlertMessage] = useState(null);
 
   useEffect(() => {
     if (location.pathname === '/Login') {
@@ -72,7 +72,7 @@ function App() {
         />
         <Route
           path="/Posts"
-          element={<Posts isAuthenticated={isAuthenticated} Review={Review}/>}
+          element={<Posts isAuthenticated={isAuthenticated} />}
         />
         <Route
           path="/product/:id"
@@ -83,7 +83,7 @@ function App() {
           element={<PlaceOrder cart={cart} isAuthenticated={isAuthenticated} />}
         />
         <Route path='/WishList' element={<Wishlist isAuthenticated={isAuthenticated}/>} />
-        <Route path="/Admin" element={<Admin Review={Review} productsItem={productsItem} category={category}/>}>
+        <Route path="/Admin" element={<Admin AllReview={AllReview} productsItem={productsItem} category={category}/>}>
           <Route
             path="UserDetails"
             element={<Users />}
@@ -94,7 +94,7 @@ function App() {
           />
           <Route
             path="Reviews"
-            element={<Reviews Review={Review} />}
+            element={<Reviews AllReview={AllReview} />}
           />
           <Route
             path="Categorys"
