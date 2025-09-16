@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useTheme } from "../../ThemeContext"
 import { useLocation } from 'react-router-dom';
+import { useMediaQuery } from 'react-responsive';
 
 export default function ProductCard({ isAuthenticated, e, Navigate, LikedState, handleCancelItem, cart=false }) {
 
   const { UserLikedState, PostUserLikedState, UpdatedProduct } = useTheme();
   const Location = useLocation();
   const [Heart, setHeart] = useState(false);
+  const small = useMediaQuery({maxWidth:600});
   
   useEffect(() => {
   const source = Location.pathname === '/WishList' ? LikedState : UserLikedState;
@@ -20,9 +22,9 @@ export default function ProductCard({ isAuthenticated, e, Navigate, LikedState, 
           <div key={e._id} className='product-item'>
             <img src={e.url||e.Product_Url} className='Shop-slid' alt={e.title} />
             <div className='d-flex flex-column w-100'>
-              <div className='d-flex justify-content-between align-items-center'>
+              <div className={`product_name_price d-flex ${small&&cart?'flex-column align-items-start':'align-items-center'} justify-content-between`}>
                 <h4 className='card-text my-2'>{e.title||e.itemName}</h4>
-                <h4 className='display-product-text-price my-2'>₹{e.categoryId==1?<><del>{(e.price||e.itemPrice).toFixed(2)}</del> ₹{(e.price/2||e.itemPrice/2).toFixed(2)}</>:<>{(e.price||e.itemPrice).toFixed(2)}</>}</h4>
+                <h4 className={`display-product-text-price d-flex ${small&&cart?'flex-row gap-1':'flex-column'} my-2`}>{e.categoryId==1?<><del>₹{(e.price||e.itemPrice).toFixed(2)}</del>₹{(e.price/2||e.itemPrice/2).toFixed(2)}</>:<>₹{(e.price||e.itemPrice).toFixed(2)}</>}</h4>
               </div>
               <p className='Poduct-Description'>{e.description||e.Description}</p>
               <div className=' d-flex justify-content-between p-1'>

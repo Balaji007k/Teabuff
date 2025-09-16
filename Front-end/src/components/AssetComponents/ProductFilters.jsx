@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useTheme } from "../../ThemeContext";
 
-export default function ProductFilters({ productsItem, category, Products, id , searchingProduct }) {
+export default function ProductFilters({ Products, id , searchingProduct }) {
 
+  const {productsItem,category} = useTheme();
   const [value, setValue] = useState(0);
   const Location = useLocation();
   const [sort, setsort] = useState(false);
@@ -19,8 +21,8 @@ export default function ProductFilters({ productsItem, category, Products, id , 
         Products(filtered);
         setfilteredCategory(filtered);
       } else {
-        if (Location.pathname === '/Menu') Products(productsItem)
-        else Products([])
+        if (Location.pathname === '/Menu') Products(productsItem);
+        else Products([]);
         setfilteredCategory(0);
         setsort(false);
       }
@@ -44,7 +46,7 @@ export default function ProductFilters({ productsItem, category, Products, id , 
         if (Location.pathname==='/Menu')Products(source);
         else{
           if(filteredCategory?.length > 0) return Products(source);
-          else return Products([])
+          else return Products([]);
         }
         return;
       }
@@ -58,8 +60,8 @@ export default function ProductFilters({ productsItem, category, Products, id , 
         const filtered_Item = await productsItem.filter(product => product.title.toLowerCase().replace(/\s+/g, '').includes(Searched_item.toLowerCase().replace(/\s+/g, '')));
         Products(filtered_Item);
       } else {
-        if (Location.pathname === '/Menu') return Products(productsItem)
-        else return Products([])
+        if (Location.pathname === '/Menu') return Products(productsItem);
+        else return Products([]);
       }
     }
   };
@@ -68,8 +70,8 @@ export default function ProductFilters({ productsItem, category, Products, id , 
     setfilteredCategory(0);
     setSearchItem("");
     Products([]);
-    if (Location.pathname === '/Menu') return Products(productsItem)
-  },[id])
+    if (Location.pathname === '/Menu') return Products(productsItem);
+  },[id,productsItem])
 
   return (
     <div className=' w-100 mb-4'>

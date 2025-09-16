@@ -44,7 +44,7 @@ function Wishlist({ isAuthenticated }) {
                 )}
             </div>
             </div>
-            <center><button className=" px-2 my-4 rounded-2" onClick={()=>PostSaveCart(LikedProducts,null)}>Move to Cart</button></center>
+            {(LikedProducts&&LikedProducts?.length>0)&&<center><button className=" px-2 my-4 rounded-2" onClick={()=>PostSaveCart(LikedProducts,null)}>Move to Cart</button></center>}
             </div>
             <Footer/>
             </>

@@ -244,7 +244,7 @@ function Product({ isAuthenticated, productsItem, category }) {
         }
 
 
-        {SearchItem!=""&&<>
+        {SearchItem!==""&&<>
         <h1>Searching Item</h1>
         <div className='product content d-flex align-items-center'>
           <div className='Next left-scroll' onClick={popularPrv}>

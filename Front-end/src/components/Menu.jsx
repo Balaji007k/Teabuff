@@ -7,7 +7,7 @@ import EmptyProductCard from "./AssetComponents/EmptyProductCard";
 import ProductFilters from "./AssetComponents/ProductFilters";
 
 function Menu({ isAuthenticated }) {
-    const { productsItem, category } = useTheme();
+     const { productsItem } = useTheme();
     const Location = useLocation();
     const Navigate = useNavigate();
     const [items, setProducts] = useState(null);
@@ -26,24 +26,20 @@ function Menu({ isAuthenticated }) {
             <div className=" w-100 h-100 inner-Menu d-flex flex-column">
 
 
-                <ProductFilters productsItem={productsItem} category={category} Products={Products} searchingProduct={setSearchItem}/>
+                <ProductFilters Products={Products} searchingProduct={setSearchItem}/>
 
                 <h1 className=" fw-bold text-center">Menu</h1>
 
                 <div className='Extra-products-container py-3'>
                     <div className='Extra-products'>
                         <div className="scroll-items" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(270px,1fr))', justifyItems: 'center', gap: '20px', maxHeight:'100%'}}>
-{items&&items.length > 0 ? (
-items.map((e, idx) => (
-<ProductCard key={idx} isAuthenticated={isAuthenticated} e={e} Navigate={Navigate} />
-))
-) : productsItem && productsItem.length > 0&&SearchItem=="" ? (
-productsItem.map((item, idx) => (
-<ProductCard key={idx} isAuthenticated={isAuthenticated} e={item} Navigate={Navigate} />
-))
-) : (
-<EmptyProductCard />
-)}
+
+{items&&items.length?items.map(product=>(
+    <ProductCard key={product._id} isAuthenticated={isAuthenticated} e={product} Navigate={Navigate}/>
+)):productsItem && productsItem.length > 0&&SearchItem=="" ? (
+productsItem.map((item) => 
+<ProductCard key={item._id} isAuthenticated={isAuthenticated} e={item} Navigate={Navigate} />)):
+<EmptyProductCard/>}
                         </div>
                     </div>
                 </div>

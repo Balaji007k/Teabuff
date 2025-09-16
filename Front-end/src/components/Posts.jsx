@@ -7,6 +7,10 @@ function Posts() {
   const [flattenedReviews, setFlattenedReviews] = useState([]);
   const [likes, setLikes] = useState({}); // track likes per review
 
+  useEffect(()=>{
+    window.scrollTo(0,0);
+  },[])
+
   useEffect(() => {
     if (AllReview && AllReview.length > 0) {
       const allReviews = [];
@@ -54,8 +58,8 @@ function Posts() {
                   className="d-flex align-items-center gap-1"
                   style={{ fontSize: "14px", color: "#FFD700" }}
                 >
-                  {Array.from({ length: review.ProductUserRating }, (_, i) => (
-                    <i key={i} className="fa-solid fa-star"></i>
+                  {Array.from({ length: 5 }, (_, i) => (
+                    <i key={i} className={`fa-solid fa-star ${i + 1 <=review.ProductUserRating?'text-warning':'text-white'}`}></i>
                   ))}
                 </div>
 

@@ -11,8 +11,9 @@ import ProductFilters from './AssetComponents/ProductFilters';
 import PageNotFound from './AssetComponents/PageNotFound';
 import AlertMessage from './AssetComponents/AlertMessage';
 import LoadingPage from './AssetComponents/LoadingPage';
+import ApiService from './Service/ApiService/product-api';
 
-function ProductItem({ isAuthenticated, Review, productsItem, cart, category, AlertMessageMain }) {
+function ProductItem({ isAuthenticated, Review, productsItem, cart, AlertMessageMain }) {
 
   const { handleCart, PostUserLikedState, UserLikedState, UpdateProduct, UserProductReviews, fetchProductReviews, ProductAvgRating } = useTheme();
 
@@ -62,7 +63,7 @@ function ProductItem({ isAuthenticated, Review, productsItem, cart, category, Al
   }
 
   const Products = (Products) => {
-    setProducts(Products)
+    setProducts(Products);
   }
 
   const [expanded, setExpanded] = useState({}); // object to track each review state
@@ -94,21 +95,22 @@ function ProductItem({ isAuthenticated, Review, productsItem, cart, category, Al
     }
   }, [UserLikedState, id]);
 
-  useEffect(() => {
-    if (isAuthenticated) {
-      window.scrollTo(0, 0);
-      if (productsItem?.length > 0 && id) {
-        const found = productsItem.find(item => item._id === id);
-        setSelectedProduct(found);
-        // console.log(found)
-        if (found) {
-          const Filtered = Review.filter(reviews => reviews.review.toLowerCase().replace(/\s+/g, '').includes(found.title.toLowerCase().replace(/\s+/g, '')))
-          setselectedProductReview(Filtered);
-          const filtedCategory = productsItem.filter(group => group.categoryId === found.categoryId)
-          setSuggestedProducts(filtedCategory)
+  const fetchProduct = async () => {
+        const { Result, Error } = await ApiService.fetchData(`/product/${id}`);
+        if(Error) {
+          setLoading(false);
+          console.error(Error);
         }
-        if (cart && found) {
-          const productQuantity = cart.items.find(item => item.productId === found._id)
+        setSelectedProduct(Result?.product);
+        if (Result&&productsItem&&productsItem.length) {
+          setLoading(false);
+          const Filtered = Review.filter(reviews => reviews.review.toLowerCase().replace(/\s+/g, '').includes(Result?.product?.title.toLowerCase().replace(/\s+/g, '')))
+          setselectedProductReview(Filtered);
+          const filtedCategory = productsItem.filter(group => group.categoryId === Result?.product?.categoryId)
+          setSuggestedProducts(filtedCategory);
+        }
+        if (cart && Result) {
+          const productQuantity = cart.items.find(item => item.productId === Result?.product?._id)
           if (productQuantity?.quantity) {
             setquantity(productQuantity?.quantity);
           }
@@ -116,25 +118,42 @@ function ProductItem({ isAuthenticated, Review, productsItem, cart, category, Al
             setquantity(0)
           }
         }
-      }
-    }
-  }, [isAuthenticated, Review, cart, productsItem, id, Location.pathname]);
+    };
 
-  if (quantity < 0) return setquantity(0)
+    // , Review, cart, productsItem, id, Location.pathname
+
+  useEffect(() => {
+    setLoading(true);
+    if (isAuthenticated) {
+      window.scrollTo(0, 0);
+      fetchProduct();
+      // if (productsItem?.length > 0 && id) {
+      //   const found = productsItem.find(item => item._id === id);
+      //   setSelectedProduct(found);
+      //   //console.log(found)
+        
+      // }
+    }
+  }, [isAuthenticated,id,productsItem]);
+
+  useEffect(() => {
+  if (quantity < 0) setquantity(0);
+}, [quantity]);
+
 
   if (!isAuthenticated) {
     setTimeout(() => {
-      Navigate('/Login')
-    }, 3000)
+      Navigate('/Login');
+    }, 3000);
     return <PageNotFound Message={"Product"} />
-  }
-  if (!selectedProduct) return <div className='Cart-holder fs-5 fw-bolder text-center'>No product Found.</div>;
+  };
+  //if (Loading) return <div className='Cart-holder fs-5 fw-bolder text-center'>No product Found.</div>;
 
   if (isAuthenticated && selectedProduct) return (
     <>
-    {AlertMessageMain&&AlertMessageMain.message?<AlertMessage message={AlertMessageMain}/>:Loading&&<LoadingPage />}
+    {Loading?<LoadingPage />:AlertMessageMain&&AlertMessageMain.message&&<AlertMessage message={AlertMessageMain}/>}
       <div className='Product-Page-cart d-flex flex-column align-items-center' style={{ marginTop: '75px', color: 'var(--Background-white-text)' }}>
-        <ProductFilters productsItem={productsItem} category={category} Products={Products} id={id} searchingProduct={setSearchItem}/>
+        <ProductFilters Products={Products} id={id} searchingProduct={setSearchItem}/>
 
         {(!items||items.length === 0) &&SearchItem==""&&
           <>
@@ -281,15 +300,14 @@ function ProductItem({ isAuthenticated, Review, productsItem, cart, category, Al
             <div className='scroll-items py-3 gap-3 bg-dark-subtle rounded-3 mt-4' style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(270px,1fr))', justifyItems: 'center', maxHeight: small ? '550px' : 'fit-content' }}>
                {items.map((e) => (
                  e._id !== id ? (
-                   <>
-                     <ProductCard key={e._id} isAuthenticated={isAuthenticated} e={e} Navigate={Navigate} />
-                   </>) : <div key={e._id} className=' text-center'>Already Selected Item {selectedProduct?.title} {items.length === 1 && <b>Or No more Item Match Your search</b>}</div>
+                    <ProductCard key={e._id} isAuthenticated={isAuthenticated} e={e} Navigate={Navigate} />
+                   ) : <div key={e._id} className=' text-center'>Already Selected Item {selectedProduct?.title} {items.length === 1 && <b>Or No more Item Match Your search</b>}</div>
                ))}
                           </div>
-              :SearchItem!==""&&!items.length&&
-              <>
-                <EmptyProductCard />
-              </>
+              :SearchItem!==""&&!items?.length&&
+                <div className='scroll-items py-3 gap-3 bg-dark-subtle rounded-3 mt-4' style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(270px,1fr))', justifyItems: 'center', maxHeight: small ? '550px' : 'fit-content' }}>
+                  <EmptyProductCard />
+                  </div>
             }
       <Footer />
     </>
