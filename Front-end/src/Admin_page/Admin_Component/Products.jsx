@@ -1,11 +1,45 @@
 import { useEffect, useState } from "react";
 import ApiService from "../../components/Service/ApiService/product-api";
+import axios from "axios";
 
 function Products({ productsItem }) {
   const [SearchedProduct, setSearchedProduct] = useState([]);
   const [Search, setSearch] = useState("");
   const [Edit, setEdit] = useState(null);
   const [AddState, setAddState] = useState(false);
+
+
+  //test
+   const [file, setFile] = useState(null);
+  const [products, setProducts] = useState([]);
+  const [message, setMessage] = useState("");
+
+  const handleFileChange = (e) => {
+    setFile(e.target.files[0]);
+  };
+
+  const handleUpload = async () => {
+    if (!file) return setMessage("Please select a JSON file.");
+
+    const formData = new FormData();
+    formData.append("file", file);
+
+    try {
+      const { Result, Error } = await ApiService.fetchData('/api/import-products',"POST",formData,{headers: { "Content-Type": "multipart/form-data" }});
+      // const res = await axios.post(
+      //   "http://localhost:5000/api/import-products",
+      //   formData,
+      //   { headers: { "Content-Type": "multipart/form-data" } }
+      // );
+
+      setMessage(`${res.data.importedCount} products imported!`);
+      console.log(Result);
+    } catch (err) {
+      setMessage("Error: " + err.message);
+    }
+  };
+//test
+
 
   // Form states
   const [form, setForm] = useState({
@@ -104,6 +138,30 @@ function Products({ productsItem }) {
   };
 
   return (
+    <>
+
+    <div className="p-6">
+      <h2 className="text-xl font-bold mb-4">Admin - Import Products</h2>
+      <input type="file" accept=".json" onChange={handleFileChange} />
+      <button
+        onClick={handleUpload}
+        className="ml-2 px-4 py-2 bg-green-600 text-white rounded"
+      >
+        Upload JSON
+      </button>
+      {message && <p className="mt-2">{message}</p>}
+
+      <h3 className="mt-6 font-bold">Products</h3>
+      <ul>
+        {products.map((p) => (
+          <li key={p._id}>
+            {p.title} - ₹{p.price} - ⭐ {p.rating}
+          </li>
+        ))}
+      </ul>
+    </div>
+
+
     <div className="Admin_page overflow-y-scroll d-flex justify-content-start align-items-start">
       <table className="table table-bordered text-center align-middle">
         <thead className="table-success">
@@ -231,6 +289,8 @@ function Products({ productsItem }) {
         </tbody>
       </table>
     </div>
+
+    </>
   );
 }
 

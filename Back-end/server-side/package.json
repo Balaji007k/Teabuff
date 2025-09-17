@@ -19,6 +19,7 @@
     "jsonwebtoken": "^9.0.2",
     "lodash": "^4.17.21",
     "mongoose": "^8.15.0",
+    "multer": "^2.0.2",
     "nodeman": "^1.1.2",
     "router": "^2.2.0"
   },

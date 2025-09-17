@@ -15,6 +15,7 @@ const OrderConfirmation = require('./routes/OrderConfirmation')
 const cors = require('cors')
 const {requireAuth} = require('./controllers/middleware/authMiddleware')
 const { name } = require('nodeman/lib/mustache')
+const importProductsRoute  = require('./routes/productImport.js')
 env.config({path: path.join(__dirname,'config.env')})
 
 app.use(express.json())
@@ -45,6 +46,10 @@ app.get('/dashboard', requireAuth, (req, res) => {
   });
 });
 
+
+
+
+app.use("/api", importProductsRoute);
 
 
 

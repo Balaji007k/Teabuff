@@ -50,7 +50,7 @@ function ProductItem({ isAuthenticated, Review, productsItem, cart, AlertMessage
   const [Editcomment, setEditcomment] = useState(false);
   const Navigate = useNavigate();
   const [Heart, setHeart] = useState(false);
-  const [Loading,setLoading] = useState(false);
+  const [Loading,setLoading] = useState(true);
   const [SearchItem, setSearchItem] = useState("");
 
 
@@ -115,7 +115,7 @@ function ProductItem({ isAuthenticated, Review, productsItem, cart, AlertMessage
             setquantity(productQuantity?.quantity);
           }
           else {
-            setquantity(0)
+            setquantity(0);
           }
         }
     };
@@ -123,7 +123,6 @@ function ProductItem({ isAuthenticated, Review, productsItem, cart, AlertMessage
     // , Review, cart, productsItem, id, Location.pathname
 
   useEffect(() => {
-    setLoading(true);
     if (isAuthenticated) {
       window.scrollTo(0, 0);
       fetchProduct();
@@ -147,11 +146,15 @@ function ProductItem({ isAuthenticated, Review, productsItem, cart, AlertMessage
     }, 3000);
     return <PageNotFound Message={"Product"} />
   };
+
+  if (isAuthenticated&&Loading){
+    return <LoadingPage/>
+  }
   //if (Loading) return <div className='Cart-holder fs-5 fw-bolder text-center'>No product Found.</div>;
 
   if (isAuthenticated && selectedProduct) return (
     <>
-    {Loading?<LoadingPage />:AlertMessageMain&&AlertMessageMain.message&&<AlertMessage message={AlertMessageMain}/>}
+    {AlertMessageMain&&AlertMessageMain.message&&<AlertMessage message={AlertMessageMain}/>}
       <div className='Product-Page-cart d-flex flex-column align-items-center' style={{ marginTop: '75px', color: 'var(--Background-white-text)' }}>
         <ProductFilters Products={Products} id={id} searchingProduct={setSearchItem}/>
 
