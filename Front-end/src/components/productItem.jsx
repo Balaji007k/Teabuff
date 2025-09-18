@@ -53,7 +53,6 @@ function ProductItem({ isAuthenticated, Review, productsItem, cart, AlertMessage
   const [Loading,setLoading] = useState(true);
   const [SearchItem, setSearchItem] = useState("");
 
-
   const ShowBar = () => {
     setShow(prev => !prev)
   }
@@ -97,9 +96,8 @@ function ProductItem({ isAuthenticated, Review, productsItem, cart, AlertMessage
 
   const fetchProduct = async () => {
         const { Result, Error } = await ApiService.fetchData(`/product/${id}`);
-        if(Error) {
+        if(!Error) {
           setLoading(false);
-          console.error(Error);
         }
         setSelectedProduct(Result?.product);
         if (Result&&productsItem&&productsItem.length) {
@@ -124,7 +122,6 @@ function ProductItem({ isAuthenticated, Review, productsItem, cart, AlertMessage
 
   useEffect(() => {
     if (isAuthenticated) {
-      window.scrollTo(0, 0);
       fetchProduct();
       // if (productsItem?.length > 0 && id) {
       //   const found = productsItem.find(item => item._id === id);
@@ -134,6 +131,10 @@ function ProductItem({ isAuthenticated, Review, productsItem, cart, AlertMessage
       // }
     }
   }, [isAuthenticated,id,productsItem]);
+
+  useEffect(()=>{
+    window.scrollTo(0, 0);
+  },[isAuthenticated,id]);
 
   useEffect(() => {
   if (quantity < 0) setquantity(0);
@@ -150,7 +151,7 @@ function ProductItem({ isAuthenticated, Review, productsItem, cart, AlertMessage
   if (isAuthenticated&&Loading){
     return <LoadingPage/>
   }
-  //if (Loading) return <div className='Cart-holder fs-5 fw-bolder text-center'>No product Found.</div>;
+  if (!selectedProduct) return <div className='Cart-holder fs-5 fw-bolder text-center'>No product Found.</div>;
 
   if (isAuthenticated && selectedProduct) return (
     <>
@@ -158,7 +159,7 @@ function ProductItem({ isAuthenticated, Review, productsItem, cart, AlertMessage
       <div className='Product-Page-cart d-flex flex-column align-items-center' style={{ marginTop: '75px', color: 'var(--Background-white-text)' }}>
         <ProductFilters Products={Products} id={id} searchingProduct={setSearchItem}/>
 
-        {(!items||items.length === 0) &&SearchItem==""&&
+        {(!items||items.length === 0)&&
           <>
             <div className='w-100 my-4 d-flex flex-column align-items-center px-3'>
               <div className='Product-container d-flex justify-content-center gap-3' style={{ width: '95%' }}>
@@ -176,7 +177,7 @@ function ProductItem({ isAuthenticated, Review, productsItem, cart, AlertMessage
                   <div className='details-holder p-3'>
                     <div className=' d-flex flex-column gap-3'>
                       <h1>{selectedProduct.title}</h1>
-                      <h2>₹{selectedProduct.categoryId==1?<><del>{(selectedProduct.price).toFixed(2)}</del> {(selectedProduct.price/2).toFixed(2)}</>:<>{(selectedProduct.price).toFixed(2)}</>}</h2>
+                      <h2>{selectedProduct.categoryId==1?<>₹<del>{(selectedProduct.price).toFixed(2)}</del> ₹{(selectedProduct.price/2).toFixed(2)}</>:<>₹{(selectedProduct.price).toFixed(2)}</>}</h2>
                       <div className="Categories bg-white w-100 h-auto py-1 d-inline-flex align-items-center gap-2"><i className="fa-solid fa-circle-exclamation"></i><p>Order in <span className=' fw-bold'>{new Date().toLocaleDateString()}</span> to get next day delivery <span className=' fw-bold'>{new Date(Date.now() + 1 * 24 * 60 * 60 * 1000).toLocaleDateString()}</span></p></div>
                       <span className=' w-100 fs-4 fw-bold w-75 d-flex justify-content-center align-items-center gap-3'>
                         <h3 className=' fw-bold'>Quantity:</h3>{quantity==0?<button className=' bg-body-secondary'>-</button>:<button onClick={() => setquantity(quantity - 1)}>-</button>}{quantity}<button onClick={() => setquantity(quantity + 1)}>+</button>
@@ -274,7 +275,7 @@ function ProductItem({ isAuthenticated, Review, productsItem, cart, AlertMessage
 
       </div>
 
-      {(!items||items.length === 0) &&SearchItem==""&&
+      {(!items||items.length === 0)&&
         <>
           <div className='Extra-products-container' style={{ color: 'var(--Background-white-text)' }}>
             <div className='Extra-products' id='suggestItems'>
@@ -307,7 +308,7 @@ function ProductItem({ isAuthenticated, Review, productsItem, cart, AlertMessage
                    ) : <div key={e._id} className=' text-center'>Already Selected Item {selectedProduct?.title} {items.length === 1 && <b>Or No more Item Match Your search</b>}</div>
                ))}
                           </div>
-              :SearchItem!==""&&!items?.length&&
+              :SearchItem!==""&&items?.length==0&&
                 <div className='scroll-items py-3 gap-3 bg-dark-subtle rounded-3 mt-4' style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(270px,1fr))', justifyItems: 'center', maxHeight: small ? '550px' : 'fit-content' }}>
                   <EmptyProductCard />
                   </div>

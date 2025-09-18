@@ -27,3 +27,56 @@ exports.createCategory = async(req,res,next)=>{
     }
     
 }
+
+exports.updateCategory = async (req, res) => {
+  try {
+    const id = req.params.id;  // category _id from URL params
+    const { categoryId, name } = req.body;
+
+    const categorys = { categoryId, name };
+
+    // Correct usage of findByIdAndUpdate
+    const category = await categoryModel.findByIdAndUpdate(
+      id,                  // just pass the id
+      categorys,           // update object
+      { new: true }        // return the updated document
+    );
+
+    if (!category) {
+      return res.status(404).json({ message: "Category not found" });
+    }
+
+    res.json({
+      message: "Category updated successfully",
+      category
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Not updated",
+      error: error.message
+    });
+  }
+};
+
+
+exports.deleteCategory = async (req, res) => {
+  try {
+    const id = req.params.id; // category _id from URL params
+
+    const category = await categoryModel.findByIdAndDelete(id);
+
+    if (!category) {
+      return res.status(404).json({ message: "Category not found" });
+    }
+
+    res.json({
+      message: "Category deleted successfully",
+      category
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Not deleted",
+      error: error.message
+    });
+  }
+};

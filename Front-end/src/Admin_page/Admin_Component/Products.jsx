@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import ApiService from "../../components/Service/ApiService/product-api";
-import axios from "axios";
+import { useTheme } from "../../ThemeContext";
 
 function Products({ productsItem }) {
   const [SearchedProduct, setSearchedProduct] = useState([]);
@@ -19,25 +19,29 @@ function Products({ productsItem }) {
   };
 
   const handleUpload = async () => {
-    if (!file) return setMessage("Please select a JSON file.");
+  if (!file) return setMessage("Please select a JSON file.");
 
-    const formData = new FormData();
-    formData.append("file", file);
+  const formData = new FormData();
+  formData.append("file", file);
 
-    try {
-      const { Result, Error } = await ApiService.fetchData('/api/import-products',"POST",formData,{headers: { "Content-Type": "multipart/form-data" }});
-      // const res = await axios.post(
-      //   "http://localhost:5000/api/import-products",
-      //   formData,
-      //   { headers: { "Content-Type": "multipart/form-data" } }
-      // );
+  try {
+    const { Result, Error } = await ApiService.fetchData(
+      "/api/import-products",
+      "POST",
+      formData
+    );
 
-      setMessage(`${res.data.importedCount} products imported!`);
-      console.log(Result);
-    } catch (err) {
-      setMessage("Error: " + err.message);
+    if (Error) {
+      setMessage("Error: " + Error);
+    } else {
+      setMessage(`${Result.importedCount} products imported!`);
+      window.location.reload();
     }
-  };
+  } catch (err) {
+    setMessage("Error: " + err.message);
+  }
+};
+
 //test
 
 
@@ -133,12 +137,28 @@ function Products({ productsItem }) {
       `/product/${id}`,
       "DELETE"
     );
-    if (!Error) window.location.reload();
+    if (Result) {
+      setTimeout(()=>{
+      window.location.reload();
+      },0);
+    }
+    else console.error(Error);
+  };
+
+  const deleteProductAll = async () => {
+    if (!window.confirm("Confirm DeleteAll Products")) return;
+    const { Result, Error } = await ApiService.fetchData(
+      `/products`,
+      "DELETE"
+    );
+    if (Result) {
+      window.location.reload();
+    }
     else console.error(Error);
   };
 
   return (
-    <>
+    <div className=" d-flex flex-column">
 
     <div className="p-6">
       <h2 className="text-xl font-bold mb-4">Admin - Import Products</h2>
@@ -147,7 +167,7 @@ function Products({ productsItem }) {
         onClick={handleUpload}
         className="ml-2 px-4 py-2 bg-green-600 text-white rounded"
       >
-        Upload JSON
+        Import Products
       </button>
       {message && <p className="mt-2">{message}</p>}
 
@@ -289,8 +309,8 @@ function Products({ productsItem }) {
         </tbody>
       </table>
     </div>
-
-    </>
+<button className="ml-2 px-4 py-2 bg-green-600 text-white rounded ms-2" style={{width:'fit-content'}} onClick={()=>{deleteProductAll()}}>DeleteAll</button>
+    </div>
   );
 }
 

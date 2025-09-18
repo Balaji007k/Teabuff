@@ -13,7 +13,7 @@ import ProductCard from './AssetComponents/ProductCard';
 function PlaceOrder({ isAuthenticated, cart }) {
     const small = useMediaQuery({maxWidth:600});
     const Location = useLocation();
-    const { setUpdatedCart,PostSaveCart, AlertMessageTheme } = useTheme();
+    const { setUpdatedCart,PostSaveCart, AlertMessageTheme, ProductReload } = useTheme();
     const [AlertMessagePlaceOrder,setAlertMessage] = useState([]);
     const [Loading,setLoading] = useState(false);
 

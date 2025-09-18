@@ -39,10 +39,9 @@ export default function CheckOut({isAuthenticated,cart}){
       const fetchCheckOut = async () => {
         setLoading(true);
         const { Result, Error } = await ApiService.fetchData(`/Checkouts/${isAuthenticated.userId}`);
-        if(Result){
+        if (Result) {
             setLoading(false);
-        };
-        if (!Error) {setUserCheckOutData(Result?.UserCheckOut.ShippingDetails[0]);
+            setUserCheckOutData(Result?.UserCheckOut.ShippingDetails[0]);
         }
         else console.error(Error);
     };

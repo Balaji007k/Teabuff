@@ -317,10 +317,10 @@ video{
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
-  font-size: 15px !important;
+  font-size: smaller !important;
 }
 .display-product-text-price{
-  font-size: 15px !important;
+  font-size: smaller !important;
   width: min-content !important;
 }
 .Poduct-Description{

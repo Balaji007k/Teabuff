@@ -1,4 +1,4 @@
-const {productsModel} = require('../models/Models')
+const {productsModel,userCartModel,UserStateModel} = require('../models/Models')
 
 
 
@@ -191,21 +191,63 @@ if (UserId && userImage && username && comment) {
 };
 
 
+exports.deleteAllProduct = async (req, res) => {
+  try {
+    // 1. Delete all products
+    const result = await productsModel.deleteMany({});
 
+    // 2. Clear all carts
+    await userCartModel.updateMany(
+      {},
+      { $set: { items: [] } }  // empties the items array
+    );
 
+    // 3. Clear all wishlists
+    await UserStateModel.updateMany(
+      {},
+      { $set: { UserState: [] } } // empties the wishlist array
+    );
 
-
-
-exports.deleteSingleProduct = async(req,res)=>{
-    try{
-    await productsModel.findByIdAndDelete(req.params.id)
     res.json({
-        message:"deleted"
-    })
+      message: "All products, carts, and wishlists cleared",
+      deletedCount: result.deletedCount
+    });
+
+  } catch (error) {
+    res.status(500).json({
+      message: "Error while deleting",
+      error: error.message
+    });
+  }
+};
+
+
+
+exports.deleteProduct = async (req, res) => {
+  try {
+    const { id } = req.params; // productId to delete
+
+    // 1. Delete product from Products
+    const deletedProduct = await productsModel.findByIdAndDelete(id);
+
+    if (!deletedProduct) {
+      return res.status(404).json({ message: "Product not found" });
     }
-    catch{
-    res.json({
-        message:"Not deleted"
-    })
-    }
-}
+
+    // 2. Remove from all carts
+    await userCartModel.updateMany(
+      {},
+      { $pull: { items: { productId: id } } }
+    );
+
+    // 3. Remove from all wishlists (UserState)
+    await UserStateModel.updateMany(
+      {},
+      { $pull: { UserState: { ProductId: id } } }
+    );
+
+    res.json({ message: "Product deleted and removed from carts & wishlist" });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
