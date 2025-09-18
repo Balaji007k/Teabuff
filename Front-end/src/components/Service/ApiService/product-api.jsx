@@ -55,7 +55,7 @@ class ApiService {
     }
 
     try {
-      const response = await fetch("http://localhost:5000" + url, options);
+      const response = await fetch("https://teabuff.onrender.com" + url, options);
       const data = await response.json();
 
       if (!response.ok) {
