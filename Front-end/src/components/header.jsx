@@ -31,7 +31,7 @@ function Header({ userinputFocus, isAuthenticated, cart, setAlertMessage }) {
    const fetchProfileImage = async () => {
         const { Result, Error } = await ApiService.fetchData(`/user/${isAuthenticated.userId}`);
         if (Result?.user.profileImage) {
-            setPreview(`http://localhost:5000${Result?.user?.profileImage}`);
+            setPreview(`https://teabuff.onrender.com${Result?.user?.profileImage}`);
             setUserDetails(Result?.user);
         }
     };
@@ -48,7 +48,7 @@ function Header({ userinputFocus, isAuthenticated, cart, setAlertMessage }) {
         const { Result, Error } = await ApiService.fetchData(`/api/users/${isAuthenticated.userId}`,"PUT",formData);
       if (Result?.profileImage) {
         // backend URL replaces temporary preview
-        setPreview(`http://localhost:5000${Result?.profileImage}`);
+        setPreview(`https://teabuff.onrender.com${Result?.profileImage}`);
       } else {
         console.error("Upload failed:", Error);
       }
