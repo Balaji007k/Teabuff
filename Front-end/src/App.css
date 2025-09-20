@@ -127,10 +127,10 @@ video{
     overflow: hidden;
   }
   .navbar.show{
-    width: 120px;
+    transform: translateX(0%);
   }
   .navbar.hide{
-    width: 0px;
+    transform: translateX(-100%);
   }
   .nav-list{
     display: flex;

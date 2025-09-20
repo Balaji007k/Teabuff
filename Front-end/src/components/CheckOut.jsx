@@ -2,11 +2,11 @@ import { useEffect, useState } from "react"
 import { useNavigate,useParams } from "react-router-dom"
 import { useMediaQuery } from "react-responsive";
 import ApiService from '../components/Service/ApiService/product-api';
-import PlaceOrder from "./placeOrder";
 import PageNotFound from "./AssetComponents/PageNotFound";
 import AlertMessage from "./AssetComponents/AlertMessage";
 import LoadingPage from "./AssetComponents/LoadingPage";
 import { useLocation } from "react-router-dom";
+import PlaceOrderDetails from "./PlaceOrderDetails";
 
 export default function CheckOut({isAuthenticated,cart}){
     const small = useMediaQuery({maxWidth:600})
@@ -103,7 +103,7 @@ export default function CheckOut({isAuthenticated,cart}){
         <>
         {AlertMessageCheckOut&&AlertMessageCheckOut?.message?<AlertMessage message={AlertMessageCheckOut}/>:Loading&&<LoadingPage/>}
         <div className={` w-100 d-flex ${!small?'flex-row-reverse':'flex-column'} `}>
-        <div className="checkout-Cart-page overflow-y-scroll" style={{flex:'1 1 40%',height:'880px'}}><PlaceOrder isAuthenticated={isAuthenticated} cart={Location.pathname==`/CheckOut/${Filtered?.productId}`?{items:[Filtered],ProductId:Filtered?.productId}:cart}/></div>
+        <div className="checkout-Cart-page overflow-y-scroll" style={{flex:'1 1 40%',height:'880px'}}><PlaceOrderDetails isAuthenticated={isAuthenticated} cart={Location.pathname==`/CheckOut/${Filtered?.productId}`?{items:[Filtered],ProductId:Filtered?.productId}:cart}/></div>
         <div className={` d-flex justify-content-center flex-grow-1 pb-3`} style={{marginTop:!small&&'75px',flex:'1 1 60%'}}>
                     <div className=' d-flex flex-column gap-4' style={{ width:!small? '80%' : '95%'}}>
                         <h2 className=" fw-bold">CheckOut</h2>

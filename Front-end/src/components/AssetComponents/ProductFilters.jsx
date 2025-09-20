@@ -300,11 +300,11 @@ export default function ProductFilters({ Products, id, searchingProduct }) {
         </div>
 
         {/* Placeholder for future dropdown */}
-        <div className="Categories" style={{ width: "20%" }}>
+        {/* <div className="Categories" style={{ width: "20%" }}>
           <select className="w-100 h-100">
             <option>Select</option>
           </select>
-        </div>
+        </div> */}
       </div>
     </div>
   );

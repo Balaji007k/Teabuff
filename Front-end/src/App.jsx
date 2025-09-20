@@ -3,7 +3,7 @@ import { Routes, Route, useLocation } from 'react-router-dom';
 import Main from './mainComponent/main';
 import Header from './components/header';
 import ProductItem from './components/productItem';
-import PlaceOrder from './components/placeOrder';
+import CartDetails from './components/CartDetails';
 import { useTheme } from './ThemeContext';
 import Admin from './Admin_page/Admin';
 import Users from './Admin_page/Admin_Component/Users';
@@ -80,7 +80,7 @@ function App() {
         />
         <Route
           path={`/${isAuthenticated?.userName+"Cart"}/:id`}
-          element={<PlaceOrder cart={cart} isAuthenticated={isAuthenticated} />}
+          element={<CartDetails cart={cart} isAuthenticated={isAuthenticated} />}
         />
         <Route path='/WishList' element={<Wishlist isAuthenticated={isAuthenticated}/>} />
         <Route path="/Admin" element={<Admin AllReview={AllReview} productsItem={productsItem} category={category}/>}>

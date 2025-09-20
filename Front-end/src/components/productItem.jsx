@@ -52,6 +52,7 @@ function ProductItem({ isAuthenticated, Review, productsItem, cart, AlertMessage
   const [Heart, setHeart] = useState(false);
   const [Loading,setLoading] = useState(true);
   const [SearchItem, setSearchItem] = useState("");
+  const [AdditionalImages,setAdditionalImages] = useState(true);
 
   const ShowBar = () => {
     setShow(prev => !prev)
@@ -165,12 +166,12 @@ function ProductItem({ isAuthenticated, Review, productsItem, cart, AlertMessage
               <div className='Product-container d-flex justify-content-center gap-3' style={{ width: '95%' }}>
                 <div className='Product image-product'>
                   <div className='image-holder p-3'>
-                    <img className='Main-image' src={selectedProduct.url} alt={selectedProduct.title} />
-                    <div className='Buttom-img'>
-                      <img src={selectedProduct.url} alt={selectedProduct.title} />
-                      <img src={selectedProduct.url} alt={selectedProduct.title} />
-                      <img src={selectedProduct.url} alt={selectedProduct.title} />
-                    </div>
+                    <img className='Main-image' src={selectedProduct.url} alt={selectedProduct.title} onClick={()=>{setAdditionalImages(prev=>!prev)}}/>
+                    {AdditionalImages&&<div className='Buttom-img'>
+                      {Array.from({length:3},(_,i)=>(
+                        <img key={i} src={selectedProduct.url} alt={selectedProduct.title} />
+                      ))}
+                    </div>}
                   </div>
                 </div>
                 <div className='Product details-product'>
@@ -184,9 +185,10 @@ function ProductItem({ isAuthenticated, Review, productsItem, cart, AlertMessage
                       </span>
                       <div className=' w-100 d-flex align-items-center justify-content-between gap-2'>
                         <button className={`btn Cart-Button ${!small&&'w-50'} flex-grow-1 py-2`} onClick={() => { handleCart(selectedProduct._id, selectedProduct.price, quantity, selectedProduct.title, selectedProduct.categoryId, isAuthenticated.userId, selectedProduct.description, selectedProduct.url, selectedProduct.rating, Heart, false) ;setLoading(true)}}>Add to Cart</button>{cart?.items.length||quantity!==0?<button className={`btn Cart-Button ${!small&&'w-50'} py-2`} onClick={() => {PlaceOrder(selectedProduct._id, selectedProduct.price, quantity, selectedProduct.title, selectedProduct.categoryId, isAuthenticated.userId, selectedProduct.description, selectedProduct.url, selectedProduct.rating, Heart, true);setLoading(true)}}>Buy Now</button>:<button className=' bg-body-secondary'></button>}
-                        <span className={`material-symbols-outlined Product-icons heart ${Heart ? 'text-danger' : 'text-black'}`} onClick={() => PostUserLikedState(isAuthenticated.userId, selectedProduct._id, selectedProduct.title, selectedProduct.price, selectedProduct.description, selectedProduct.url, selectedProduct.categoryId, selectedProduct.rating, selectedProduct.ingredients, selectedProduct.features, selectedProduct.purchaseLink, !Heart && true, selectedProduct.comments)}>
+                        {/* <span className={`material-symbols-outlined Product-icons heart ${Heart ? 'text-danger' : 'text-black'}`} onClick={() => PostUserLikedState(isAuthenticated.userId, selectedProduct._id, selectedProduct.title, selectedProduct.price, selectedProduct.description, selectedProduct.url, selectedProduct.categoryId, selectedProduct.rating, selectedProduct.ingredients, selectedProduct.features, selectedProduct.purchaseLink, !Heart && true, selectedProduct.comments)}>
                           favorite
-                        </span>
+                        </span> */}
+                        <i className={`fa-solid fa-heart Product-icons heart ${Heart ? 'text-danger' : 'text-black'} fs-4`} onClick={() => PostUserLikedState(isAuthenticated.userId, selectedProduct._id, selectedProduct.title, selectedProduct.price, selectedProduct.description, selectedProduct.url, selectedProduct.categoryId, selectedProduct.rating, selectedProduct.ingredients, selectedProduct.features, selectedProduct.purchaseLink, !Heart && true, selectedProduct.comments)} ></i>
                       </div>
                       <div className=' d-flex flex-column gap-3'>
                         <div className='div Description'>

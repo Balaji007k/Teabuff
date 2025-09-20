@@ -45,18 +45,19 @@
     justify-content: center;
 }
 .Buttom-img{
-    padding: 20px;
+    width: 100%;
+    height: 30%;
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
     position: absolute;
     bottom: 0;
+    left: 0;
     z-index: 1;
 }
 .Buttom-img img{
-    width: 32%;
-    height: 30%;
-    min-height: 150px;
+    width: 30%;
     border-radius: 15px;
+    margin-bottom: 15px;
     border: 1px solid white;
     cursor: pointer;
     transition: all .3s;
@@ -69,6 +70,7 @@
     height: 100%;
     position: absolute;
     top: 0;
+    left: 0;
     border-radius: 15px;
 }
 .details-product{

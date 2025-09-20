@@ -27,7 +27,7 @@ const OfferSlider = () => {
         >
           {/* Slide 1 */}
           <SwiperSlide>
-            <div className="d-flex flex-column flex-md-row align-items-center justify-content-between px-3 px-md-5 py-4 bg-light h-100">
+            <div className="d-flex flex-column flex-md-row align-items-center justify-content-between px-3 px-md-5 py-4 bg-light">
               {/* Text */}
               <div
                 className="text-center text-md-start mb-4 mb-md-0"
@@ -51,7 +51,7 @@ const OfferSlider = () => {
               </div>
 
               {/* Images */}
-              <div className="d-flex flex-wrap justify-content-center gap-3">
+              <div className="d-flex justify-content-center gap-3">
                 <img
                   src="https://images.unsplash.com/photo-1576092768241-dec231879fc3?q=80&w=687&auto=format&fit=crop"
                   alt="Blue Dress"
@@ -105,7 +105,7 @@ const OfferSlider = () => {
               </div>
 
               {/* Images */}
-              <div className="d-flex flex-wrap justify-content-center gap-3">
+              <div className="d-flex justify-content-center gap-3">
                 <img
                   src="https://images.unsplash.com/photo-1576092768241-dec231879fc3?q=80&w=687&auto=format&fit=crop"
                   alt="Green Outfit"

@@ -5,8 +5,10 @@ import ProductCard from "./AssetComponents/ProductCard";
 import Footer from "./footer";
 import EmptyProductCard from "./AssetComponents/EmptyProductCard";
 import ProductFilters from "./AssetComponents/ProductFilters";
+import { useMediaQuery } from "react-responsive";
 
 function Menu({ isAuthenticated }) {
+    const small = useMediaQuery({ maxWidth: 600 });
      const { productsItem } = useTheme();
     const Location = useLocation();
     const Navigate = useNavigate();
@@ -28,7 +30,7 @@ function Menu({ isAuthenticated }) {
 
                 <ProductFilters Products={Products} searchingProduct={setSearchItem}/>
 
-                <h1 className=" fw-bold text-center">Menu</h1>
+                {small&&<h1 className=" fw-bold text-center">Menu</h1>}
 
                 <div className='Extra-products-container py-3'>
                     <div className='Extra-products'>

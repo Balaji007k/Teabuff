@@ -1,6 +1,6 @@
 import { useMediaQuery } from "react-responsive";
 import { useState, useRef, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { NavLink as Link } from "react-router-dom";
 import { useLocation } from 'react-router-dom';
 import { Link as ScrollLink } from "react-scroll";
 import ApiService from "./Service/ApiService/product-api";
