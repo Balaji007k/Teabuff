@@ -1,9 +1,27 @@
 const express = require('express')
 const router = express.Router();
-const { getUsers, createUsers, verifyUser, LogoutUser, GetUserSate, GetSingleUserSate, CreateUserState } = require('../controllers/usersController');
+const multer = require("multer");
+const path = require("path");
+
+// Multer setup for profile images
+const storage = multer.diskStorage({
+  destination: function(req, file, cb) {
+    cb(null, "uploads/"); // folder for profile images
+  },
+  filename: function(req, file, cb) {
+    const ext = path.extname(file.originalname);
+    cb(null, `${Date.now()}${ext}`);
+  }
+});
+const upload = multer({ storage });
+
+
+const { getUsers, getSingleUser, createUsers, updateProfileImage, verifyUser, LogoutUser, GetUserSate, GetSingleUserSate, CreateUserState } = require('../controllers/usersController');
 
 router.route('/users').get(getUsers);
+router.route('/user/:id').get(getSingleUser);
 router.route('/users').post(createUsers);
+router.put("/users/:id", upload.single("profileImage"), updateProfileImage);
 router.route('/login').post(verifyUser);
 router.route('/Logout/:id').post(LogoutUser);
 

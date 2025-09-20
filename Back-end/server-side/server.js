@@ -48,8 +48,19 @@ app.get('/dashboard', requireAuth, (req, res) => {
 
 
 
+// app.use((req, res, next) => {
+//   console.log(req.method, req.url);
+//   next();
+// });
 
 app.use("/api", importProductsRoute);
+
+// Serve profile image uploads
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+
+// Import routes
+const userRoutes = require("./routes/users");
+app.use("/api", userRoutes);
 
 
 

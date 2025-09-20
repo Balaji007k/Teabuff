@@ -18,6 +18,37 @@ exports.getUsers = async (req, res, next) => {
     })
 }
 
+exports.getSingleUser = async (req, res) => {
+  const id = req.params.id;
+    const user = await usersModel.findById(id)
+    res.json({
+        user
+    })
+}
+
+exports.updateProfileImage = async (req, res) => {
+  try {
+    const userId = req.params.id;
+
+    if (!req.file) return res.status(400).json({ message: "No file uploaded" });
+
+    const updatedUser = await usersModel.findByIdAndUpdate(
+      userId,
+      { profileImage: `/uploads/${req.file.filename}` },
+      { new: true }
+    );
+
+    if (!updatedUser) return res.status(404).json({ message: "User not found" });
+
+    res.status(200).json({
+      message: "Profile image updated successfully",
+      profileImage: updatedUser.profileImage
+    });
+  } catch (err) {
+    res.status(500).json({ message: "Server error", error: err.message });
+  }
+};
+
 
 exports.createUsers = async (req, res, next) => {
     try {

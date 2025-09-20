@@ -15,6 +15,7 @@ function Users() {
               <th>Email</th>
               <th>Password</th>
               <th>Phone Number</th>
+              <th>Profile Image</th>
             </tr>
           </thead>
           <tbody>
@@ -27,6 +28,7 @@ function Users() {
                   {user.password}
                 </td>
                 <td>{user.phoneNumber}</td>
+                <td>{user?.profileImage}</td>
               </tr>
             ))}
           </tbody>

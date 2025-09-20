@@ -122,6 +122,7 @@ function ProductItem({ isAuthenticated, Review, productsItem, cart, AlertMessage
     // , Review, cart, productsItem, id, Location.pathname
 
   useEffect(() => {
+    if(id&&isAuthenticated) setAdditionalImages(true);
     if (isAuthenticated) {
       fetchProduct();
       // if (productsItem?.length > 0 && id) {

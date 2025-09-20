@@ -18,6 +18,50 @@ function Header({ userinputFocus, isAuthenticated, cart, setAlertMessage }) {
     const id = match ? match[1] : undefined;
     const accountNavRef = useRef(null);
     const buttonRef = useRef(null);
+    const [preview, setPreview] = useState('assets/ProfileImage.svg');
+    const [UserDetails, setUserDetails] = useState("");
+
+    const fileInputRef = useRef(null);
+
+  const handleIconClick = () => {
+    fileInputRef.current.click(); // open file dialog
+  };
+
+
+   const fetchProfileImage = async () => {
+        const { Result, Error } = await ApiService.fetchData(`/user/${isAuthenticated.userId}`);
+        if (Result?.user.profileImage) {
+            setPreview(`http://localhost:5000${Result?.user?.profileImage}`);
+            setUserDetails(Result?.user);
+        }
+    };
+  const handleFileChange = async (event) => {
+  const file = event.target.files[0];
+  if (file) {
+
+    // Upload to backend
+    const formData = new FormData();
+    formData.append("profileImage", file);
+    formData.append("userId", isAuthenticated?.userId); // pass userId
+
+    try {
+        const { Result, Error } = await ApiService.fetchData(`/api/users/${isAuthenticated.userId}`,"PUT",formData);
+      if (Result?.profileImage) {
+        // backend URL replaces temporary preview
+        setPreview(`http://localhost:5000${Result?.profileImage}`);
+      } else {
+        console.error("Upload failed:", Error);
+      }
+    } catch (err) {
+      console.error("Error uploading image:", err);
+    }
+  }
+};
+
+useEffect(()=>{
+    fetchProfileImage();
+},[]);
+
 
     const HideBar = () => {
         setBarVisible(prev => !prev);
@@ -30,20 +74,6 @@ function Header({ userinputFocus, isAuthenticated, cart, setAlertMessage }) {
     const Logout = async () => {
         const LogoutConfirm = window.confirm('Are you sure you want to Logout')
         if (LogoutConfirm) {
-            // await fetch(`https://teabuff.onrender.com/Logout/${isAuthenticated.userId}`, {
-            //     method: 'POST',
-            //     credentials: 'include',
-            //     headers: {
-            //         'Content-Type': 'application/json',
-            //     }
-            // })
-            //     .then(res => res.json())
-            //     .then(data => {
-            //         alert(data.message)
-            //         window.location.reload();
-            //     })
-            //     .catch(err => console.log(err));
-
             const payload = {
                 UserId:isAuthenticated.userId
             };
@@ -91,8 +121,22 @@ function Header({ userinputFocus, isAuthenticated, cart, setAlertMessage }) {
                 <div className="logo name">
                     <h1 className=" fs-3 m-0">Teabuff</h1>
                 </div>
+                <input
+          type="file"
+          ref={fileInputRef}
+          style={{ display: "none" }}
+          accept="image/*"
+          onChange={handleFileChange}
+        />
                 <nav ref={small?accountNavRef:null} className={`navbar ${small&&BarVisible?'show':'hide'}`}>
                     <ul className="nav-list p-0 m-0">
+                        {small&&<div className="w-100 d-flex flex-column align-items-center">
+                                    <div className="UserProfileImage">
+                                <img src={preview} alt="Profile" height={'75px'} width={'75px'} className=" rounded-circle bg-black" />
+                                <i className="fa-solid fa-pen-to-square" onClick={handleIconClick} style={{top:'60px'}}></i>
+                                    </div>
+                            <span className=" fs-3 text-black">{isAuthenticated?.userName}</span>
+                                </div>}
                         <li data-aos="fade-down" data-aos-duration="600">{Location.pathname==='/'?<a href="#">Home</a>:<Link to={"/"}>Home</Link>}</li>
                         {Location.pathname === `/product/${id}` ? <li data-aos="fade-down" data-aos-duration="1000"><ScrollLink to="suggestItems">Suggested items</ScrollLink></li> :Location.pathname==='/'?<li data-aos="fade-down" data-aos-duration="1000"><ScrollLink to="About">About</ScrollLink></li>:<li data-aos="fade-down" data-aos-duration="2200"><Link to="/About">About</Link></li>}
                         {Location.pathname === `/product/${id}` ? <li data-aos="fade-down" data-aos-duration="1400"><Link to="/Menu">More items</Link></li>:<li data-aos="fade-down" data-aos-duration="1400"><Link to={'/Menu'}>Menu</Link></li>}
@@ -115,16 +159,19 @@ function Header({ userinputFocus, isAuthenticated, cart, setAlertMessage }) {
                         <ul className="py-0 d-flex flex-column justify-content-around px-2 mx-2 w-100 h-100">
                             <div>
                                 <div className="w-100 d-flex flex-column align-items-center">
-                                <img src="hi.jpg" alt="No Image" height={'100px'} width={'100px'} className=" rounded-circle bg-black" />
-                                <span className=" fs-3 text-black">{isAuthenticated?.userName}</span>
-                            </div>
+                                    <div className="UserProfileImage">
+                                <img src={preview} alt="Profile" height={'100px'} width={'100px'} className=" rounded-circle bg-black" />
+                                <i className="fa-solid fa-pen-to-square" onClick={handleIconClick}></i>
+                                    </div>
+                            <span className=" fs-3 text-black">{isAuthenticated?.userName}</span>
+                                </div>
                             <div className=" w-100">
                                 {Location.pathname==='/'?<a href="#"><h3 className=' mt-1'><i className="fa-solid fa-house"></i>Home</h3></a>:<Link to={"/"}><h3 className=' mt-1'><i className="fa-solid fa-house"></i>Home</h3></Link>}
                                 <h3 onClick={()=>Hideprofile()}><i className="fa-solid fa-user"></i>Profile</h3>
                                 <div className={`profile-details ${Showprofile?'show':'hide'} d-flex flex-column align-items-center`}>
                                     <input type="text" className="lobu rounded-0 m-0 bg-transparent" disabled placeholder="Name" value={isAuthenticated?.userName}/>
-                                    <input type="text" className="lobu rounded-0 m-0 bg-transparent" disabled placeholder="Email"/>
-                                    <input type="text" className="lobu rounded-0 m-0 bg-transparent" disabled placeholder="Password"/>
+                                    <input type="text" className="lobu rounded-0 m-0 bg-transparent" disabled placeholder="Email" value={UserDetails?.email || ""}/>
+                                    <input type="text" className="lobu rounded-0 m-0 bg-transparent" disabled placeholder="Password" value={'**********'}/>
                                 </div>
                                 <h3><i className="fa-solid fa-gift"></i>Offers</h3>
                                 <Link to={'/WishList'}><h3><i className="fa-solid fa-heart"></i>WishList</h3></Link>

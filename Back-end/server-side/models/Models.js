@@ -2,6 +2,10 @@ const mongoose = require('mongoose');
 
 // Define the schema for each user
 const userSchema = new mongoose.Schema({
+  profileImage: {
+    type: String,   // store image URL / file path
+    required: false // optional field
+  },
   username: { type: String, required: true },
   email: { type: String, required: true, unique: true},
   password: { type: String, required: true },

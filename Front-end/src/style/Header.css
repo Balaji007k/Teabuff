@@ -133,4 +133,16 @@
 .profile-details input::placeholder{
   color: var(--bOX-background-color);
 }
+.UserProfileImage{
+  position: relative;
+  width: fit-content;
+}
+.UserProfileImage i{
+  position: absolute;
+  top: 85px;
+  right: 5px;
+  cursor: pointer;
+  z-index: 99;
+  color: black;
+}
 
