@@ -32,18 +32,22 @@ export default function CheckOut({isAuthenticated,cart}){
       useEffect(()=>{
         setFiltered(cart?.items.find((product)=>
             product.productId==id
-        ))
+        ));
       },[cart])
 
 
       const fetchCheckOut = async () => {
         setLoading(true);
         const { Result, Error } = await ApiService.fetchData(`/Checkouts/${isAuthenticated.userId}`);
-        if (Result) {
+        console.log(Result)
+        if (Result?.UserCheckOut) {
             setLoading(false);
             setUserCheckOutData(Result?.UserCheckOut.ShippingDetails[0]);
         }
-        else console.error(Error);
+        else {
+            setLoading(false);
+            console.error(`${'No UserCheckOut Data:' +Error}`);
+        }
     };
       
       const PostCheckOut = async(e) => {
@@ -99,7 +103,7 @@ export default function CheckOut({isAuthenticated,cart}){
 
     
 
-    if(isAuthenticated?.userId){return(
+    if(isAuthenticated?.userId&&cart?.items.length>0){return(
         <>
         {AlertMessageCheckOut&&AlertMessageCheckOut?.message?<AlertMessage message={AlertMessageCheckOut}/>:Loading&&<LoadingPage/>}
         <div className={` w-100 d-flex ${!small?'flex-row-reverse':'flex-column'} `}>
@@ -152,7 +156,7 @@ export default function CheckOut({isAuthenticated,cart}){
     )}
     else{
         return(
-            <div style={{marginTop:'75px'}}><PageNotFound Message={'User'}/></div>
+            <div style={{marginTop:'75px'}}><PageNotFound Message={'Checkout Data'}/></div>
         )
     }
 }

@@ -135,9 +135,9 @@ export const ThemeProvider = ({ children }) => {
         const NewComment = {UserId,userImage,username,ProductUserRating,comment}
         const { Result, Error } = await ApiService.fetchData(`/product/${Id}`,"PUT",NewComment);
         if (Result){
-            setUserProductReviews(Result.updatedProduct.comments[0])
-            setProductAvgRating(Result.avgRating)
-            setUpdatedProduct(Result.updatedProduct)
+            setUserProductReviews(Result.updatedProduct.comments[0]);
+            setProductAvgRating(Result.avgRating);
+            setUpdatedProduct(Result.updatedProduct);
         }
         else console.log(Error);
     }
@@ -157,10 +157,10 @@ export const ThemeProvider = ({ children }) => {
         setAlertMessage({ message: "Minimum select one item", state: false });
     return ;
   }
-  else if(cart.items.length&&quantity==0&&placeOrder){
+  else if(cart?.items.length&&quantity==0&&placeOrder){
     return false;
 }
-else if ((quantity>=0&&placeOrder&&!cart.items.length)||(placeOrder&&quantity!==0&&cart.items.length)){
+else if ((quantity>=0&&placeOrder&&!cart)||(placeOrder&&quantity!==0&&cart?.items.length)){
     ApiService.fetchData('/carts', "POST", newCart)
     .then(({ Result, Error }) => {
       if (Error) {
@@ -169,13 +169,13 @@ else if ((quantity>=0&&placeOrder&&!cart.items.length)||(placeOrder&&quantity!==
       }
       setAlertMessage({ message: "Cart successfully added", state: true });
     //   console.log("theme",Result)
-      setUpdatedCart(Result?.usercart);
+      setUpdatedCart(Result?.cart || Result?.usercart);
       //setFastPlaceOrder({cart:Result?.newItem,state:true});
     })
     .catch(err => console.log(err));
     return true;
 }
-else if(placeOrder&&quantity==0&&!cart.items.length){
+else if(placeOrder&&quantity==0&&!cart){
     setAlertMessage({ message: "Minimum select one item", state: false });
     return false;
 }
@@ -189,7 +189,7 @@ else{
     //   console.log("demo",newCart)
     //   console.log("theme",Result)
       setAlertMessage({ message: "Cart successfully added", state: true });
-        setUpdatedCart(Result?.usercart);
+        setUpdatedCart(Result?.cart || Result?.usercart);
     })
     .catch(err=>console.log(err));
     return false;

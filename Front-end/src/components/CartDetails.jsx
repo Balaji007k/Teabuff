@@ -28,9 +28,6 @@ function CartDetails({ isAuthenticated, cart }) {
         if (!userId) {
             setAlertMessage({message:"User not authenticated",state:false})
             return ;
-            // setTimeout(()=>{
-            //     setAlertMessage(null);
-            // },1500);
         }
 
         try {
@@ -48,9 +45,6 @@ function CartDetails({ isAuthenticated, cart }) {
     const OrderHandler = () => {
         if (cart.items.length <= 0) {
              setAlertMessage({message:"No items in Cart",state:false});
-            //  setTimeout(()=>{
-            //     setAlertMessage(null);
-            //  },1500);
         }
         PostSaveCart(cart,quantity);
         setOrder(true);
@@ -98,47 +92,58 @@ function CartDetails({ isAuthenticated, cart }) {
 
     if (!isAuthenticated) {
         setTimeout(() => {
-            Navigate('/Login')
-        }, 3000)
+            Navigate('/Login');
+        }, 3000);
         return <PageNotFound Message={"Cart"} />
     }
     if (isAuthenticated&&isAuthenticated.userId){ return (
         <>
         {AlertMessagePlaceOrder&&AlertMessagePlaceOrder?.message?<AlertMessage message={AlertMessagePlaceOrder}/>:Loading&&<LoadingPage/>}
         <div className={` d-flex gap-2 pb-3 flex-column`} style={{ marginTop: '75px'}}>
-            <div className=' d-flex flex-wrap-reverse justify-content-between' style={{ color: 'var(--Background-white-text)' }}>
-
-                <div className={`w-100 d-flex justify-content-center`}>
-                    <div className='Cart-Products w-100' style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(300px,1fr))', justifyItems: 'center' }}>
-                        {cart?.items.map((item) => (
-                                <div key={item._id} className='selected-item d-flex flex-column align-items-center gap-4'>
-                                    <ProductCard key={item._id} isAuthenticated={isAuthenticated} e={item} Navigate={Navigate} cart={true} handleCancelItem={handleCancelItem}/>
-                                    <div className='w-100 d-flex flex-column gap-3 justify-content-between align-items-center'>
-                                        <span className='plus-cart fs-4 fw-bold w-75 d-flex justify-content-between align-items-center gap-2'>
-                                            {quantity[item.productId]<=1?<button className=' bg-body-secondary'>-</button>:<button onClick={() => handleQuantityChange(item.productId, -1)}>-</button>}
-                                            {quantity[item.productId] ?? item.quantity}
-                                            <button onClick={() => handleQuantityChange(item.productId, 1)}>+</button>
-                                        </span>
-
-                                        <div className='d-flex align-items-center fs-5 fw-bolder'>Total <h5>₹{((quantity[item.productId] ?? item.quantity) * (item.categoryId==1?item.itemPrice/2:item.itemPrice)).toFixed(2)}</h5>
-                                        </div>
-                                    </div>
-                                </div>
-                        ))}
-                    </div>
+            {(!cart || cart?.items.length <= 0) ? (
+  <div className='w-100 text-center fs-2'>No Cart Here</div>
+) : (
+  (cart?.items?.length > 0) && (
+    <div className='d-flex flex-wrap-reverse justify-content-between' style={{ color: 'var(--Background-white-text)' }}>
+      <div className="w-100 d-flex justify-content-center">
+        <div className='Cart-Products w-100' style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(300px,1fr))', justifyItems: 'center' }}>
+          {cart?.items.map((item) => (
+            <div key={item._id} className='selected-item d-flex flex-column align-items-center gap-4'>
+              <ProductCard 
+                key={item._id} 
+                isAuthenticated={isAuthenticated} 
+                e={item} 
+                Navigate={Navigate} 
+                cart={true} 
+                handleCancelItem={handleCancelItem}
+              />
+              <div className='w-100 d-flex flex-column gap-3 justify-content-between align-items-center'>
+                <span className='plus-cart fs-4 fw-bold w-75 d-flex justify-content-between align-items-center gap-2'>
+                  {quantity[item.productId] <= 1 
+                    ? <button className='bg-body-secondary'>-</button>
+                    : <button onClick={() => handleQuantityChange(item.productId, -1)}>-</button>}
+                  {quantity[item.productId] ?? item.quantity}
+                  <button onClick={() => handleQuantityChange(item.productId, 1)}>+</button>
+                </span>
+                <div className='d-flex align-items-center fs-5 fw-bolder'>
+                  Total <h5>₹{((quantity[item.productId] ?? item.quantity) * (item.categoryId==1 ? item.itemPrice/2 : item.itemPrice)).toFixed(2)}</h5>
                 </div>
+              </div>
             </div>
-<div className={`w-100 ${Location.pathname==='/CheckOut'||Location.pathname===`/CheckOut/${cart?.ProductId}`?'d-none':'d-block'} ${small&&'position-fixed bottom-0 py-2 bg-white'} d-flex justify-content-center gap-2`}>
+          ))}
+        </div>
+      </div>
+    </div>
+  )
+)}
+
+            {(cart?.items?.length ?? 0) > 0 && (<div className={`w-100 ${Location.pathname==='/CheckOut'||Location.pathname===`/CheckOut/${cart?.ProductId}`?'d-none':'d-block'} ${small&&'position-fixed bottom-0 py-2 bg-white'} d-flex justify-content-center gap-2`}>
                     {!Order && <><button className={`cart-btn px-3 ${small&&'rounded-5 py-1'}`} onClick={() => {PostSaveCart(cart,quantity);setLoading(true)}}>Save Cart</button><Link to={`/CheckOut`}><button className={`cart-btn px-3 ${small&&'rounded-5'}`} onClick={() => {OrderHandler();setLoading(true)}}>Place Order</button></Link></>}
                 </div>
+                )}
         </div>
         </>
     );
-}
-else{
-    return(
-        <div style={{marginTop:'75px'}}><PageNotFound Message={'User'}/></div>
-    )
 }
 }
 

@@ -137,7 +137,7 @@ exports.updateProduct = async (req, res) => {
 
     // Add or update comment only if comment-related fields are present
     // Add or update comment only if comment-related fields are present
-if (UserId && userImage && username && comment) {
+if (UserId && username && comment) {
   const userComment = {
     UserId,
     userImage,
