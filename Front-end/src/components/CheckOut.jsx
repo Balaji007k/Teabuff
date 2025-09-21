@@ -131,7 +131,7 @@ export default function CheckOut({isAuthenticated,cart}){
                                     <input type='text' value={city} onChange={(e)=>setcity(e.target.value)} placeholder='City' required/>
                                     <input type='text' value={postcode} onChange={(e)=>setpostcode(e.target.value)} placeholder='Postcode' required/>
                                 </div>
-                                <input type='tel' name="phone" value={phone} onChange={(e)=>setphone(e.target.value)} minLength={10} maxLength={10} pattern="[0-9]{10}" placeholder='Phone [Optional]' />
+                                <input type='tel' name="phone" value={phone} onChange={(e)=>setphone(e.target.value)} minLength={10} maxLength={10} pattern="[0-9]{10}" placeholder='Phone' required/>
                                 <span className=' d-flex align-items-center gap-2'>
                                     <input className='check-box' checked={CheckoutReUse} onChange={()=>setCheckoutReUse(prev=>!prev)} type="checkbox" /><label>Save this information for next time</label>
                                 </span>

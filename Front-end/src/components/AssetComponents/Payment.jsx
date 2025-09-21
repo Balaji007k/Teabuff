@@ -52,75 +52,12 @@ export default function Payment() {
     </span>
   );
 
-//   const orderData = {
-//   userId: isAuthenticated?.userId,
-//   newOrder: 
-//     {
-//       orderId: "ORD1006",
-//   deliveryDate: new Date(),
-//   customerName: isAuthenticated?.userName,
-//   address: CheckOutData?.address,
-//   email: CheckOutData?.contactEmail,
-//   products: cart?.items.map(item => ({
-//     name: item?.itemName,
-//     image: item?.Product_Url,
-//     qty: item?.quantity,
-//     price: item?.itemPrice
-//   })),
-//   subtotal: 319.97,
-//   shipping: 10,
-//   tax: 25.6,
-//   total: 355.57,
-//   paymentType: "Visa",
-//   cardEnding: "5678",
-//     },
-// };
-
-// const orderData ={
-//   userId: "68b57266fc53fe521c0be0da",
-//   newOrder: {
-//     orderId: "ORD1757407546448",
-//     deliveryDate: "2025-09-09T08:45:46.448Z",
-//     customerName: "Demo",
-//     address: "NA",
-//     email: "demo@gmail.com",
-//     products: [
-//       {
-//         name: "Mint Moroccan Tea",
-//         image: "https://sakiproducts.com/cdn/shop/articles/Benefits-of-Drinking-Black-Tea-thumbnail_1920x1080.jpg?v=1660832924",
-//         qty: 1,
-//         price: 41.75
-//       },
-//       {
-//         name: "Tea",
-//         image: "https://sakiproducts.com/cdn/shop/articles/Benefits-of-Drinking-Black-Tea-thumbnail_1920x1080.jpg?v=1660832924",
-//         qty: 2,
-//         price: 33
-//       },
-//       {
-//         name: "Coffee",
-//         image: "https://sakiproducts.com/cdn/shop/articles/Benefits-of-Drinking-Black-Tea-thumbnail_1920x1080.jpg?v=1660832924",
-//         qty: 2,
-//         price: 75
-//       }
-//     ],
-//     subtotal: 257.75,
-//     shipping: 10,
-//     tax: 25.6,
-//     total: 355.57,
-//     paymentType: "Visa",
-//     cardEnding: "5678"
-//   }
-// }
-
-// console.log("payment",cart);
-
 const orderData = {
   userId: isAuthenticated?.userId || "guest_user",
   newOrder: {
     orderId: "ORD" + Date.now(),
     deliveryDate: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
-    customerName: isAuthenticated?.userName || "Guest",
+    customerName: `${(CheckOutData?.firstname+" "+CheckOutData?.lastname) || "Guest"}`,
     address: CheckOutData?.address || "Unknown Address",
     email: CheckOutData?.contactEmail || "noemail@example.com",
     products: (cart?.items || []).map(item => ({
@@ -135,44 +72,12 @@ const orderData = {
     tax: ((cart?.items || []).reduce((acc, item) => acc + ((item.categoryId==1?item?.itemPrice/2:item?.itemPrice) || 0) * (item?.quantity || 0), 0)) * 0.18,
     total: ((cart?.items || []).reduce((acc, item) => acc + ((item.categoryId==1?item?.itemPrice/2:item?.itemPrice) || 0) * (item?.quantity || 0), 0)) + 10 + (((cart?.items || []).reduce((acc, item) => acc + ((item.categoryId==1?item?.itemPrice/2:item?.itemPrice) || 0) * (item?.quantity || 0), 0)) * 0.18),
     paymentType: "Visa",
-    cardEnding: "5678",
+    cardEnding: `**** **** **** ${cardNumber.slice(-4)}`,
+    contact:CheckOutData?.phone,
   },
 };
 
 //console.log("Prepared orderData:", JSON.stringify(orderData, null, 2));
-
-
-
-// const orderData = {
-//   userId: "user123",
-//   newOrder: 
-//     {
-//       orderId: "ORD1005",
-//       deliveryDate: "2025-09-20",
-//       customerName: "John Doe",
-//       address: "123 Main Street, New York",
-//       email: "johndoe@example.com",
-//       products: [
-//         {
-//           name: "Laptop Bag",
-//           image: "https://via.placeholder.com/150",
-//           qty: 1,
-//           price: 49.99,
-//         },
-//       ],
-//       subtotal: 49.99,
-//       shipping: 5,
-//       tax: 3,
-//       total: 57.99,
-//       paymentType: "Visa",
-//       cardEnding: "4321",
-//     },
-// };
-
-  // useEffect(()=>{
-  //   console.log(cart.items);
-  //   console.log("checkout",CheckOutData.contactEmail);
-  // },[cart,CheckOutData]);
 
   useEffect(()=>{
     if(AlertMessagePayment&&AlertMessagePayment.message) setLoading(false);

@@ -21,7 +21,6 @@ export default function OrderConfirmation() {
 const getUserAllOrders = async(Id)=> {
   setLoading(true);
   const { Result, Error } = await ApiService.fetchData(`/orders/${Id}`);
-  //console.log(Result);
   setOrderDetails(Result);
   if(!Result){
     //console.log(Error);

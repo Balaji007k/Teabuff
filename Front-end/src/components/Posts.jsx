@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useTheme } from "../ThemeContext";
 import "../style/Post.css"
+import ApiService from "./Service/ApiService/product-api";
 
 function Posts() {
   const { AllReview } = useTheme();
@@ -66,10 +67,14 @@ function Posts() {
                 {/* User info */}
                 <div className="d-flex align-items-center gap-2">
                   <img
-                    src={"assets/user.png"}
+                    src={`${ApiService.Backend+review?.userImage}`}
                     className="rounded-circle"
                     alt={review.username}
                     style={{ width: "40px", height: "40px", objectFit: "cover" }}
+                    onError={(e) => {
+    e.currentTarget.onerror = null; // avoid infinite loop
+    e.currentTarget.src = "assets/user.png"; // fallback if image not found
+  }}
                   />
                   <h6 className="mb-0">{review.username}</h6>
                 </div>

@@ -39,6 +39,12 @@
 
 
 class ApiService {
+   // Dynamically set backend URL
+  static Backend = window.location.hostname === "localhost"
+    ? "http://localhost:5000"
+    : "https://teabuff.onrender.com";
+
+
   static async fetchData(url, method = "GET", params = null, headers = null) {
     let options = {
       method,
@@ -55,7 +61,7 @@ class ApiService {
     }
 
     try {
-      const response = await fetch("https://teabuff.onrender.com" + url, options);
+      const response = await fetch(this.Backend + url, options);
       const data = await response.json();
 
       if (!response.ok) {

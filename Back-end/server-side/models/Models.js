@@ -71,7 +71,7 @@ const categoryModel = mongoose.model('category', categorySchema);
 
 const ProductReviewsSchema = mongoose.Schema({
   UserId:{type:String,required:true},
-  userImage:{type:String,required:true},
+  userImage:{type:String,required:false},
   username:{type:String,required:true},
   ProductUserRating:{type:Number,default:0},
   comment:{type:String,default:null}
@@ -134,7 +134,7 @@ const ShippingDetail = new mongoose.Schema({
   apartment: { type: String },
   city: { type: String, required: true },
   postcode: { type: Number, required: true },
-  phone: { type: Number },
+  phone: { type: Number, required:true },
   ReUseData: {type:Boolean,default:false},
   FeedOffers: {type:Boolean,default:false}
 });

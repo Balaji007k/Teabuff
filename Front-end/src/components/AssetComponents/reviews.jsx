@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useTheme } from '../../ThemeContext';
 import { useNavigate } from 'react-router-dom';
+import ApiService from '../Service/ApiService/product-api';
 
 const ReviewSlider = () => {
   const { AllReview } = useTheme(); // Review = [ { title, comments: [ { User: [reviewers...] } ] } ]
@@ -79,10 +80,14 @@ useEffect(() => {
               <div className="user d-flex align-items-center gap-2">
                 <img
                   // src={user.userImage}
-                  src="assets/user.png"
+                  src={`${ApiService.Backend+user?.userImage}`}
                   className="user-image"
                   alt={user.username}
                   style={{ width: '30px', height: '30px', borderRadius: '50%' }}
+                  onError={(e) => {
+    e.currentTarget.onerror = null; // avoid infinite loop
+    e.currentTarget.src = "assets/user.png"; // fallback if image not found
+  }}
                 />
                 <h5 className="m-0">{user.username}</h5>
               </div>

@@ -1,6 +1,9 @@
-const { usersModel,UserStateModel } = require('../models/Models')
+const { usersModel,UserStateModel,productsModel } = require('../models/Models')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
+const sharp = require("sharp");
+const fs = require("fs").promises;
+const path = require("path");
 
 const maxAge = 3 * 24 * 60 * 60;
 
@@ -16,7 +19,7 @@ exports.getUsers = async (req, res, next) => {
     res.json({
         users
     })
-}
+};
 
 exports.getSingleUser = async (req, res) => {
   const id = req.params.id;
@@ -24,29 +27,6 @@ exports.getSingleUser = async (req, res) => {
     res.json({
         user
     })
-}
-
-exports.updateProfileImage = async (req, res) => {
-  try {
-    const userId = req.params.id;
-
-    if (!req.file) return res.status(400).json({ message: "No file uploaded" });
-
-    const updatedUser = await usersModel.findByIdAndUpdate(
-      userId,
-      { profileImage: `/uploads/${req.file.filename}` },
-      { new: true }
-    );
-
-    if (!updatedUser) return res.status(404).json({ message: "User not found" });
-
-    res.status(200).json({
-      message: "Profile image updated successfully",
-      profileImage: updatedUser.profileImage
-    });
-  } catch (err) {
-    res.status(500).json({ message: "Server error", error: err.message });
-  }
 };
 
 
@@ -83,6 +63,109 @@ exports.createUsers = async (req, res, next) => {
         });
     }
 };
+
+// exports.updateProfileImage = async (req, res) => {
+//   try {
+//     const userId = req.params.id;
+
+//     if (!req.file) {
+//       return res.status(400).json({ message: "No file uploaded" });
+//     }
+
+//     // Step 1: Update user profile image in users collection
+//     const updatedUser = await usersModel.findByIdAndUpdate(
+//       userId,
+//       { profileImage: `/uploads/${req.file.filename}` },
+//       { new: true }
+//     );
+
+//     if (!updatedUser) {
+//       return res.status(404).json({ message: "User not found" });
+//     }
+
+
+//     // Step 2: Update all product comments where this user has commented
+//     await productsModel.updateMany(
+//       { "comments.User.UserId": userId }, // find all products where this user commented
+//       {
+//         $set: {
+//           "comments.$[comment].User.$[user].userImage": updatedUser.profileImage
+//         }
+//       },
+//       {
+//         arrayFilters: [
+//           { "comment.User": { $exists: true } }, // ensure comments have User
+//           { "user.UserId": userId }              // match user inside User[]
+//         ]
+//       }
+//     );
+
+//     res.status(200).json({
+//       message: "Profile image updated successfully",
+//       profileImage: updatedUser.profileImage
+//     });
+//   } catch (err) {
+//     console.error("Update Profile Image Error:", err);
+//     res.status(500).json({
+//       message: "Server error",
+//       error: err.message
+//     });
+//   }
+// };
+
+exports.updateProfileImage = async (req, res) => {
+  try {
+    const userId = req.params.id;
+
+    if (!req.file) return res.status(400).json({ message: "No file uploaded" });
+    
+const uploadsDir = path.join(__dirname, "../uploads");
+const originalPath = req.file.path;
+const compressedFileName = `compressed_${req.file.filename}`;
+const compressedPath = path.join(uploadsDir, compressedFileName);
+
+// Compress image
+await sharp(originalPath)
+  .resize(200, 200)
+  .jpeg({ quality: 70 })
+  .toFile(compressedPath);
+
+// Delete original file safely
+try {
+  await fs.unlink(originalPath);
+} catch (err) {
+  console.warn("Could not delete original file, skipping:", err.message);
+}
+
+    // Update user profileImage
+    const updatedUser = await usersModel.findByIdAndUpdate(
+      userId,
+      { profileImage: `/uploads/${compressedFileName}` },
+      { new: true }
+    );
+
+    if (!updatedUser) return res.status(404).json({ message: "User not found" });
+
+    // Update userImage in product comments
+    await productsModel.updateMany(
+      { "comments.User.UserId": userId },
+      { $set: { "comments.$[comment].User.$[user].userImage": updatedUser.profileImage } },
+      { arrayFilters: [{ "comment.User": { $exists: true } }, { "user.UserId": userId }] }
+    );
+
+    res.status(200).json({
+      message: "Profile image updated successfully",
+      profileImage: updatedUser.profileImage,
+    });
+  } catch (err) {
+    console.error("Update Profile Image Error:", err);
+    res.status(500).json({ message: "Server error", error: err.message });
+  }
+};
+
+
+
+
 
 
 exports.verifyUser = async (req, res, next) => {

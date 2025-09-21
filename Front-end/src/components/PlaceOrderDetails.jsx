@@ -6,13 +6,15 @@ export default function PlaceOrderDetails({isAuthenticated, cart }) {
   const [CartItems, setCartItems] = useState(null);
 
   // Compute total amount
-  const grandTotal = CartItems?.items?.reduce((acc, item) => {
+  const Subtotal = CartItems?.items?.reduce((acc, item) => {
     const qty = item.quantity; // replace with quantity[item.productId] if you pass quantity prop
     return acc + qty * (item.categoryId == 1 ? item.itemPrice / 2 : item.itemPrice);
   }, 0);
 
-  const Tax = (grandTotal * 18) / 100;
-  const Total = (grandTotal + Tax + 10)?.toFixed(2);
+  const Shipping = 10;
+
+  const Tax = (Subtotal * 18) / 100;
+  const Total = (Subtotal + Tax + Shipping)?.toFixed(2);
 
   useEffect(() => {
     setCartItems(cart);
@@ -70,7 +72,7 @@ export default function PlaceOrderDetails({isAuthenticated, cart }) {
     <tbody>
       <tr>
         <th>Subtotal</th>
-        <td>₹{grandTotal?.toFixed(2)}</td>
+        <td>₹{Subtotal?.toFixed(2)}</td>
       </tr>
       <tr>
         <th>Tax</th>
@@ -78,7 +80,7 @@ export default function PlaceOrderDetails({isAuthenticated, cart }) {
       </tr>
       <tr>
         <th>Shipping</th>
-        <td>₹10</td>
+        <td>₹{Shipping?.toFixed(2)}</td>
       </tr>
       <tr>
         <th>GrandTotal</th>

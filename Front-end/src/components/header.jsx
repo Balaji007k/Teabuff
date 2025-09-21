@@ -27,11 +27,10 @@ function Header({ userinputFocus, isAuthenticated, cart, setAlertMessage }) {
     fileInputRef.current.click(); // open file dialog
   };
 
-
    const fetchProfileImage = async () => {
         const { Result, Error } = await ApiService.fetchData(`/user/${isAuthenticated.userId}`);
         if (Result?.user.profileImage) {
-            setPreview(`https://teabuff.onrender.com${Result?.user?.profileImage}`);
+            setPreview(`${ApiService.Backend+Result?.user.profileImage}`);
             setUserDetails(Result?.user);
         }
     };
@@ -48,7 +47,7 @@ function Header({ userinputFocus, isAuthenticated, cart, setAlertMessage }) {
         const { Result, Error } = await ApiService.fetchData(`/api/users/${isAuthenticated.userId}`,"PUT",formData);
       if (Result?.profileImage) {
         // backend URL replaces temporary preview
-        setPreview(`https://teabuff.onrender.com${Result?.profileImage}`);
+        setPreview(`${ApiService.Backend+Result?.profileImage}`);
       } else {
         console.error("Upload failed:", Error);
       }
@@ -132,7 +131,11 @@ useEffect(()=>{
                     <ul className="nav-list p-0 m-0">
                         {small&&<div className="w-100 d-flex flex-column align-items-center">
                                     <div className="UserProfileImage">
-                                <img src={preview} alt="Profile" height={'75px'} width={'75px'} className=" rounded-circle bg-black" />
+                                <img src={preview} alt="Profile" height={'75px'} width={'75px'} className=" rounded-circle bg-black" 
+                                onError={(e) => {
+    e.currentTarget.onerror = null; // avoid infinite loop
+    e.currentTarget.src = "assets/ProfileImage.svg"; // fallback if image not found
+  }} />
                                 <i className="fa-solid fa-pen-to-square" onClick={handleIconClick} style={{top:'60px'}}></i>
                                     </div>
                             <span className=" fs-3 text-black">{isAuthenticated?.userName}</span>
@@ -160,7 +163,18 @@ useEffect(()=>{
                             <div>
                                 <div className="w-100 d-flex flex-column align-items-center">
                                     <div className="UserProfileImage">
-                                <img src={preview} alt="Profile" height={'100px'} width={'100px'} className=" rounded-circle bg-black" />
+                                <img
+  src={preview}
+  alt="Profile"
+  height="100px"
+  width="100px"
+  className="rounded-circle bg-black"
+  onError={(e) => {
+    e.currentTarget.onerror = null; // avoid infinite loop
+    e.currentTarget.src = "assets/ProfileImage.svg"; // fallback if image not found
+  }}
+/>
+
                                 <i className="fa-solid fa-pen-to-square" onClick={handleIconClick}></i>
                                     </div>
                             <span className=" fs-3 text-black">{isAuthenticated?.userName}</span>

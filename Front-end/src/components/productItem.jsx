@@ -237,7 +237,12 @@ function ProductItem({ isAuthenticated, Review, productsItem, cart, AlertMessage
                   <div className='User Reviews'>
                     <div className='Comment-box d-flex flex-column gap-2'>
                     {UserProductReviews?.ProductId === selectedProduct?._id ? UserProductReviews.User.map(ProductReview => <div key={ProductReview._id} className=' d-flex flex-column gap-2'>
-                      <div className=' d-flex align-items-center gap-2'><img src={ProductReview?.userImage} alt="loading" /><span className=' fs-4'>{ProductReview?.username}</span></div>
+                      <div className=' d-flex align-items-center gap-2'><img src={`${ApiService.Backend+ProductReview?.userImage}`} alt="loading" 
+                      onError={(e) => {
+    e.currentTarget.onerror = null; // avoid infinite loop
+    e.currentTarget.src = "assets/user.png"; // fallback if image not found
+  }} />
+  <span className=' fs-4'>{ProductReview?.username}</span></div>
                       <div className=' d-flex align-items-center gap-2 mt-1'>{Array.from({ length: 5 }, (_, i) => (
                         <i key={i} className="fa-solid fa-star" style={{ color: i + 1 <= ProductReview?.ProductUserRating ? 'gold' : 'grey' }}></i>
                       ))}</div>
@@ -265,7 +270,7 @@ function ProductItem({ isAuthenticated, Review, productsItem, cart, AlertMessage
                       </div>
 
                       <textarea className=' my-2' rows={4} cols={5} value={comment} onChange={(e) => setcomment(e.target.value)} />
-                      <button onClick={() => { UpdateProduct(selectedProduct._id, isAuthenticated.userId, "nothing", isAuthenticated.userName, Rating, comment); setcomment(''); setEditcomment(false) }}>Send</button>
+                      <button onClick={() => { UpdateProduct(selectedProduct._id, isAuthenticated.userId, "", isAuthenticated.userName, Rating, comment); setcomment(''); setEditcomment(false) }}>Send</button>
                     </div>
                   </div>
 
