@@ -200,7 +200,7 @@ function Products({ productsItem }) {
           <tr>
             <th>ProductId</th>
             <th>CategoryId</th>
-            <th>Title</th>
+            <th>Product Name</th>
             <th>Price</th>
             <th>Rating</th>
             <th>Description</th>

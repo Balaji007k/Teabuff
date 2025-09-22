@@ -93,11 +93,12 @@ function ProductItem({ isAuthenticated, Review, productsItem, cart, AlertMessage
       const User = UserLikedState.find(u => u?.ProductId === id);
       setHeart(!!User?.likedState); // Set to true or false accordingly
     }
+    
   }, [UserLikedState, id]);
 
   const fetchProduct = async () => {
         const { Result, Error } = await ApiService.fetchData(`/product/${id}`);
-        if(!Error) {
+        if(!Error||Error) {
           setLoading(false);
         }
         setSelectedProduct(Result?.product);
@@ -125,17 +126,13 @@ function ProductItem({ isAuthenticated, Review, productsItem, cart, AlertMessage
     if(id&&isAuthenticated) setAdditionalImages(true);
     if (isAuthenticated) {
       fetchProduct();
-      // if (productsItem?.length > 0 && id) {
-      //   const found = productsItem.find(item => item._id === id);
-      //   setSelectedProduct(found);
-      //   //console.log(found)
-        
-      // }
-    }
+    };
+    
   }, [isAuthenticated,id,productsItem]);
 
   useEffect(()=>{
     window.scrollTo(0, 0);
+    
   },[isAuthenticated,id]);
 
   useEffect(() => {
@@ -150,9 +147,8 @@ function ProductItem({ isAuthenticated, Review, productsItem, cart, AlertMessage
     return <PageNotFound Message={"Product"} />
   };
 
-  if (isAuthenticated&&Loading){
-    return <LoadingPage/>
-  }
+  if (Loading) return <LoadingPage/>
+
   if (!selectedProduct) return <div className='Cart-holder fs-5 fw-bolder text-center'>No product Found.</div>;
 
   if (isAuthenticated && selectedProduct) return (

@@ -1,5 +1,6 @@
 import { useOutletContext } from "react-router-dom";
 import "../assets_Admin/AdminPages.css";
+import ApiService from "../../components/Service/ApiService/product-api";
 
 function Users() {
   const users = useOutletContext();
@@ -16,6 +17,7 @@ function Users() {
               <th>Password</th>
               <th>Phone Number</th>
               <th>Profile Image</th>
+              <th>Profile View</th>
             </tr>
           </thead>
           <tbody>
@@ -29,6 +31,7 @@ function Users() {
                 </td>
                 <td>{user.phoneNumber}</td>
                 <td>{user?.profileImage}</td>
+                {user?.profileImage&&<td><a href={ApiService.Backend+user?.profileImage} className=" bg-info p-3 rounded-2">View</a></td>}
               </tr>
             ))}
           </tbody>

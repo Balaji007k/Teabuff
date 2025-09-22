@@ -1,4 +1,4 @@
-const { usersModel,UserStateModel,productsModel } = require('../models/Models')
+const { usersModel,UserStateModel,productsModel, userCartModel, CheckOutModel, OrderConfirmationModel } = require('../models/Models')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const sharp = require("sharp");
@@ -63,55 +63,6 @@ exports.createUsers = async (req, res, next) => {
         });
     }
 };
-
-// exports.updateProfileImage = async (req, res) => {
-//   try {
-//     const userId = req.params.id;
-
-//     if (!req.file) {
-//       return res.status(400).json({ message: "No file uploaded" });
-//     }
-
-//     // Step 1: Update user profile image in users collection
-//     const updatedUser = await usersModel.findByIdAndUpdate(
-//       userId,
-//       { profileImage: `/uploads/${req.file.filename}` },
-//       { new: true }
-//     );
-
-//     if (!updatedUser) {
-//       return res.status(404).json({ message: "User not found" });
-//     }
-
-
-//     // Step 2: Update all product comments where this user has commented
-//     await productsModel.updateMany(
-//       { "comments.User.UserId": userId }, // find all products where this user commented
-//       {
-//         $set: {
-//           "comments.$[comment].User.$[user].userImage": updatedUser.profileImage
-//         }
-//       },
-//       {
-//         arrayFilters: [
-//           { "comment.User": { $exists: true } }, // ensure comments have User
-//           { "user.UserId": userId }              // match user inside User[]
-//         ]
-//       }
-//     );
-
-//     res.status(200).json({
-//       message: "Profile image updated successfully",
-//       profileImage: updatedUser.profileImage
-//     });
-//   } catch (err) {
-//     console.error("Update Profile Image Error:", err);
-//     res.status(500).json({
-//       message: "Server error",
-//       error: err.message
-//     });
-//   }
-// };
 
 exports.updateProfileImage = async (req, res) => {
   try {
@@ -209,22 +160,6 @@ exports.verifyUser = async (req, res, next) => {
   }
 };
 
-//exports.LogoutUser = async (req, res) => {
-    //try {
-       // const id = req.params.id;
-       // const token = req.cookies.user;
-       // const decoded = jwt.verify(token, process.env.SECRET_KEY);
-       // if (decoded && decoded.id === id) {
-          //  res.clearCookie('user');
-          //  res.status(200).json({ message: 'Logout successfully' });
-       // } else {
-           // res.status(403).json({ message: 'Unauthorized logout attempt' });
-      //  }
-   // } catch (error) {
-       // res.status(500).json({ message: error.message });
-   // }
-//};
-
 exports.LogoutUser = async (req, res) => {
   try {
     const id = req.params.id;
@@ -255,6 +190,46 @@ exports.LogoutUser = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+exports.deleteUser = async (req, res) => {
+  try {
+    const userId = req.params.id;
+
+    // 1. Delete user
+    const user = await usersModel.findByIdAndDelete(userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // 2. Delete user cart
+    await userCartModel.findOneAndDelete({ userId });
+
+    // 3. Delete user state (liked products)
+    await UserStateModel.findOneAndDelete({ UserId: userId });
+
+    // 4. Delete user checkout/shipping details
+    await CheckOutModel.deleteMany({ UserId: userId });
+
+    // 5. Delete orders of that user
+    await OrderConfirmationModel.deleteMany({ userId });
+
+    // 6. Remove user comments from products
+    await productsModel.updateMany(
+      { "comments.User.UserId": userId },
+      { $pull: { "comments.$[].User": { UserId: userId } } }
+    );
+
+    // 7. (Optional) If you want to delete user's own reviews in reviews collection
+    //await reviewsModel.deleteMany({ name: user.username });
+
+    return res.status(200).json({ message: "User and related data deleted successfully" });
+
+  } catch (error) {
+    console.error("Delete User Error:", error);
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
+
 
 
 exports.GetUserSate = async(req,res)=>{

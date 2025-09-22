@@ -57,8 +57,9 @@ function Reviews({ AllReview }) {
               </td>
             </tr>
             <tr>
-              <th style={{ minWidth: "80px" }}>Id</th>
-              <th style={{ minWidth: "120px" }}>Title</th>
+              {/* <th style={{ minWidth: "80px" }}>Id</th> */}
+              <th style={{ minWidth: "80px" }}>UserId</th>
+              <th style={{ minWidth: "120px" }}>Product Name</th>
               <th style={{ minWidth: "120px" }}>Username</th>
               <th style={{ minWidth: "60px" }}>Rating</th>
               <th style={{ minWidth: "200px" }}>Comment</th>
@@ -67,8 +68,11 @@ function Reviews({ AllReview }) {
           <tbody>
             {searchedReviews.map((r) => (
               <tr key={r._id}>
-                <td className="text-truncate">
+                {/* <td className="text-truncate">
                   {r._id}
+                </td> */}
+                <td className="text-truncate">
+                  {r.UserId}
                 </td>
                 <td className="text-truncate">
                   {r.title}
