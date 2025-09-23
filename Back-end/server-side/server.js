@@ -46,7 +46,9 @@ app.get('/dashboard', requireAuth, (req, res) => {
   });
 });
 
-
+app.get("/health", (req, res) => {
+  res.status(200).send("OK");
+});
 
 // app.use((req, res, next) => {
 //   console.log(req.method, req.url);
