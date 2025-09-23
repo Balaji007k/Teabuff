@@ -232,7 +232,7 @@ function ProductItem({ isAuthenticated, Review, productsItem, cart, AlertMessage
 
                   <div className='User Reviews'>
                     <div className='Comment-box d-flex flex-column gap-2'>
-                    {UserProductReviews?.ProductId === selectedProduct?._id ? UserProductReviews.User.map(ProductReview => <div key={ProductReview._id} className=' d-flex flex-column gap-2'>
+                    {UserProductReviews?.ProductId === selectedProduct?._id && UserProductReviews?.User.length > 0? UserProductReviews.User.map(ProductReview => <div key={ProductReview._id} className=' d-flex flex-column gap-2'>
                       <div className=' d-flex align-items-center gap-2'><img src={`${ApiService.Backend+ProductReview?.userImage}`} alt="loading" 
                       onError={(e) => {
     e.currentTarget.onerror = null; // avoid infinite loop
@@ -248,7 +248,11 @@ function ProductItem({ isAuthenticated, Review, productsItem, cart, AlertMessage
                       <div className=' d-flex align-items-center gap-2 mt-2'>{Array.from({ length: selectedProductReview[0]?.rating ? selectedProductReview[0]?.rating : 5 }, (_, i) => (
                         <i key={i} className="fa-solid fa-star"></i>
                       ))}</div>
-                      <p>{selectedProductReview[0]?.review ? selectedProductReview[0]?.review : `${selectedProduct?.title} is very good!`}</p>
+                     <p>{`${selectedProduct?.title || "This product"} is very good!`}
+</p>
+
+
+
                     </div>}
                     </div>
                     <div className=' d-flex align-items-center gap-2 my-2'><button className=' rounded-circle bg-white d-flex justify-content-center align-items-center' onClick={() => { handleEditcomment(); setRating(0) }} style={{ width: '40px', height: '40px', border: '1px solid black', boxShadow: 'none' }}><span>+</span></button>Comments</div>

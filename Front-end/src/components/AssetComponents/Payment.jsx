@@ -73,11 +73,11 @@ const orderData = {
     total: ((cart?.items || []).reduce((acc, item) => acc + ((item.categoryId==1?item?.itemPrice/2:item?.itemPrice) || 0) * (item?.quantity || 0), 0)) + 10 + (((cart?.items || []).reduce((acc, item) => acc + ((item.categoryId==1?item?.itemPrice/2:item?.itemPrice) || 0) * (item?.quantity || 0), 0)) * 0.18),
     paymentType: "Visa",
     cardEnding: `**** **** **** ${cardNumber.slice(-4)}`,
-    contact:CheckOutData?.phone,
+    contact:`+91${CheckOutData?.phone}`,
   },
 };
 
-//console.log("Prepared orderData:", JSON.stringify(orderData, null, 2));
+console.log("Prepared orderData:", JSON.stringify(orderData, null, 2));
 
   useEffect(()=>{
     if(AlertMessagePayment&&AlertMessagePayment.message) setLoading(false);
@@ -129,18 +129,29 @@ const orderData = {
                 setAlertMessage(null);
             },3000);
             }
-            setAlertMessage({message:"Payment submitted!",state:true});
              if (cart && CheckOutData) {
       try {
-        const res = await createOrder(orderData); 
+        // const res = await createOrder(orderData); 
 
-        if (res) {
-          setTimeout(() => {
-            setAlertMessage(null);
-            setLoading(false);
-            Navigate(`/MyOrders/${isAuthenticated?.userId}`);
-          }, 3000);
-        }
+        // if (res) {
+        //   setAlertMessage({message:"Payment submitted!",state:true});
+        //   setTimeout(() => {
+        //     setAlertMessage(null);
+        //     setLoading(false);
+        //     Navigate(`/MyOrders/${isAuthenticated?.userId}`);
+        //   }, 3000);
+        // }
+
+        const res = await createOrder(orderData); // calls backend
+if (res) {
+  setAlertMessage({ message: "Payment submitted! SMS sent.", state: true });
+  setTimeout(() => {
+    setAlertMessage(null);
+    setLoading(false);
+    Navigate(`/MyOrders/${isAuthenticated?.userId}`);
+  }, 3000);
+}
+
       } catch (err) {
         console.error("Error creating order:", err);
         setAlertMessage({ message: "Order failed. Try again.", state: false });

@@ -1,4 +1,4 @@
-const {productsModel,userCartModel,UserStateModel} = require('../models/Models')
+const {productsModel,userCartModel,UserStateModel,usersModel} = require('../models/Models')
 
 
 
@@ -124,6 +124,8 @@ exports.updateProduct = async (req, res) => {
       comment
     } = req.body;
 
+     const profileImage = await usersModel.findById(UserId);
+
     // Update product fields
     if (title) SelectedProduct.title = title;
     if (price) SelectedProduct.price = price;
@@ -140,7 +142,7 @@ exports.updateProduct = async (req, res) => {
 if (UserId && username && comment) {
   const userComment = {
     UserId,
-    userImage,
+    userImage:userImage?userImage:profileImage.profileImage,
     username,
     ProductUserRating,
     comment

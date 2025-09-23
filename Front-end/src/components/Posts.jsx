@@ -4,12 +4,14 @@ import "../style/Post.css"
 import ApiService from "./Service/ApiService/product-api";
 
 function Posts() {
-  const { AllReview } = useTheme();
+  const { isAuthenticated,AllReview,fetchAllReviews } = useTheme();
   const [flattenedReviews, setFlattenedReviews] = useState([]);
   const [likes, setLikes] = useState({}); // track likes per review
+  
 
   useEffect(()=>{
     window.scrollTo(0,0);
+    if(isAuthenticated) fetchAllReviews();
   },[])
 
   useEffect(() => {

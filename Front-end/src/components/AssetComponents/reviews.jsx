@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import ApiService from '../Service/ApiService/product-api';
 
 const ReviewSlider = () => {
-  const { AllReview } = useTheme(); // Review = [ { title, comments: [ { User: [reviewers...] } ] } ]
+  const { isAuthenticated,AllReview,fetchAllReviews } = useTheme(); // Review = [ { title, comments: [ { User: [reviewers...] } ] } ]
   const Navigate = useNavigate();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [flattenedReviews, setFlattenedReviews] = useState([]);
@@ -16,6 +16,10 @@ const shuffleArray = (array) => {
     .sort((a, b) => a.sort - b.sort)
     .map(({ value }) => value);
 };
+
+useEffect(()=>{
+  if(isAuthenticated) fetchAllReviews();
+},[])
 
 useEffect(() => {
   if (AllReview && AllReview.length > 0) {

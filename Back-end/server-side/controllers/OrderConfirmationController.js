@@ -1,31 +1,148 @@
 const mongoose = require("mongoose");
-const { OrderConfirmationModel } = require('../models/Models')
+const { OrderConfirmationModel } = require('../models/Models');
+const { sendOrderConfirmation } = require("../utils/sendEmail");
 
 // CREATE ORDER (push into same userId's array)
+// exports.createOrderConfirmation = async (req, res) => {
+//   try {
+//     const { userId, newOrder } = req.body;
+
+//     const exists = await OrderConfirmationModel.findOne({
+//   "OrderDetails.orderId": newOrder.orderId
+// });
+// if (exists) {
+//   return res.status(400).json({ error: "OrderId already exists" });
+// }
+
+
+//     const order = await OrderConfirmationModel.findOneAndUpdate(
+//   { userId: new mongoose.Types.ObjectId(userId) },
+//   { $push: { OrderDetails: newOrder } },
+//   { new: true, upsert: true }
+// );
+
+//     res.status(201).json({ message: "Order created", newOrder:newOrder.orderId });
+//   } catch (err) {
+//     console.error("Error creating order:", err);
+//     res.status(500).json({ error: err.message });
+//   }
+// };
+
+// const twilio = require("twilio");
+// const accountSid = process.env.TWILIO_ACCOUNT_SID;
+// const authToken = process.env.TWILIO_AUTH_TOKEN;
+// const fromNumber = process.env.TWILIO_PHONE_NUMBER; 
+// const client = twilio(accountSid, authToken);
+
+// exports.createOrderConfirmation = async (req, res) => {
+//   try {
+//     const { userId, newOrder } = req.body;
+
+//     // Check if order exists
+//     const exists = await OrderConfirmationModel.findOne({
+//       "OrderDetails.orderId": newOrder.orderId
+//     });
+//     if (exists) {
+//       return res.status(400).json({ error: "OrderId already exists" });
+//     }
+
+//     // Save order
+//     const order = await OrderConfirmationModel.findOneAndUpdate(
+//       { userId: new mongoose.Types.ObjectId(userId) },
+//       { $push: { OrderDetails: newOrder } },
+//       { new: true, upsert: true }
+//     );
+
+//     // Send SMS if contact exists
+//     if (newOrder.contact) {
+//       await client.messages.create({
+//         body: `Hi ${newOrder.customerName}, your order (${newOrder.orderId}) has been successfully placed! Total: ₹${newOrder.total}.`,
+//         from: fromNumber,
+//         to: newOrder.contact, // e.g. +91XXXXXXXXXX
+//       });
+//     }
+
+//     res.status(201).json({ message: "Order created and SMS sent", newOrder: newOrder.orderId });
+//   } catch (err) {
+//     console.error("Error creating order:", err);
+//     res.status(500).json({ error: err.message });
+//   }
+// };
+
+
+
 exports.createOrderConfirmation = async (req, res) => {
   try {
     const { userId, newOrder } = req.body;
 
     const exists = await OrderConfirmationModel.findOne({
-  "OrderDetails.orderId": newOrder.orderId
-});
-if (exists) {
-  return res.status(400).json({ error: "OrderId already exists" });
+      "OrderDetails.orderId": newOrder.orderId
+    });
+    if (exists) {
+      return res.status(400).json({ error: "OrderId already exists" });
+    }
+
+    const order = await OrderConfirmationModel.findOneAndUpdate(
+      { userId: new mongoose.Types.ObjectId(userId) },
+      { $push: { OrderDetails: newOrder } },
+      { new: true, upsert: true }
+    );
+
+    // Send confirmation email
+    // if (newOrder.email) {
+    //   const subject = `Order Confirmation - ${newOrder.orderId}`;
+    //   const text = `Hi ${newOrder.customerName},\n\nYour order (${newOrder.orderId}) has been successfully placed!\n\nTotal: ₹${newOrder.total}\n\nThank you for shopping with Teabuff.`;
+    //   await sendOrderConfirmation(newOrder.email, subject, text);
+    // }
+
+    if (newOrder.email) {
+  const subject = `Order Confirmation - ${newOrder.orderId}`;
+
+  // Build detailed product list
+  const productsList = newOrder.products
+    .map(
+      (p, i) =>
+        `${i + 1}. ${p.name}\n   Quantity: ${p.qty}\n   Price: ₹${p.price}\n   CategoryId: ${p.categoryId}\n   Image: ${p.image}`
+    )
+    .join("\n\n");
+
+  const text = `
+Hi ${newOrder.customerName},
+
+Your order (${newOrder.orderId}) has been successfully placed! Here are the full details:
+
+Delivery Date: ${newOrder.deliveryDate}
+Shipping Address: ${newOrder.address}
+Contact: ${newOrder.contact}
+
+Products:
+${productsList}
+
+Subtotal: ₹${newOrder.subtotal}
+Shipping: ₹${newOrder.shipping}
+Tax: ₹${newOrder.tax}
+Total: ₹${newOrder.total}
+
+Payment Type: ${newOrder.paymentType}
+Card Ending: ${newOrder.cardEnding}
+
+Thank you for shopping with Teabuff!
+
+Regards,
+Teabuff Store
+`;
+
+  await sendOrderConfirmation(newOrder.email, subject, text);
 }
 
 
-    const order = await OrderConfirmationModel.findOneAndUpdate(
-  { userId: new mongoose.Types.ObjectId(userId) },
-  { $push: { OrderDetails: newOrder } },
-  { new: true, upsert: true }
-);
-
-    res.status(201).json({ message: "Order created", newOrder:newOrder.orderId });
+    res.status(201).json({ message: "Order created and email sent", newOrder: newOrder.orderId });
   } catch (err) {
     console.error("Error creating order:", err);
     res.status(500).json({ error: err.message });
   }
 };
+
 
 // GET ORDER (find specific order by orderId and userId)
 exports.getOrderConfirmation = async (req, res) => {

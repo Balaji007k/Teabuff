@@ -102,7 +102,7 @@ export const ThemeProvider = ({ children }) => {
         const NewUserState = {ProductId,title, price, description, url, categoryId, rating, ingredients, features, purchaseLink,likedState};
         const { Result, Error } = await ApiService.fetchData(`/users/State/${UserId}`,"POST",NewUserState);
         if (Result){
-            setUserLikedState(Result.NewState?.UserState)
+            setUserLikedState(Result.NewState?.UserState);
         }
         else console.log(Error);
     };
@@ -196,30 +196,6 @@ else{
     }
 };
 
-// const handleCart = async (productId, itemPrice, quantity, itemName, categoryId, userId, Description, Product_Url, Rating, likes, placeOrder=false) => {
-//   if (quantity === 0 && !placeOrder) {
-//     setAlertMessage({ message: "Minimum select one item", state: false });
-//     return false;
-//   }
-
-//   const newCart = { userId, productId, itemPrice, quantity, itemName, categoryId, Product_Url, Rating, Description, likes };
-
-//   try {
-//     const { Result, Error } = await ApiService.fetchData('/carts', "POST", newCart);
-//     if (Error) {
-//       setAlertMessage({ message: "Cart update failed: " + Error, state: false });
-//       return false;
-//     }
-//     setUpdatedCart(Result?.usercart);
-//     setAlertMessage({ message: "Cart successfully updated", state: true });
-//     return true;
-//   } catch (err) {
-//     console.error("Cart error:", err);
-//     setAlertMessage({ message: "Something went wrong.", state: false });
-//     return false;
-//   }
-// };
-
 
 // Create new order (POST)
 const createOrder = async(orderData)=> {
@@ -231,51 +207,6 @@ const createOrder = async(orderData)=> {
     return true};
   if(Error)console.log(Error);
 }
-
-
-
-    // useEffect(() => {
-    //     const fetchData = async () => {
-    //         try {
-    //             // const res = await fetch('https://teabuff.onrender.com/dashboard', {
-    //             //     method: 'GET',
-    //             //     credentials: 'include'
-    //             // });
-    //             const { Result, Error } = await ApiService.fetchData('/dashboard');
-
-    //             if (Result.userId) {
-    //                 setAuthenticated(Result);
-    //                 await fetchCart(Result.userId);
-    //                 await fetchUserLikedState(Result.userId)
-    //                 console.log("User is authenticated:", Result.userName);
-    //              }
-    //             // else {
-    //             //     console.log("Not authenticated "+Error);
-    //             // }
-    //             // await Promise.all([
-    //             //     fetchAllReviews(),
-    //             //     fetchReviews(),
-    //             //     fetchShops(),
-    //             //     fetchProducts(),
-    //             //     fetchCategories()
-    //             // ]);
-
-    //         } catch (err) {
-    //             console.log("'Not authenticated'",err);
-    //         } finally {
-    //             setIsLoading(false);
-    //             await Promise.all([
-    //                 fetchAllReviews(),
-    //                 fetchReviews(),
-    //                 fetchShops(),
-    //                 fetchProducts(),
-    //                 fetchCategories()
-    //             ]);
-    //         }
-    //     };
-
-    //     fetchData();
-    // }, []);
 
     useEffect(() => {
   const fetchData = async () => {
@@ -306,6 +237,7 @@ const createOrder = async(orderData)=> {
 const contextValue = useMemo(() => {
   return {isAuthenticated,
   AllReview,
+  fetchAllReviews,
   Review,
   image,
   productsItem,

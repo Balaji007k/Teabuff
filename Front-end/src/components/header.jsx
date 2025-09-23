@@ -27,7 +27,7 @@ function Header({ userinputFocus, isAuthenticated, cart, setAlertMessage }) {
     fileInputRef.current.click(); // open file dialog
   };
 
-   const fetchProfileImage = async () => {
+  const fetchProfileImage = async () => {
         const { Result, Error } = await ApiService.fetchData(`/user/${isAuthenticated.userId}`);
         if (Result?.user.profileImage) {
             setPreview(`${ApiService.Backend+Result?.user.profileImage}`);
@@ -58,7 +58,7 @@ function Header({ userinputFocus, isAuthenticated, cart, setAlertMessage }) {
 };
 
 useEffect(()=>{
-    fetchProfileImage();
+    if (isAuthenticated) fetchProfileImage();
 },[]);
 
 
