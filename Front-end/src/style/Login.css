@@ -13,12 +13,8 @@
 }
 .login-form{
     width: 85%;
-    height: 75%;
     padding-top: 1rem;
     background-color: transparent;
-}
-.login-way{
-    height: 15%;
 }
 .icon-login{
     height: 10%;

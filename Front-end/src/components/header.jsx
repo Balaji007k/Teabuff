@@ -19,7 +19,6 @@ function Header({ userinputFocus, isAuthenticated, cart, setAlertMessage }) {
     const accountNavRef = useRef(null);
     const buttonRef = useRef(null);
     const [preview, setPreview] = useState('assets/ProfileImage.svg');
-    const [UserDetails, setUserDetails] = useState("");
 
     const fileInputRef = useRef(null);
 
@@ -28,10 +27,9 @@ function Header({ userinputFocus, isAuthenticated, cart, setAlertMessage }) {
   };
 
   const fetchProfileImage = async () => {
-        const { Result, Error } = await ApiService.fetchData(`/user/${isAuthenticated.userId}`);
-        if (Result?.user.profileImage) {
-            setPreview(`${ApiService.Backend+Result?.user.profileImage}`);
-            setUserDetails(Result?.user);
+        const { Result, Error } = await ApiService.fetchData(`/userProfileImage/${isAuthenticated.userId}`);
+        if (Result?.profileImage) {
+            setPreview(`${ApiService.Backend+Result?.profileImage}`);
         }
     };
   const handleFileChange = async (event) => {
@@ -183,8 +181,8 @@ useEffect(()=>{
                                 {Location.pathname==='/'?<a href="#"><h3 className=' mt-1'><i className="fa-solid fa-house"></i>Home</h3></a>:<Link to={"/"}><h3 className=' mt-1'><i className="fa-solid fa-house"></i>Home</h3></Link>}
                                 <h3 onClick={()=>Hideprofile()}><i className="fa-solid fa-user"></i>Profile</h3>
                                 <div className={`profile-details ${Showprofile?'show':'hide'} d-flex flex-column align-items-center`}>
-                                    <input type="text" className="lobu rounded-0 m-0 bg-transparent" disabled placeholder="Name" value={isAuthenticated?.userName}/>
-                                    <input type="text" className="lobu rounded-0 m-0 bg-transparent" disabled placeholder="Email" value={UserDetails?.email || ""}/>
+                                    <input type="text" className="lobu rounded-0 m-0 bg-transparent" disabled placeholder="Name" value={isAuthenticated?.userName || "No user"}/>
+                                    <input type="text" className="lobu rounded-0 m-0 bg-transparent" disabled placeholder="Email" value={isAuthenticated?.userEmail || ""}/>
                                     <input type="text" className="lobu rounded-0 m-0 bg-transparent" disabled placeholder="Password" value={'**********'}/>
                                 </div>
                                 <h3><i className="fa-solid fa-gift"></i>Offers</h3>

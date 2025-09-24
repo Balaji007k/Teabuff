@@ -42,7 +42,8 @@ app.get('/dashboard', requireAuth, (req, res) => {
   res.json({
     message: "Access granted",
     userId: req.user.id,
-    userName: req.user.username
+    userName: req.user.username,
+    userEmail: req.user.email
   });
 });
 

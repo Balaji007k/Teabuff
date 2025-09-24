@@ -12,7 +12,7 @@ const OfferSlider = () => {
   const Navigate = useNavigate();
 
   return (
-    <div className="container-fluid container-md my-5 offer-slider-wrapper">
+    <div className="my-5 offer-slider-wrapper mx-3">
       <div className="shadow-lg rounded overflow-hidden position-relative p-2 p-md-4">
         <Swiper
           modules={[Navigation, Pagination, Autoplay]}

@@ -14,7 +14,7 @@ export default function CheckOut({isAuthenticated,cart}){
     const Navigate = useNavigate();
     const Location = useLocation();
     const {id} = useParams();
-    const [contactEmail,setcontactEmail] = useState("");
+    const [contactEmail,setcontactEmail] = useState(isAuthenticated?.userEmail);
       const [firstname,setfirstname] = useState("");
       const [lastname,setlastname] = useState("");
       const [company,setcompany] = useState("");
@@ -143,7 +143,7 @@ export default function CheckOut({isAuthenticated,cart}){
                             <div className=' d-flex justify-content-between align-items-center'>
                                 <span onClick={()=>Navigate(-1)} className=' text-info d-flex align-items-center' style={{cursor:'pointer'}}><span className="material-symbols-outlined">
                                     chevron_left
-                                </span>Return to cart</span><button type="submit" className={`${small?'p-2':'p-3'} bg-success rounded-2`}>Confirm Order</button>
+                                </span>Return to cart</span><button type="submit" className={`${small?'p-2':'p-3'} bg-success allBox-btn`}>Confirm Order</button>
                             </div>
                         </div>
                         </form>

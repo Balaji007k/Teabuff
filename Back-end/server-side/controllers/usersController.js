@@ -29,6 +29,23 @@ exports.getSingleUser = async (req, res) => {
     })
 };
 
+exports.getSingleUserProfileImage = async (req, res) => {
+  try {
+    const id = req.params.id;
+    // Select only profileImage
+    const user = await usersModel.findById(id).select('profileImage');
+    
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    res.json({ profileImage: user.profileImage });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
 
 exports.createUsers = async (req, res, next) => {
     try {
@@ -137,7 +154,7 @@ exports.verifyUser = async (req, res, next) => {
     }
 
     // Create JWT token
-    const token = createToken(user._id, user.username);
+    const token = createToken(user._id, user.username , user.email);
 
     // Set secure cookie
     res.cookie("user", token, {
@@ -148,6 +165,7 @@ exports.verifyUser = async (req, res, next) => {
     });
 
     return res.status(200).json({
+      email: user.email,
       user: user.username,
       token,
       message: "success"

@@ -26,8 +26,8 @@ function Main({ userInput, AccountSet, createdAccount, AlertMessageMain }) {
   return (
     <div className="App">
       <Home userInput={userInput} Review={Review} isAuthenticated={isAuthenticated} AccountSet={AccountSet} createdAccount={createdAccount} AccoutState={setAlertMessage} PopupMessage={AlertMessage}/>
-      <About image={image} />
       <Product productsItem={productsItem} category={category} isAuthenticated={isAuthenticated} />
+      <About image={image} />
       <Service />
       <Contact />
       <Footer />

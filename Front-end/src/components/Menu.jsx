@@ -30,7 +30,7 @@ function Menu({ isAuthenticated }) {
 
                 <ProductFilters Products={Products} searchingProduct={setSearchItem}/>
 
-                {small&&<h1 className=" fw-bold text-center">Menu</h1>}
+                {/* {small&&<h1 className=" fw-bold text-center">Menu</h1>} */}
 
                 <div className='Extra-products-container py-3'>
                     <div className='Extra-products'>

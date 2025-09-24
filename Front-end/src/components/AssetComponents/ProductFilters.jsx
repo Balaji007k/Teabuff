@@ -233,7 +233,7 @@ export default function ProductFilters({ Products, id, searchingProduct }) {
   }, [id, productsItem]);
 
   return (
-    <div className="w-100 mb-4">
+    <div className="w-100 mb-md-4">
       <div className="Cart-head d-flex justify-content-between align-items-center px-5">
         {/* Category filter */}
         <div className="Categories" style={{ width: "25%" }}>

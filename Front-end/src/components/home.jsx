@@ -30,12 +30,12 @@ function Home({ userInput, isAuthenticated, AccoutState, PopupMessage }) {
         <div className='inner-content d-flex justify-content-center'>
           <div className='inner-text'>
             <div className='bold-text'>
-              {!small?<><h1 className='text' data-aos="fade-right" data-aos-duration="800">Brewed to <br />Perfection, Sipped <br />with Tradition.</h1>
-              <p className='p' data-aos="fade-right" data-aos-duration="1200">Experience the authentic taste of Indian chai, crafted with tradition and love.From every sip to every story, our tea brings warmth to your soul.</p></>:<><h1 className='text text-center fw-bolder'>Tradition in Every<br></br> Sip.</h1>
+              {!small?<><h1 className='text' data-aos="fade-right" data-aos-once="true" data-aos-duration="800">Brewed to <br />Perfection, Sipped <br />with Tradition.</h1>
+              <p className='p' data-aos="fade-right" data-aos-once="true" data-aos-duration="1200">Experience the authentic taste of Indian chai, crafted with tradition and love.From every sip to every story, our tea brings warmth to your soul.</p></>:<><h1 className='text text-center fw-bolder'>Tradition in Every<br></br> Sip.</h1>
               <p className='p text-center w-100'>Experience the authentic taste of Indian chai, crafted with tradition and love.From every sip to every story, our tea brings warmth to your soul.</p></>}
             </div>
             <div className='inner-button'>
-              {!small?<div className='btn-icon' data-aos="fade-right" data-aos-duration="1600">
+              {!small?<div className='btn-icon' data-aos="fade-right" data-aos-once="true" data-aos-duration="1600">
                 <ScrollLink to='Product_id'><button className='explore-button'>Explore Now <i className="fa-solid fa-arrow-right ms-2"></i></button></ScrollLink>
                 <div className='share'>
                   <div className='icons d-flex gap-4 fs-4 my-2'>
@@ -47,7 +47,7 @@ function Home({ userInput, isAuthenticated, AccoutState, PopupMessage }) {
                 </div>
               </div>:<div className='btn-icon'>
                 <ScrollLink to='Product_id'><button className='explore-button'>Explore Now <i className="fa-solid fa-arrow-right ms-2"></i></button></ScrollLink></div>}
-              <div className='empty-box d-flex flex-column gap-2' data-aos="fade-right" data-aos-duration="800">
+              <div className='empty-box d-flex flex-column gap-2' data-aos="fade-right" data-aos-once="true" data-aos-duration="800">
                 <div>
                   <ReviewSlider />
                 </div>
@@ -58,7 +58,7 @@ function Home({ userInput, isAuthenticated, AccoutState, PopupMessage }) {
         
         <div className='inner-image'>
           {(Location.pathname === '/Login' || Location.pathname === '/Register') ? <Login userInput={userInput} AccoutState={AccoutState} setLoading={setLoading}/> :
-            !small?<img src="assets/Tea.jpeg" className='img' alt="Tea-Img" data-aos="fade-left" data-aos-duration="1400" />:<img src="assets/Tea-Image.webp" className='img' alt="Coffee-Img" />
+            !small?<img src="assets/Tea.jpeg" className='img' alt="Tea-Img" data-aos="fade-left" data-aos-once="true" data-aos-duration="1400" />:<img src="assets/Tea-Image.webp" className='img' alt="Coffee-Img" />
           }
         </div>
       </div>

@@ -31,6 +31,11 @@ overflow-x: hidden;
   border-color: #000 #0000;
   animation: l1 1s infinite;
 }
+.allBox-btn{
+  padding-left: 15px;
+  padding-right: 15px;
+  border-radius: 10px;
+}
 @keyframes l1 {to{transform: rotate(.5turn)}}
 
 Link,a,button a{

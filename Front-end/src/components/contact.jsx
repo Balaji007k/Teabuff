@@ -10,9 +10,9 @@ function Contact() {
                 <h1 className='text-center fw-bolder my-3'>Contact Us</h1>
                 <div className='main gap-4'>
                     <div className='contact-image'>
-                        <img src="assets/contact-tea.jpeg" className='image-cont' alt="loading" data-aos="fade-right" data-aos-duration="600" />
+                        <img src="assets/contact-tea.jpeg" className='image-cont' alt="loading" data-aos="fade-right" data-aos-once="true" data-aos-duration="600" />
                     </div>
-                    <div className='contact-content' data-aos="fade-left" data-aos-duration="600">
+                    <div className='contact-content' data-aos="fade-left" data-aos-once="true" data-aos-duration="600">
                         <form className='d-flex flex-column justify-content-center'>
                             <input type='text' className='input' placeholder='Username' required />
                             <input type='email' className='input' placeholder='Email' required />

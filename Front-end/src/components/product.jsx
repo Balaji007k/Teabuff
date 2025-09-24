@@ -108,7 +108,11 @@ function Product({ isAuthenticated, productsItem, category }) {
             </button>
           </div>
         </div>
-        {SearchItem==""&&<><h1>Popular</h1>
+
+        {SearchItem==""&&<>
+        <div className='Home-Products w-100 d-flex justify-content-between align-items-center'><h1 className=' m-0'>Popular</h1><span className="material-symbols-outlined p-2 d-md-none" onClick={()=>{Navigate('/Menu')}} style={{border:'1px solid black',borderRadius:'50%'}}>
+              arrow_forward_ios
+            </span></div>
         <div className='product content d-flex align-items-center'>
           <div className='Next left-scroll' onClick={popularPrv}>
             <span className="material-symbols-outlined">
@@ -153,8 +157,10 @@ function Product({ isAuthenticated, productsItem, category }) {
           </div>
         </div>
 
-
-        <h1>Fresh Tea</h1>
+<OfferSlider/>
+        <div className='Home-Products w-100 d-flex justify-content-between align-items-center'><h1 className=' m-0'>Fresh Tea</h1><span className="material-symbols-outlined p-2 d-md-none" onClick={()=>{Navigate('/Menu')}} style={{border:'1px solid black',borderRadius:'50%'}}>
+              arrow_forward_ios
+            </span></div>
         <div id='Fresh_Tea' className='product content d-flex align-items-center'>
           <div className='Next left-scroll' onClick={HandlePrev}>
             <span className="material-symbols-outlined">
@@ -197,8 +203,11 @@ function Product({ isAuthenticated, productsItem, category }) {
           </div>
         </div>
 
-
-        <h1>Recommended</h1>
+<OfferSlider/>
+<div className='Home-Products w-100 d-flex justify-content-between align-items-center'><h1 className=' m-0'>Recommended</h1><span className="material-symbols-outlined p-2 d-md-none" onClick={()=>{Navigate('/Menu')}} style={{border:'1px solid black',borderRadius:'50%'}}>
+              arrow_forward_ios
+            </span></div>
+        
         <div className='product content d-flex align-items-center'>
           <div className='Next left-scroll' onClick={handlePrev}>
             <span className="material-symbols-outlined">

@@ -13,7 +13,7 @@ import ProductCard from './AssetComponents/ProductCard';
 function CartDetails({ isAuthenticated, cart }) {
     const small = useMediaQuery({maxWidth:600});
     const Location = useLocation();
-    const { setUpdatedCart,PostSaveCart, AlertMessageTheme, ProductReload } = useTheme();
+    const { setUpdatedCart,PostSaveCart, AlertMessageTheme } = useTheme();
     const [AlertMessagePlaceOrder,setAlertMessage] = useState([]);
     const [Loading,setLoading] = useState(false);
 
@@ -138,7 +138,7 @@ function CartDetails({ isAuthenticated, cart }) {
 )}
 
             {(cart?.items?.length ?? 0) > 0 && (<div className={`w-100 ${Location.pathname==='/CheckOut'||Location.pathname===`/CheckOut/${cart?.ProductId}`?'d-none':'d-block'} ${small&&'position-fixed bottom-0 py-2 bg-white'} d-flex justify-content-center gap-2`}>
-                    {!Order && <><button className={`cart-btn px-3 ${small&&'rounded-5 py-1'}`} onClick={() => {PostSaveCart(cart,quantity);setLoading(true)}}>Save Cart</button><Link to={`/CheckOut`}><button className={`cart-btn px-3 ${small&&'rounded-5'}`} onClick={() => {OrderHandler();setLoading(true)}}>Place Order</button></Link></>}
+                    {!Order && <><button className={`allBox-btn ${small&&'rounded-5 py-1'}`} onClick={() => {PostSaveCart(cart,quantity);setLoading(true)}}>Save Cart</button><Link to={`/CheckOut`}><button className={`allBox-btn ${small&&'rounded-5'}`} onClick={() => {OrderHandler();setLoading(true)}}>Place Order</button></Link></>}
                 </div>
                 )}
         </div>
