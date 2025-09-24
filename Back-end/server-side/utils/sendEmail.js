@@ -1,36 +1,26 @@
-const env = require('dotenv')
-const path = require('path')
+const env = require('dotenv');
+const path = require('path');
 const nodemailer = require("nodemailer");
 
 env.config({ path: path.resolve(__dirname, '../config.env') }); 
 
-if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
-  throw new Error(".env variables EMAIL_USER or EMAIL_PASS are missing!");
+if (!process.env.SENDGRID_API_KEY) {
+  throw new Error(".env variable SENDGRID_API_KEY is missing!");
 }
 
 const transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
+  host: "smtp.sendgrid.net",
   port: 587,
-  secure: false, // true for port 465
   auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS, // must be an App Password, not your Gmail login
+    user: "apikey",                   // literally "apikey"
+    pass: process.env.SENDGRID_API_KEY,
   },
 });
-
-/*const transporter = nodemailer.createTransport({
-  service: "gmail", // or any SMTP service
-  auth: {
-    user: process.env.EMAIL_USER,      // your email
-    pass: process.env.EMAIL_PASS,      // app password for Gmail
-  },
-
-});*/
 
 const sendOrderConfirmation = async (to, subject, text) => {
   try {
     const info = await transporter.sendMail({
-      from: `"Teabuff Store" <${process.env.EMAIL_USER}>`,
+      from: `"Teabuff Store" <${process.env.EMAIL_USER}>`, // verified in SendGrid
       to,
       subject,
       text,
