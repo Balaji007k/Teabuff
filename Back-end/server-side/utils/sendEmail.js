@@ -8,15 +8,24 @@ if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
   throw new Error(".env variables EMAIL_USER or EMAIL_PASS are missing!");
 }
 
-
 const transporter = nodemailer.createTransport({
+  host: "smtp.gmail.com",
+  port: 587,
+  secure: false, // true for port 465
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS, // must be an App Password, not your Gmail login
+  },
+});
+
+/*const transporter = nodemailer.createTransport({
   service: "gmail", // or any SMTP service
   auth: {
     user: process.env.EMAIL_USER,      // your email
     pass: process.env.EMAIL_PASS,      // app password for Gmail
   },
 
-});
+});*/
 
 const sendOrderConfirmation = async (to, subject, text) => {
   try {
