@@ -77,7 +77,7 @@ const orderData = {
   },
 };
 
-console.log("Prepared orderData:", JSON.stringify(orderData, null, 2));
+//console.log("Prepared orderData:", JSON.stringify(orderData, null, 2));
 
   useEffect(()=>{
     if(AlertMessagePayment&&AlertMessagePayment.message) setLoading(false);

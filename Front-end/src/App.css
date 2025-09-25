@@ -31,25 +31,135 @@ overflow-x: hidden;
   border-color: #000 #0000;
   animation: l1 1s infinite;
 }
-.allBox-btn{
-  padding-left: 15px;
-  padding-right: 15px;
-  border-radius: 10px;
+
+
+
+
+.search-i-product{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 35px;
+  width: 35px;
+  font-size: 17px;
+  border: none;
+  padding: 0px 15px !important;
+  border-radius: 50%;
+  background-color: var(--background-color);
 }
+.explore-button-Home {
+  background-color: #FFD700; /* bright yellow */
+  color: #000; /* black text */
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
+  white-space: nowrap;
+  border-radius: 25px;
+  padding: 10px 25px;
+  border: 2px solid #FFD700;
+  cursor: pointer;
+  font-size: 1rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.4s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Hover effect */
+.explore-button-Home:hover {
+  background-color: #000; /* black background */
+  color: #FFD700; /* yellow text */
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+}
+
+/* Arrow animation */
+.explore-button-Home i {
+  transition: transform 0.3s ease;
+}
+
+.explore-button-Home:hover i {
+  transform: translateX(5px);
+}
+
+/* Optional: small background shine animation */
+.explore-button-Home::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -75%;
+  width: 50%;
+  height: 100%;
+  background: rgba(255,255,255,0.2);
+  transform: skewX(-25deg);
+  transition: all 0.5s;
+}
+
+.explore-button-Home:hover::after {
+  left: 125%;
+}
+
+.lobu{
+  padding: 7px 30px;
+  border: none;
+  border-radius: 20px;
+  outline: none;
+  background-color: var(--background-color);
+}
+.ViewMore-product{
+  height: 100px;
+  width: 100px;
+  border-radius: 50%;
+  background-color: var(--background-color);
+}
+.quantity-btn-All {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  background: linear-gradient(145deg, #ffcc00, #ffdb4d); /* Yellow gradient */
+  color: #000; /* Black text */
+  border: 2px solid #000;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.25), inset 0 2px 4px rgba(255,255,255,0.4);
+  transition: all 0.25s ease-in-out;
+}
+
+.quantity-btn-All:hover {
+  transform: scale(1.1);
+  background: linear-gradient(145deg, #000, #222); /* Black on hover */
+  color: #fff; /* White text */
+  box-shadow: 0 6px 10px rgba(0,0,0,0.4), 0 0 10px #ffcc00; /* Yellow glow */
+}
+
+.quantity-btn-All:active {
+  transform: scale(0.9);
+  background: #ffcc00; /* Flash yellow when clicked */
+  color: #000;
+  box-shadow: inset 0 2px 6px rgba(0,0,0,0.4);
+}
+
+.quantity-btn-All.bg-body-secondary {
+  background: var(--bs-secondary-bg) !important; /* Bootstrap variable */
+  color: #000 !important;
+  box-shadow: inset 0 2px 6px rgba(0,0,0,0.3);
+}
+
+
 @keyframes l1 {to{transform: rotate(.5turn)}}
 
-Link,a,button a{
+Link,a{
   border: none;
   text-decoration: none !important;
   color: black;
 }
 select:hover{
   cursor: pointer;
-}
-button:hover{
-  /*background-color: rgb(165, 194, 94);*/
-  box-shadow: 0PX  0px 20PX 1PX rgb(98, 85, 85);
-  transition: all .3s;
 }
 
 @media only screen and (min-height: 950px) {
@@ -119,33 +229,97 @@ video{
 @media only screen and (max-width: 600px) {
   /* Applies to all phones */
   /*Home*/
-  .navbar{
-    position: fixed;
-    top: 0;
-    height: 100vh;
-    backdrop-filter: blur(20px);
-    background-color: rgba(31, 45, 46, 0.5);
-    box-shadow: 0px 0px 30px rgba(227,228,237,0.37);
-    align-items: flex-start;
-    padding-top: 100px;
-    transition: all .5s;
-    overflow: hidden;
-  }
-  .navbar.show{
-    transform: translateX(0%);
-  }
-  .navbar.hide{
-    transform: translateX(-100%);
-  }
-  .nav-list{
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-  }
-  .nav-list li{
-    margin-left: 5px;
-    margin-right: 5px;
-  }
+  /* Navbar wrapper */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: auto; /* sidebar width */
+  backdrop-filter: blur(15px);
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.95), rgba(30, 30, 30, 0.98));
+  box-shadow: 4px 0px 25px rgba(0, 0, 0, 0.6);
+  padding: 80px 0px 30px 0px;
+  transition: transform 0.5s ease-in-out;
+  overflow-y: auto;
+  z-index: 999;
+  border-right: 3px solid rgb(215, 186, 18); /* yellow accent border */
+}
+
+/* Show/hide states */
+.navbar.show {
+  transform: translateX(0%);
+}
+.navbar.hide {
+  transform: translateX(-100%);
+}
+
+/* Nav list */
+.nav-list {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Nav items */
+.nav-list li {
+  margin: 0 !important;
+}
+
+.nav-list a,
+.nav-list li {
+  width: 100%;
+  text-decoration: none;
+  font-size: 18px;
+  font-weight: 500;
+  color: #fff; /* white text */
+  margin: 0px;
+  padding: 1.5vw;
+  border-radius: 6px;
+  display: block;
+  transition: all 0.3s ease;
+}
+
+/* Hover + active effect */
+.nav-list a:hover,
+.nav-list a.active {
+  background-color: rgba(215, 186, 18, 0.2); /* soft yellow bg */
+  color: rgb(215, 186, 18); /* yellow text */
+  transform: translateX(5px);
+}
+
+/* Profile section (if shown inside navbar) */
+.UserProfileImage {
+  position: relative;
+  margin-bottom: 20px;
+}
+.UserProfileImage img {
+  border: 2px solid rgb(215, 186, 18);
+  object-fit: cover;
+}
+.UserProfileImage i {
+  position: absolute;
+  right: 5px;
+  background: rgb(215, 186, 18);
+  color: #000;
+  padding: 5px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+/* Username text */
+.navbar span {
+  font-size: 18px;
+  font-weight: 600;
+  color: #fff;
+  margin-top: 5px;
+}
+
+
+
   .lobu{
     display: block;
   }
@@ -298,7 +472,7 @@ video{
   grid-template-columns: repeat(auto-fill, minmax(150px,1fr)) !important;
   justify-items: center;
   gap: 10px !important;
-  padding: 10px !important;
+  padding: 10px 0 !important;
   overflow-y: scroll;
 }
 .product-item{
@@ -331,11 +505,6 @@ video{
 .Poduct-Description{
   display: none !important;
 }
-.order-button{
-  font-size: 20px;
-  width: 95% !important;
-  padding: 4px !important;
-}
 .search .top{
   width: 20% !important;
   min-width: 150px !important;
@@ -351,11 +520,11 @@ video{
 .Next{
   display: none !important;
 }
-.exp div h5{
-  font-size: 15px !important;
+.exp div span{
+  font-size: small !important;
 }
 .exp div .Expri{
-  font-size: 30px !important;
+  font-size: x-large !important;
 }
 .exp div{
   margin: 0px 1% !important;
@@ -454,7 +623,6 @@ form{
 
 .bill table tr{
   width: 100% !important;
-  padding: 0px 10px !important;
 }
 
 /*ProductItem*/

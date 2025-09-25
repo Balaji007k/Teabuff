@@ -17,7 +17,7 @@ function Contact() {
                             <input type='text' className='input' placeholder='Username' required />
                             <input type='email' className='input' placeholder='Email' required />
                             <textarea rows={5} cols={5} placeholder='Message' className='input'></textarea>
-                            <button type='submit' className='con-button input  d-flex justify-content-center align-items-center gap-2'>Send<span className="material-symbols-outlined">
+                            <button type='submit' className='contact-btn-contact input d-flex justify-content-center align-items-center gap-2'>Send<span className="material-symbols-outlined">
                                 send
                             </span></button>
                         </form>

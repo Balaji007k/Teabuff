@@ -36,9 +36,9 @@ export default function ProductCard({ isAuthenticated, e, Navigate, LikedState, 
                 </p>}
               </div>
             </div>
-            {cart?<button className='order-button rounded-5 p-2 w-100 text-center' onClick={() => handleCancelItem(e.productId)}>Cancel</button>:
+            {cart?<button className='product-card-OrderNow-btn w-100 text-center' onClick={() => handleCancelItem(e.productId)}>Cancel</button>:
             <button
-              className="order-button rounded-5 p-2 w-100 text-center" style={{color:'var(--btn-color)'}}
+              className="product-card-OrderNow-btn text-center"
               onClick={() => {
                 if (!isAuthenticated && Location.pathname === '/Login') {
                   window.scrollTo(0, 0);

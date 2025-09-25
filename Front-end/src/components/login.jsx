@@ -304,9 +304,9 @@ function Login({ userInput, AccoutState, setLoading }) {
           )}
 
           {Location.pathname === '/Register' ? (
-            <button onClick={() => newUser()}>Register</button>
+            <button className="" onClick={() => newUser()}>Register</button>
           ) : (
-            <button className="my-5" onClick={() => handleLogin()}>Login</button>
+            <button className="" onClick={() => handleLogin()}>Login</button>
           )}
         </div>
 

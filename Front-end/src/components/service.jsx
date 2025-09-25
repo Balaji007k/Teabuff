@@ -15,36 +15,49 @@ const Service = () => {
           <div className="inner-sevice-content h-100 d-flex justify-content-center flex-wrap">
             <h1 className="mb-5">Services</h1>
             <div className="Service-card d-flex justify-content-center align-items-center flex-wrap w-100 h-100 gap-5">
+              
               <div className="service-text">
                 <i className="fa-solid fa-gear"></i>
                 <h3>Creative Design</h3>
-                <p>Shop with confidence. We use industry-standard SSL encryption and trusted payment gateways to ensure your personal and payment information is always safe.</p>
+                <p>We craft visually appealing designs that reflect your brand identity.  
+                Every element is made to deliver a professional and lasting impression.</p>
               </div>
+
               <div className="service-text">
                 <i className="fa-solid fa-terminal"></i>
                 <h3>Clean Code</h3>
-                <p>Shop with confidence. We use industry-standard SSL encryption and trusted payment gateways to ensure your personal and payment information is always safe.</p>
+                <p>Our code is simple, efficient, and easy to understand.  
+                This ensures smooth performance and hassle-free future updates.</p>
               </div>
+
               <div className="service-text">
                 <i className="fa-solid fa-boxes-stacked"></i>
                 <h3>Responsive Design</h3>
-                <p>Shop with confidence. We use industry-standard SSL encryption and trusted payment gateways to ensure your personal and payment information is always safe.</p>
+                <p>Your website will adapt seamlessly to any device size.  
+                We ensure a consistent experience on mobiles, tablets, and desktops.</p>
               </div>
+
               <div className="service-text">
                 <i className="fa-solid fa-chart-pie"></i>
                 <h3>Bootstrap 4</h3>
-                <p>Shop with confidence. We use industry-standard SSL encryption and trusted payment gateways to ensure your personal and payment information is always safe.</p>
+                <p>Built with the latest Bootstrap framework for speed and flexibility.  
+                It provides a solid foundation to scale your project with ease.</p>
               </div>
+
               <div className="service-text">
                 <i className="fa-solid fa-code"></i>
-                <h3>Font icons</h3>
-                <p>Shop with confidence. We use industry-standard SSL encryption and trusted payment gateways to ensure your personal and payment information is always safe.</p>
+                <h3>Font Icons</h3>
+                <p>Scalable, lightweight icons that look sharp on every screen.  
+                They add style while keeping performance optimized.</p>
               </div>
+
               <div className="service-text">
                 <i className="fa-solid fa-chart-line"></i>
                 <h3>Awesome Support</h3>
-                <p>Shop with confidence. We use industry-standard SSL encryption and trusted payment gateways to ensure your personal and payment information is always safe.</p>
+                <p>We provide reliable assistance whenever you need help.  
+                Our team is dedicated to solving issues quickly and efficiently.</p>
               </div>
+
             </div>
           </div>
         </div>

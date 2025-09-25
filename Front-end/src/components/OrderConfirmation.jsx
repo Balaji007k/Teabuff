@@ -67,7 +67,7 @@ useEffect(()=>{
     </h1>
   </div>
   <div className="col-12 col-md-4 text-center text-md-end">
-    <button onClick={()=>Navigate('/Menu')} className="btn btn-link fw-medium text-decoration-none">
+    <button onClick={()=>Navigate('/Menu')} className="btn-link fw-medium text-decoration-none">
       Continue Shopping
     </button>
   </div>
@@ -96,6 +96,7 @@ useEffect(()=>{
       <p className="fw-semibold mb-0">{OrderDetails?.customerName}</p>
       <p className="mb-0">{OrderDetails?.address}</p>
       <p className="small text-muted">{OrderDetails?.email}</p>
+      <p className="small text-muted">{OrderDetails?.contact?(`+${OrderDetails?.contact}`):""}</p>
     </div>
 
     {/* Progress */}
@@ -179,6 +180,7 @@ useEffect(()=>{
             <p className="fw-semibold mb-0">{OrderDetails?.customerName}</p>
             <p className="mb-0">{OrderDetails?.address}</p>
             <p className="small text-muted">{OrderDetails?.email}</p>
+            <p className="small text-muted">{OrderDetails?.contact?(`+${OrderDetails?.contact}`):""}</p>
           </div>
         </div>
 

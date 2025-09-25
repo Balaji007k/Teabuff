@@ -190,10 +190,13 @@ const OrderSchemaDetails = new mongoose.Schema({
   paymentType: { type: String, required: true }, // e.g. "Visa", "Mastercard"
   cardEnding: { type: String, required: true }, // last 4 digits
 
+  contact:{type:Number,required:true},
+
   createdAt: {
     type: Date,
     default: Date.now,
   },
+
 });
 
 const OrderSchema = new mongoose.Schema({

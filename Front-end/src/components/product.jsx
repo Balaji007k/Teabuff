@@ -103,14 +103,14 @@ function Product({ isAuthenticated, productsItem, category }) {
           <h1 className='menu-head fw-bolder'>Menu</h1>
           <div className='top d-flex align-items-center'>
             <input type='search' className='item search-tag' onKeyUp={() => handleSearch(SearchItem)} onChange={(e) => setSearchItem(e.target.value.trim().toLowerCase())} placeholder='search' />
-            <button type='submit' className='search-i' onClick={() => handleSearch(SearchItem)}>
+            <button type='submit' className='search-i-product' onClick={() => handleSearch(SearchItem)}>
               <i className="fa-solid fa-magnifying-glass"></i>
             </button>
           </div>
         </div>
 
         {SearchItem==""&&<>
-        <div className='Home-Products w-100 d-flex justify-content-between align-items-center'><h1 className=' m-0'>Popular</h1><span className="material-symbols-outlined p-2 d-md-none" onClick={()=>{Navigate('/Menu')}} style={{border:'1px solid black',borderRadius:'50%'}}>
+        <div className='Home-Products w-100 d-flex justify-content-between align-items-center'><h1 className=' m-0'>Popular</h1><span className="material-symbols-outlined d-md-none" onClick={()=>{Navigate('/Menu')}} >
               arrow_forward_ios
             </span></div>
         <div className='product content d-flex align-items-center'>
@@ -158,7 +158,7 @@ function Product({ isAuthenticated, productsItem, category }) {
         </div>
 
 <OfferSlider/>
-        <div className='Home-Products w-100 d-flex justify-content-between align-items-center'><h1 className=' m-0'>Fresh Tea</h1><span className="material-symbols-outlined p-2 d-md-none" onClick={()=>{Navigate('/Menu')}} style={{border:'1px solid black',borderRadius:'50%'}}>
+        <div className='Home-Products w-100 d-flex justify-content-between align-items-center'><h1 className=' m-0'>Fresh Tea</h1><span className="material-symbols-outlined d-md-none" onClick={()=>{Navigate('/Menu')}}>
               arrow_forward_ios
             </span></div>
         <div id='Fresh_Tea' className='product content d-flex align-items-center'>
@@ -204,7 +204,7 @@ function Product({ isAuthenticated, productsItem, category }) {
         </div>
 
 <OfferSlider/>
-<div className='Home-Products w-100 d-flex justify-content-between align-items-center'><h1 className=' m-0'>Recommended</h1><span className="material-symbols-outlined p-2 d-md-none" onClick={()=>{Navigate('/Menu')}} style={{border:'1px solid black',borderRadius:'50%'}}>
+<div className='Home-Products w-100 d-flex justify-content-between align-items-center'><h1 className=' m-0'>Recommended</h1><span className="material-symbols-outlined d-md-none" onClick={()=>{Navigate('/Menu')}}>
               arrow_forward_ios
             </span></div>
         
@@ -303,10 +303,10 @@ function Product({ isAuthenticated, productsItem, category }) {
 
 
         <div className='product exp d-flex justify-content-around my-3'>
-          <div><AnimatedCounter endValue={3} label={'+'} /><h5>Projects Completed</h5></div>
-          <div><AnimatedCounter endValue={6} label={'+'} /><h5>Month Experience</h5></div>
-          <div><AnimatedCounter endValue={100} label={'%'} /><h5>Client satisfaction</h5></div>
-          <div><AnimatedCounter endValue={""} label={''} /><h5>Support Available</h5></div>
+          <div><AnimatedCounter endValue={3} label={'+'} /><span>Projects Completed</span></div>
+          <div><AnimatedCounter endValue={6} label={'+'} /><span>Month Experience</span></div>
+          <div><AnimatedCounter endValue={100} label={'%'} /><span>Client satisfaction</span></div>
+          <div><AnimatedCounter endValue={""} label={''} /><span>Support Available</span></div>
         </div>
       </div>
     </div>

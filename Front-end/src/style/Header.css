@@ -62,14 +62,6 @@
 .logo{
   margin: 0px 40px;
 }
-.lobu{
-  padding: 7px 30px;
-  background-color: var(--background-color);
-  border: none;
-  border-radius: 20px;
-  outline: none;
-  font-size: 17px;
-}
 .lobu:hover{
   background-color: rgb(255, 255, 255);
   cursor: pointer;

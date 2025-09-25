@@ -9,7 +9,7 @@ export default function EmptyProductCard() {
                 </div>
                 <p className='Poduct-Description'>No item found for this category</p>
             </div>
-            <button className='order-button text-dark rounded-5 p-2 w-100 text-center'>No item</button>
+            <button className='w-100 text-center'>No item</button>
         </div>
     )
 }

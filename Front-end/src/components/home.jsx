@@ -36,7 +36,7 @@ function Home({ userInput, isAuthenticated, AccoutState, PopupMessage }) {
             </div>
             <div className='inner-button'>
               {!small?<div className='btn-icon' data-aos="fade-right" data-aos-once="true" data-aos-duration="1600">
-                <ScrollLink to='Product_id'><button className='explore-button'>Explore Now <i className="fa-solid fa-arrow-right ms-2"></i></button></ScrollLink>
+                <ScrollLink to='Product_id'><button className='explore-button-Home'>Explore Now <i className="fa-solid fa-arrow-right ms-2"></i></button></ScrollLink>
                 <div className='share'>
                   <div className='icons d-flex gap-4 fs-4 my-2'>
                     <a href='#'><i className="fa-brands fa-instagram"></i></a>
@@ -46,7 +46,7 @@ function Home({ userInput, isAuthenticated, AccoutState, PopupMessage }) {
                   <p className='d-inline' style={{ borderBottom: '2px solid #CACA12' }}>Follow us</p>
                 </div>
               </div>:<div className='btn-icon'>
-                <ScrollLink to='Product_id'><button className='explore-button'>Explore Now <i className="fa-solid fa-arrow-right ms-2"></i></button></ScrollLink></div>}
+                <ScrollLink to='Product_id'><button className='explore-button-Home'>Explore Now <i className="fa-solid fa-arrow-right ms-2"></i></button></ScrollLink></div>}
               <div className='empty-box d-flex flex-column gap-2' data-aos="fade-right" data-aos-once="true" data-aos-duration="800">
                 <div>
                   <ReviewSlider />

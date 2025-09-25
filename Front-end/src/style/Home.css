@@ -55,15 +55,6 @@
   font-weight: 600;
   width: 90%;
 }
-.explore-button{
-  background-color: var(--bOX-background-color);
-  font-family: Montserrat;
-  border-radius: 20px;
-  color: var(--color);
-  padding: 0px 20px;
-  font-size: 14px;
-  height: 40px;
-}
 .inner-button{
   height: 45%;
   display: flex;

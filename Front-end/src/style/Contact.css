@@ -51,6 +51,7 @@ form{
     min-width: 300px;
     border-radius: 25px;
 }
-.con-button{
+.contact-btn-contact{
     background-color: var(--background-color);
+    color: var(--Background-white-text);
 }

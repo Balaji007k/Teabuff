@@ -270,7 +270,7 @@ export default function ProductFilters({ Products, id, searchingProduct }) {
               />
               <button
                 type="submit"
-                className="search-i"
+                className="search-i-product"
                 onClick={() => handleSearch(searchItem)}
               >
                 <i className="fa-solid fa-magnifying-glass"></i>

@@ -24,5 +24,24 @@ exports.createShop = async(req,res,next)=>{
             message:"not created"
         })
     }
+}
+
+exports.updateShop = async(req,res)=>{
+    try {
+        const id = req.params.id;
+        const {url,content} = req.body;
+    const shops = {
+        url,content
+    }
+    const updatedShop = await shopModel.findByIdAndUpdate(id,shops,{new:true})
+    updatedShop.save()
+    res.json({
+        updatedShop
+    })
+    } catch (error) {
+        res.json({
+            message:"not created"
+        })
+    }
     
 }

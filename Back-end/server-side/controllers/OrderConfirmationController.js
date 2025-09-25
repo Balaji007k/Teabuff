@@ -126,6 +126,8 @@ Total: ₹${newOrder.total}
 Payment Type: ${newOrder.paymentType}
 Card Ending: ${newOrder.cardEnding}
 
+Contact : ${newOrder.contact}
+
 Thank you for shopping with Teabuff!
 
 Regards,

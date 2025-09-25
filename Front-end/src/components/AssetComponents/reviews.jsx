@@ -17,10 +17,6 @@ const shuffleArray = (array) => {
     .map(({ value }) => value);
 };
 
-useEffect(()=>{
-  if(isAuthenticated) fetchAllReviews();
-},[])
-
 useEffect(() => {
   if (AllReview && AllReview.length > 0) {
     const allReviews = [];

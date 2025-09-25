@@ -33,7 +33,7 @@ function Wishlist({ isAuthenticated }) {
     return(
         <>
         {AlertMessageTheme&&AlertMessageTheme?.message&&<AlertMessage message={AlertMessageTheme}/>}
-        <div className='Extra-products-container py-3' style={{marginTop:'75px'}}>
+        <div className='Extra-products-container py-3 d-flex flex-column gap-5' style={{marginTop:'75px'}}>
             <h1 className=" fw-bold text-center">Wishlist</h1>
                 <div className='Extra-products'>
                  <div className="scroll-items" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(270px,1fr))', justifyItems: 'center', gap: '20px', maxHeight: small ? '100%' : 'auto' }}>
@@ -44,7 +44,7 @@ function Wishlist({ isAuthenticated }) {
                 )}
             </div>
             </div>
-            {(LikedProducts&&LikedProducts?.length>0)&&<center><button className="allBox-btn" onClick={()=>PostSaveCart(LikedProducts,null)}>Move to Cart</button></center>}
+            {(LikedProducts&&LikedProducts?.length>0)&&<center><button className="Save-cart-btn-CartDetails" onClick={()=>PostSaveCart(LikedProducts,null)}>Move to Cart</button></center>}
             </div>
             <Footer/>
             </>

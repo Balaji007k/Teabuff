@@ -120,10 +120,10 @@ function CartDetails({ isAuthenticated, cart }) {
               <div className='w-100 d-flex flex-column gap-3 justify-content-between align-items-center'>
                 <span className='plus-cart fs-4 fw-bold w-75 d-flex justify-content-between align-items-center gap-2'>
                   {quantity[item.productId] <= 1 
-                    ? <button className='bg-body-secondary'>-</button>
-                    : <button onClick={() => handleQuantityChange(item.productId, -1)}>-</button>}
+                    ? <button className='quantity-btn-All bg-body-secondary'>-</button>
+                    : <button className='quantity-btn-All' onClick={() => handleQuantityChange(item.productId, -1)}>-</button>}
                   {quantity[item.productId] ?? item.quantity}
-                  <button onClick={() => handleQuantityChange(item.productId, 1)}>+</button>
+                  <button className='quantity-btn-All' onClick={() => handleQuantityChange(item.productId, 1)}>+</button>
                 </span>
                 <div className='d-flex align-items-center fs-5 fw-bolder'>
                   Total <h5>₹{((quantity[item.productId] ?? item.quantity) * (item.categoryId==1 ? item.itemPrice/2 : item.itemPrice)).toFixed(2)}</h5>
@@ -137,8 +137,8 @@ function CartDetails({ isAuthenticated, cart }) {
   )
 )}
 
-            {(cart?.items?.length ?? 0) > 0 && (<div className={`w-100 ${Location.pathname==='/CheckOut'||Location.pathname===`/CheckOut/${cart?.ProductId}`?'d-none':'d-block'} ${small&&'position-fixed bottom-0 py-2 bg-white'} d-flex justify-content-center gap-2`}>
-                    {!Order && <><button className={`allBox-btn ${small&&'rounded-5 py-1'}`} onClick={() => {PostSaveCart(cart,quantity);setLoading(true)}}>Save Cart</button><Link to={`/CheckOut`}><button className={`allBox-btn ${small&&'rounded-5'}`} onClick={() => {OrderHandler();setLoading(true)}}>Place Order</button></Link></>}
+            {(cart?.items?.length ?? 0) > 0 && (<div className={`w-100 ${Location.pathname==='/CheckOut'||Location.pathname===`/CheckOut/${cart?.ProductId}`?'d-none':'d-block'} ${small&&'position-fixed bottom-0 py-2 bg-white'} d-flex justify-content-center gap-4`}>
+                    {!Order && <><button className={`Save-cart-btn-CartDetails ${small&&'rounded-5'}`} onClick={() => {PostSaveCart(cart,quantity);setLoading(true)}}>Save Cart</button><button className={`Save-cart-btn-CartDetails ${small&&'rounded-5'}`} onClick={() => {OrderHandler();setLoading(true);Navigate('/CheckOut')}}>Place Order</button></>}
                 </div>
                 )}
         </div>

@@ -6,7 +6,8 @@ function Footer() {
                 <div className='footer-content d-flex flex-wrap justify-content-between gap-5 mx-5 my-4 ps-2'>
                     <div className='Footer-Details d-flex flex-wrap justify-content-center align-items-start'>
                         <div className='w-100 d-flex justify-content-start'>
-                            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam veniam molestias esse minus saepe dolorem voluptatibus at a sunt optio.
+                            <p>
+                                At TeaBuff, we believe every sip should bring comfort and joy. From refreshing teas and energizing coffees to natural juices and snacks, we’re here to serve you quality, freshness, and flavor in every cup.
                             </p>
                         </div>
                     </div>

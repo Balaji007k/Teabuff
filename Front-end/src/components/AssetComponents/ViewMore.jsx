@@ -7,7 +7,7 @@ export default function ViewMore() {
     return (
         <div className='product-item' style={{ width: '300px', flex: '0 0 auto' }}>
             <div className='MoreProduct'>
-                <button className='ViewMore fs-2' style={{color:"var(--btn-color)"}} onClick={() => Navigate('/Menu')}>
+                <button className='ViewMore-product fs-2' style={{color:"var(--btn-color)"}} onClick={() => Navigate('/Menu')}>
                     <i className="fa-solid fa-angles-right"></i>
                 </button>
                 <b className=" fs-3">View More</b>

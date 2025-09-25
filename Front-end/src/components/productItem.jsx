@@ -179,16 +179,16 @@ function ProductItem({ isAuthenticated, Review, productsItem, cart, AlertMessage
                         <span className='d-flex align-items-center gap-2 fs-4'>{Array.from({ length: 5 }, (_, i) => (
                         <i key={i} className="fa-solid fa-star fs-4" style={{ color: i + 1 <= selectedProduct?.rating ? 'gold' : 'grey' }}></i>
                       ))}<p>{Number(ProductAvgRating).toFixed(1)}</p></span>
-                      <p className=' fs-4'>( {UserProductReviews?.User?.length} Reviews )
+                      <p className=' fs-4'>( {UserProductReviews?.User?.length||0} Reviews )
                       </p>
                       </div>
                       <h2>{selectedProduct.categoryId==1?<>₹<del>{(selectedProduct.price).toFixed(2)}</del> ₹{(selectedProduct.price/2).toFixed(2)}</>:<>₹{(selectedProduct.price).toFixed(2)}</>}</h2>
                       <div className="Categories bg-white w-100 h-auto py-1 d-inline-flex align-items-center gap-2"><i className="fa-solid fa-circle-exclamation"></i><p>Order in <span className=' fw-bold'>{new Date().toLocaleDateString()}</span> to get next day delivery <span className=' fw-bold'>{new Date(Date.now() + 1 * 24 * 60 * 60 * 1000).toLocaleDateString()}</span></p></div>
                       <span className=' w-100 fs-4 fw-bold w-75 d-flex justify-content-center align-items-center gap-3'>
-                        <h3 className=' fw-bold'>Quantity:</h3>{quantity==0?<button className=' bg-body-secondary'>-</button>:<button onClick={() => setquantity(quantity - 1)}>-</button>}{quantity}<button onClick={() => setquantity(quantity + 1)}>+</button>
+                        <h3 className=' fw-bold'>Quantity:</h3>{quantity==0?<button className='quantity-btn-All bg-body-secondary'>-</button>:<button className='quantity-btn-All' onClick={() => setquantity(quantity - 1)}>-</button>}{quantity}<button className='quantity-btn-All' onClick={() => setquantity(quantity + 1)}>+</button>
                       </span>
                       <div className=' w-100 d-flex align-items-center justify-content-between gap-2'>
-                        <button className={`btn Cart-Button ${!small&&'w-50'} flex-grow-1 py-2`} onClick={() => { handleCart(selectedProduct._id, selectedProduct.price, quantity, selectedProduct.title, selectedProduct.categoryId, isAuthenticated.userId, selectedProduct.description, selectedProduct.url, selectedProduct.rating, Heart, false) ;setLoading(true)}}>Add to Cart</button>{cart?.items.length||quantity!==0?<button className={`btn Cart-Button ${!small&&'w-50'} py-2`} onClick={() => {PlaceOrder(selectedProduct._id, selectedProduct.price, quantity, selectedProduct.title, selectedProduct.categoryId, isAuthenticated.userId, selectedProduct.description, selectedProduct.url, selectedProduct.rating, Heart, true);setLoading(true)}}>Buy Now</button>:<button className=' bg-body-secondary'></button>}
+                        <button className={`Add-cart-btn-productItem ${!small&&'w-50'} flex-grow-1 py-2`} onClick={() => { handleCart(selectedProduct._id, selectedProduct.price, quantity, selectedProduct.title, selectedProduct.categoryId, isAuthenticated.userId, selectedProduct.description, selectedProduct.url, selectedProduct.rating, Heart, false) ;setLoading(true)}}>Add to Cart {!small&&<i className="fa-solid fa-cart-shopping ms-2"></i>}</button>{cart?.items.length||quantity!==0?<button className={`Add-cart-btn-productItem ${!small&&'w-50'} py-2`} onClick={() => {PlaceOrder(selectedProduct._id, selectedProduct.price, quantity, selectedProduct.title, selectedProduct.categoryId, isAuthenticated.userId, selectedProduct.description, selectedProduct.url, selectedProduct.rating, Heart, true);setLoading(true)}}>Buy Now {!small&&<i class="fa-solid fa-truck ms-2"></i>}</button>:<button className=' bg-body-secondary'></button>}
                         {/* <span className={`material-symbols-outlined Product-icons heart ${Heart ? 'text-danger' : 'text-black'}`} onClick={() => PostUserLikedState(isAuthenticated.userId, selectedProduct._id, selectedProduct.title, selectedProduct.price, selectedProduct.description, selectedProduct.url, selectedProduct.categoryId, selectedProduct.rating, selectedProduct.ingredients, selectedProduct.features, selectedProduct.purchaseLink, !Heart && true, selectedProduct.comments)}>
                           favorite
                         </span> */}
@@ -277,7 +277,7 @@ function ProductItem({ isAuthenticated, Review, productsItem, cart, AlertMessage
                       </div>
 
                       <textarea className=' my-2' rows={4} cols={5} value={comment} onChange={(e) => setcomment(e.target.value)} />
-                      <button onClick={() => { UpdateProduct(selectedProduct._id, isAuthenticated.userId, "", isAuthenticated.userName, Rating, comment); setcomment(''); setEditcomment(false) }}>Send</button>
+                      <button className='Add-cart-btn-productItem' onClick={() => { UpdateProduct(selectedProduct._id, isAuthenticated.userId, "", isAuthenticated.userName, Rating, comment); setcomment(''); setEditcomment(false) }}>Send</button>
                     </div>
                   </div>
 
@@ -316,17 +316,17 @@ function ProductItem({ isAuthenticated, Review, productsItem, cart, AlertMessage
         </>}
           
             {items&&items.length > 0 ?
-            <div className='scroll-items py-3 gap-3 bg-dark-subtle rounded-3 mt-4' style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(270px,1fr))', justifyItems: 'center', maxHeight: small ? '550px' : 'fit-content' }}>
+            <div className=' w-100 p-2'><div className='scroll-items py-3 gap-3 bg-dark-subtle rounded-3 mt-4' style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(270px,1fr))', justifyItems: 'center', maxHeight: small ? '550px' : 'fit-content' }}>
                {items.map((e) => (
                  e._id !== id ? (
                     <ProductCard key={e._id} isAuthenticated={isAuthenticated} e={e} Navigate={Navigate} />
                    ) : <div key={e._id} className=' text-center'>Already Selected Item {selectedProduct?.title} {items.length === 1 && <b>Or No more Item Match Your search</b>}</div>
                ))}
-                          </div>
+                          </div></div>
               :SearchItem!==""&&items?.length==0&&
-                <div className='scroll-items py-3 gap-3 bg-dark-subtle rounded-3 mt-4' style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(270px,1fr))', justifyItems: 'center', maxHeight: small ? '550px' : 'fit-content' }}>
+                <div className=' w-100 p-2'><div className='scroll-items py-3 gap-3 bg-dark-subtle rounded-3 mt-4' style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(270px,1fr))', justifyItems: 'center', maxHeight: small ? '550px' : 'fit-content' }}>
                   <EmptyProductCard />
-                  </div>
+                  </div></div>
             }
       <Footer />
     </>

@@ -55,6 +55,7 @@ function Header({ userinputFocus, isAuthenticated, cart, setAlertMessage }) {
   }
 };
 
+
 useEffect(()=>{
     if (isAuthenticated) fetchProfileImage();
 },[]);
@@ -100,7 +101,7 @@ useEffect(()=>{
                 buttonRef.current &&
                 !buttonRef.current.contains(event.target)
             ) {
-                setBarVisible(false);
+                setBarVisible(prev=>!prev);
                 setShowProfile(false);
             }
         };
@@ -136,7 +137,7 @@ useEffect(()=>{
   }} />
                                 <i className="fa-solid fa-pen-to-square" onClick={handleIconClick} style={{top:'60px'}}></i>
                                     </div>
-                            <span className=" fs-3 text-black">{isAuthenticated?.userName}</span>
+                            <span className=" fs-3 text-white">{isAuthenticated?.userName}</span>
                                 </div>}
                         <li data-aos="fade-down" data-aos-duration="600">{Location.pathname==='/'?<a href="#">Home</a>:<Link to={"/"}>Home</Link>}</li>
                         {Location.pathname === `/product/${id}` ? <li data-aos="fade-down" data-aos-duration="1000"><ScrollLink to="suggestItems">Suggested items</ScrollLink></li> :Location.pathname==='/'?<li data-aos="fade-down" data-aos-duration="1000"><ScrollLink to="About">About</ScrollLink></li>:<li data-aos="fade-down" data-aos-duration="2200"><Link to="/About">About</Link></li>}
@@ -152,7 +153,7 @@ useEffect(()=>{
                 </nav>
                 <div className='logo button'>
                     {!isAuthenticated ? <nav>
-                        <Link to='/Login' onClick={() => userinputFocus()}>
+                        <Link to='/Login' onClick={() => {userinputFocus()}}>
                             <button className='lobu'>Login</button>
                         </Link>
                     </nav> : <button ref={buttonRef} className='lobu fs-5' onClick={() => HideBar()}><i className="fa-solid fa-bars"></i></button>}
