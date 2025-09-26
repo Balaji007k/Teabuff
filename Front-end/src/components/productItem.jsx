@@ -177,7 +177,7 @@ function ProductItem({ isAuthenticated, Review, productsItem, cart, AlertMessage
                       <h1>{selectedProduct.title}</h1>
                       <div className=' d-flex align-items-center flex-wrap gap-2'>
                         <span className='d-flex align-items-center gap-2 fs-4'>{Array.from({ length: 5 }, (_, i) => (
-                        <i key={i} className="fa-solid fa-star fs-4" style={{ color: i + 1 <= selectedProduct?.rating ? 'gold' : 'grey' }}></i>
+                        <i key={i} className="fa-solid fa-star fs-4" style={{ color: i + 1 <= ProductAvgRating ? 'gold' : 'grey' }}></i>
                       ))}<p>{Number(ProductAvgRating).toFixed(1)}</p></span>
                       <p className=' fs-4'>( {UserProductReviews?.User?.length||0} Reviews )
                       </p>
@@ -295,7 +295,7 @@ function ProductItem({ isAuthenticated, Review, productsItem, cart, AlertMessage
           <div className='Extra-products-container' style={{ color: 'var(--Background-white-text)' }}>
             <div className='Extra-products' id='suggestItems'>
               <h1 className=' text-center my-4'>You might also like</h1>
-              <div className='scroll-items py-3 gap-3 bg-dark-subtle rounded-3' style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(270px,1fr))', justifyItems: 'center', maxHeight: small ? '550px' : 'fit-content' }}>
+              <div className='scroll-items py-3 gap-3' style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(270px,1fr))', justifyItems: 'center', maxHeight: small ? '550px' : 'fit-content' }}>
                 {suggestedproducts && suggestedproducts.length > 0 ? (
                   <>
                     {suggestedproducts.map((e) => (
@@ -316,7 +316,7 @@ function ProductItem({ isAuthenticated, Review, productsItem, cart, AlertMessage
         </>}
           
             {items&&items.length > 0 ?
-            <div className=' w-100 p-2'><div className='scroll-items py-3 gap-3 bg-dark-subtle rounded-3 mt-4' style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(270px,1fr))', justifyItems: 'center', maxHeight: small ? '550px' : 'fit-content' }}>
+            <div className=' w-100 p-2'><div className='scroll-items py-3 gap-3 mt-4' style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(270px,1fr))', justifyItems: 'center', maxHeight: small ? '550px' : 'fit-content' }}>
                {items.map((e) => (
                  e._id !== id ? (
                     <ProductCard key={e._id} isAuthenticated={isAuthenticated} e={e} Navigate={Navigate} />
@@ -324,7 +324,7 @@ function ProductItem({ isAuthenticated, Review, productsItem, cart, AlertMessage
                ))}
                           </div></div>
               :SearchItem!==""&&items?.length==0&&
-                <div className=' w-100 p-2'><div className='scroll-items py-3 gap-3 bg-dark-subtle rounded-3 mt-4' style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(270px,1fr))', justifyItems: 'center', maxHeight: small ? '550px' : 'fit-content' }}>
+                <div className=' w-100 p-2'><div className='scroll-items py-3 gap-3 mt-4' style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(270px,1fr))', justifyItems: 'center', maxHeight: small ? '550px' : 'fit-content' }}>
                   <EmptyProductCard />
                   </div></div>
             }

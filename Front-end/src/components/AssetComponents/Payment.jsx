@@ -224,7 +224,7 @@ if (res) {
               </div>
             </div>
 
-            <button type="submit" className="rounded-2 bg-info my-2">
+            <button type="submit" className="payment-btn rounded-2 bg-info my-2">
               Confirm Payment
             </button>
           </div>

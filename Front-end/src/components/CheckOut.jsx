@@ -106,8 +106,8 @@ export default function CheckOut({isAuthenticated,cart}){
     if(isAuthenticated?.userId&&cart?.items.length>0){return(
         <>
         {AlertMessageCheckOut&&AlertMessageCheckOut?.message?<AlertMessage message={AlertMessageCheckOut}/>:Loading&&<LoadingPage/>}
-        <div className={` w-100 d-flex gap-2 ${!small?'flex-row-reverse':'flex-column'} `} style={{marginTop:!small&&'70px'}}>
-        <div className="checkout-Cart-page overflow-y-scroll" style={{marginTop:small&&'70px',flex:'1 1 40%',height:'880px'}}><PlaceOrderDetails isAuthenticated={isAuthenticated} cart={Location.pathname==`/CheckOut/${Filtered?.productId}`?{items:[Filtered],ProductId:Filtered?.productId}:cart}/></div>
+        <div className={`checkout-Cart-page w-100 bg-white d-flex gap-2 ${!small?'flex-row-reverse':'flex-column'} `} style={{marginTop:!small&&'70px'}}>
+        <div className=" overflow-y-scroll" style={{marginTop:small&&'70px',flex:'1 1 40%',height:'880px'}}><PlaceOrderDetails isAuthenticated={isAuthenticated} cart={Location.pathname==`/CheckOut/${Filtered?.productId}`?{items:[Filtered],ProductId:Filtered?.productId}:cart}/></div>
         <div className={` d-flex justify-content-center flex-grow-1`} style={{flex:'1 1 60%'}}>
                     <div className='CheckOut-Page d-flex flex-column gap-4 p-3' style={{ width:!small? '80%' : '100%'}}>
                         <h2 className=" fw-bold">CheckOut</h2>
@@ -143,7 +143,7 @@ export default function CheckOut({isAuthenticated,cart}){
                             <div className=' d-flex justify-content-between align-items-center'>
                                 <span onClick={()=>Navigate(-1)} className=' text-info d-flex align-items-center' style={{cursor:'pointer'}}><span className="material-symbols-outlined">
                                     chevron_left
-                                </span>Return to cart</span><button type="submit" className={`${small?'p-2':'p-3'} bg-success`}>Confirm Order</button>
+                                </span>Return to cart</span><button type="submit" className={`confirm-order-btn ${small?'p-2':'p-3'} bg-success`}>Confirm Order</button>
                             </div>
                         </div>
                         </form>

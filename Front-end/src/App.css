@@ -1,9 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 *{
   font-family: Montserrat;
-  scroll-padding-top: 65px;
 }
-htm{
+html{
   scroll-behavior: smooth;
 }
 :root{
@@ -48,14 +47,14 @@ overflow-x: hidden;
   background-color: var(--background-color);
 }
 .explore-button-Home {
-  background-color: #FFD700; /* bright yellow */
+  background-color: var(--background-color); /* bright yellow */
   color: #000; /* black text */
   font-family: 'Montserrat', sans-serif;
   font-weight: 600;
   white-space: nowrap;
   border-radius: 25px;
   padding: 10px 25px;
-  border: 2px solid #FFD700;
+  border: 2px solid var(--background-color);
   cursor: pointer;
   font-size: 1rem;
   display: inline-flex;
@@ -69,7 +68,7 @@ overflow-x: hidden;
 /* Hover effect */
 .explore-button-Home:hover {
   background-color: #000; /* black background */
-  color: #FFD700; /* yellow text */
+  color: var(--background-color); /* yellow text */
   transform: translateY(-3px);
   box-shadow: 0 8px 20px rgba(0,0,0,0.25);
 }
@@ -112,6 +111,7 @@ overflow-x: hidden;
   width: 100px;
   border-radius: 50%;
   background-color: var(--background-color);
+  border: none;
 }
 .quantity-btn-All {
   width: 45px;
@@ -123,7 +123,7 @@ overflow-x: hidden;
   font-size: 20px;
   font-weight: bold;
   cursor: pointer;
-  background: linear-gradient(145deg, #ffcc00, #ffdb4d); /* Yellow gradient */
+  background: linear-gradient(145deg, var(--background-color), #ffdb4d); /* Yellow gradient */
   color: #000; /* Black text */
   border: 2px solid #000;
   box-shadow: 0 4px 6px rgba(0,0,0,0.25), inset 0 2px 4px rgba(255,255,255,0.4);
@@ -134,12 +134,12 @@ overflow-x: hidden;
   transform: scale(1.1);
   background: linear-gradient(145deg, #000, #222); /* Black on hover */
   color: #fff; /* White text */
-  box-shadow: 0 6px 10px rgba(0,0,0,0.4), 0 0 10px #ffcc00; /* Yellow glow */
+  box-shadow: 0 6px 10px rgba(0,0,0,0.4), 0 0 10px var(--background-color); /* Yellow glow */
 }
 
 .quantity-btn-All:active {
   transform: scale(0.9);
-  background: #ffcc00; /* Flash yellow when clicked */
+  background: var(--background-color); /* Flash yellow when clicked */
   color: #000;
   box-shadow: inset 0 2px 6px rgba(0,0,0,0.4);
 }
@@ -148,6 +148,38 @@ overflow-x: hidden;
   background: var(--bs-secondary-bg) !important; /* Bootstrap variable */
   color: #000 !important;
   box-shadow: inset 0 2px 6px rgba(0,0,0,0.3);
+}
+
+.continue-shipping-btn {
+  background: transparent;
+  border: none;
+  color: #17a2b8; /* info theme */
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  position: relative;
+  padding: 8px 16px;
+  transition: color 0.3s ease;
+}
+
+/* underline slide animation */
+.continue-shipping-btn::after {
+  content: "";
+  position: absolute;
+  left: 16px;
+  bottom: 4px;
+  width: 0;
+  height: 2px;
+  background-color: #17a2b8;
+  transition: width 0.3s ease;
+}
+
+.continue-shipping-btn:hover {
+  color: #138496;
+}
+
+.continue-shipping-btn:hover::after {
+  width: calc(100% - 32px);
 }
 
 
@@ -322,6 +354,10 @@ video{
 
   .lobu{
     display: block;
+  }
+  .outerbox{
+    display: flex;
+    justify-content: center;
   }
   .inner-box{
     display: flex;

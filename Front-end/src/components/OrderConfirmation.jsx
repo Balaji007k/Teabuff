@@ -67,7 +67,7 @@ useEffect(()=>{
     </h1>
   </div>
   <div className="col-12 col-md-4 text-center text-md-end">
-    <button onClick={()=>Navigate('/Menu')} className="btn-link fw-medium text-decoration-none">
+    <button onClick={()=>Navigate('/Menu')} className="continue-shipping-btn fw-medium text-decoration-none">
       Continue Shopping
     </button>
   </div>

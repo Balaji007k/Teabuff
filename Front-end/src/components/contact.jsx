@@ -5,7 +5,7 @@ function Contact() {
     const Location = useLocation();
     return (
         <>
-        <div className='Contact d-flex justify-content-center' id="Contact_id" style={{marginTop:Location.pathname==='/Contact_Us'?'75px':null}}>
+        <div className='Contact d-flex justify-content-center' id="Contact_id" style={{marginTop:Location.pathname==='/Contact_Us'&&'75px'}}>
             <div className='contact-inner-box d-flex flex-column'>
                 <h1 className='text-center fw-bolder my-3'>Contact Us</h1>
                 <div className='main gap-4'>

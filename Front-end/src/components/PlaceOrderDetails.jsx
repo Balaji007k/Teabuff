@@ -122,7 +122,7 @@ export default function PlaceOrderDetails({ isAuthenticated, cart }) {
 
   return (
     <div
-      className={`d-flex gap-4 pb-4 flex-column bg-white shadow-sm rounded-3 p-3 border`}
+      className={`d-flex gap-4 pb-4 flex-column bg-white p-3`}
     >
       {/* Items Section */}
       <div className="bill items-page w-100">

@@ -10,6 +10,7 @@
    overflow: hidden;
 }
 .footer-inner-box a{
+   cursor: pointer;
   text-decoration: none !important;
   color: var(--color);
 }

@@ -14,7 +14,7 @@ function About({image}) {
 
   return (
     <>
-      <div className="About-box my-3" id="About" style={{marginTop:Location.pathname==='/About'?'75px':null}}>
+      <div className="About-box mb-3" id="About" style={{marginTop:Location.pathname==='/About'&&'75px'}}>
         <div className="About-inner-box">
           <div className="About-content d-flex flex-column"
            data-aos="fade-left"

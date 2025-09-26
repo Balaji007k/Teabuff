@@ -139,16 +139,23 @@ useEffect(()=>{
                                     </div>
                             <span className=" fs-3 text-white">{isAuthenticated?.userName}</span>
                                 </div>}
-                        <li data-aos="fade-down" data-aos-duration="600">{Location.pathname==='/'?<a href="#">Home</a>:<Link to={"/"}>Home</Link>}</li>
-                        {Location.pathname === `/product/${id}` ? <li data-aos="fade-down" data-aos-duration="1000"><ScrollLink to="suggestItems">Suggested items</ScrollLink></li> :Location.pathname==='/'?<li data-aos="fade-down" data-aos-duration="1000"><ScrollLink to="About">About</ScrollLink></li>:<li data-aos="fade-down" data-aos-duration="2200"><Link to="/About">About</Link></li>}
+                        <li data-aos="fade-down" data-aos-duration="600">{Location.pathname==='/'?<ScrollLink offset={-70} to="Home">Home</ScrollLink>:<Link to={"/"}>Home</Link>}</li>
+                        {Location.pathname === `/product/${id}` ? <li data-aos="fade-down" data-aos-duration="1000"><ScrollLink offset={-70} to="suggestItems">Suggested items</ScrollLink></li> :Location.pathname==='/'?<li data-aos="fade-down" data-aos-duration="1000"><ScrollLink offset={-70} to="About">About</ScrollLink></li>:<li data-aos="fade-down" data-aos-duration="2200"><Link to="/About">About</Link></li>}
                         {Location.pathname === `/product/${id}` ? <li data-aos="fade-down" data-aos-duration="1400"><Link to="/Menu">More items</Link></li>:<li data-aos="fade-down" data-aos-duration="1400"><Link to={'/Menu'}>Menu</Link></li>}
-                        {Location.pathname === `/product/${id}` ? null : Location.pathname==='/'?<li data-aos="fade-down" data-aos-duration="1800"><ScrollLink to="Service_id">Service</ScrollLink></li>:<li data-aos="fade-down" data-aos-duration="1800"><Link to="/Service">Service</Link></li>}
-                        {Location.pathname === `/product/${id}` ? null : Location.pathname==='/'?<li data-aos="fade-down" data-aos-duration="2200"><ScrollLink to="Contact_id">Contact Us</ScrollLink></li>:<li data-aos="fade-down" data-aos-duration="2200"><Link to="/Contact_Us">Contact Us</Link></li>}
+                        {Location.pathname === `/product/${id}` ? null : Location.pathname==='/'?<li data-aos="fade-down" data-aos-duration="1800"><ScrollLink offset={-70} to="Service_id">Service</ScrollLink></li>:<li data-aos="fade-down" data-aos-duration="1800"><Link to="/Service">Service</Link></li>}
+                        {Location.pathname === `/product/${id}` ? null : Location.pathname==='/'?<li data-aos="fade-down" data-aos-duration="2200"><ScrollLink offset={-70} to="Contact_id">Contact Us</ScrollLink></li>:<li data-aos="fade-down" data-aos-duration="2200"><Link to="/Contact_Us">Contact Us</Link></li>}
                         {small&&<li><Link to={'/WishList'}>Wishlist</Link></li>}
                         <li><Link to={`/${isAuthenticated?.userName+"Cart"}/${isAuthenticated ? isAuthenticated?.userId : 'No_user'}`}><i className="fa-solid fa-cart-shopping">  {!CartLength?0:CartLength} </i></Link></li>
                         {small&&<><li><Link to={'/Login'}>Add Account</Link></li>
                         <li><Link to={`/MyOrders/${OrderId}`}>My Orders</Link></li>
-                        <li onClick={() => Logout()}>Logout</li></>}
+                        <li onClick={() => Logout()}><Link 
+    to="/Logout" 
+    onClick={(e) => {
+      e.preventDefault(); // prevent navigation
+    }}
+  >
+    Logout
+  </Link></li></>}
                     </ul>
                 </nav>
                 <div className='logo button'>
@@ -179,7 +186,7 @@ useEffect(()=>{
                             <span className=" fs-3 text-black">{isAuthenticated?.userName}</span>
                                 </div>
                             <div className=" w-100">
-                                {Location.pathname==='/'?<a href="#"><h3 className=' mt-1'><i className="fa-solid fa-house"></i>Home</h3></a>:<Link to={"/"}><h3 className=' mt-1'><i className="fa-solid fa-house"></i>Home</h3></Link>}
+                                {Location.pathname==='/'?<ScrollLink offset={-70} to="Home"><h3 className=' mt-1'><i className="fa-solid fa-house"></i>Home</h3></ScrollLink>:<Link to={"/"}><h3 className=' mt-1'><i className="fa-solid fa-house"></i>Home</h3></Link>}
                                 <h3 onClick={()=>Hideprofile()}><i className="fa-solid fa-user"></i>Profile</h3>
                                 <div className={`profile-details ${Showprofile?'show':'hide'} d-flex flex-column align-items-center`}>
                                     <input type="text" className="lobu rounded-0 m-0 bg-transparent" disabled placeholder="Name" value={isAuthenticated?.userName || "No user"}/>
@@ -188,7 +195,7 @@ useEffect(()=>{
                                 </div>
                                 <h3><i className="fa-solid fa-gift"></i>Offers</h3>
                                 <Link to={'/WishList'}><h3><i className="fa-solid fa-heart"></i>WishList</h3></Link>
-                                {Location.pathname==='/'?<a href="#Contact_id"><h3><i className="fa-solid fa-phone"></i>Contact Us</h3></a>:<Link to={'/Contact_Us'}><h3><i className="fa-solid fa-phone"></i>Contact Us</h3></Link>}
+                                {Location.pathname==='/'?<ScrollLink offset={-70} to="Contact_id"><h3><i className="fa-solid fa-phone"></i>Contact Us</h3></ScrollLink>:<Link to={'/Contact_Us'}><h3><i className="fa-solid fa-phone"></i>Contact Us</h3></Link>}
                                 <Link to={'/Login'}><h3><i className="fa-solid fa-user-plus"></i>Add Account</h3></Link>
                                 <Link to={`/MyOrders/${isAuthenticated?.userId}`}><h3><i className="fa-solid fa-box-open"></i>My Orders</h3></Link>
                                 

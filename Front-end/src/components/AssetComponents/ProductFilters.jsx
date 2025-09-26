@@ -180,6 +180,7 @@ export default function ProductFilters({ Products, id, searchingProduct }) {
     setSort(value);
   };
 
+
   // 🔹 Sorting filter
   // const handleSort = (value) => {
   //   setSort(value);
@@ -214,7 +215,6 @@ export default function ProductFilters({ Products, id, searchingProduct }) {
         product.title.toLowerCase().replace(/\s+/g, "").includes(term)
       );
       Products(filtered);
-      searchingProduct(term); // 🔹 still calling external search if needed
     } else {
       if (Location.pathname === "/Menu") Products(productsItem);
       else Products([]);
@@ -265,7 +265,7 @@ export default function ProductFilters({ Products, id, searchingProduct }) {
                 className="item search-tag"
                 value={searchItem}
                 onKeyUp={()=>handleSearch(searchItem)}
-                onChange={(e) => setSearchItem(e.target.value)}
+                onChange={(e) => {setSearchItem(e.target.value);searchingProduct(e.target.value)}}
                 placeholder="search"
               />
               <button
