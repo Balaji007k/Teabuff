@@ -26,6 +26,8 @@ function App() {
   const userInput = useRef();
   const location = useLocation();
   const [AlertMessage,setAlertMessage] = useState(null);
+  const [HideNavbar,setHideNavbar] = useState(true);
+
 
   useEffect(() => {
     if (location.pathname === '/Login') {
@@ -51,12 +53,13 @@ function App() {
           isAuthenticated={isAuthenticated}
           setAlertMessage={setAlertMessage}
           cart={cart}
+          HideNav={HideNavbar}
         />
       )}
       <Routes>
         <Route
           path="/"
-          element={<Main AlertMessageMain={AlertMessage}/>}
+          element={<Main setHideNavbar={setHideNavbar} AlertMessageMain={AlertMessage}/>}
         />
         <Route
           path="/Login"

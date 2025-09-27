@@ -271,7 +271,7 @@ video{
   top: 0;
   left: 0;
   height: 100vh;
-  width: auto; /* sidebar width */
+  width: 65%; /* sidebar width */
   backdrop-filter: blur(15px);
   background: linear-gradient(180deg, rgba(0, 0, 0, 0.95), rgba(30, 30, 30, 0.98));
   box-shadow: 4px 0px 25px rgba(0, 0, 0, 0.6);
@@ -292,6 +292,7 @@ video{
 
 /* Nav list */
 .nav-list {
+  width: 100%;
   display: flex;
   flex-direction: column;
   gap: 18px;
@@ -330,7 +331,7 @@ video{
 /* Profile section (if shown inside navbar) */
 .UserProfileImage {
   position: relative;
-  margin-bottom: 20px;
+  margin-bottom: 5px;
 }
 .UserProfileImage img {
   border: 2px solid rgb(215, 186, 18);
@@ -505,41 +506,26 @@ video{
   align-items: center;
 }
 .scroll-items {
-  min-height: 200px;
   width: 100%;
-  max-width: 450px;
-  display: grid !important;
-  grid-template-columns: none !important;
-  grid-auto-flow: column !important; /* flow horizontally */
-  grid-template-rows: repeat(2, 1fr) !important; /* 2 rows */
-  grid-auto-columns: 175px !important; /* width of each item */
-  gap: 10px;
-  padding: 10px 0px;
-  padding-left: 5px;
-  overflow-x: auto; /* scroll left-right */
-  overflow-y: hidden; /* disable vertical scroll */
-  scroll-snap-type: x mandatory; /* optional: snap items */
+  display: flex !important;
+  gap: 0px !important;
+  min-height: 200px;
+  overflow-y: hidden;
+  overflow-x: visible;
+  scroll-snap-type: x mandatory;
 }
 
-.scroll-items > * {
-  scroll-snap-align: start; /* optional for smooth snap */
-}
-
-.scroll-items::-webkit-scrollbar{
-  display: none;
-}
-
-
-
-.product-item{
+/* Product item */
+.product-item {
+  flex: 0 0 auto; /* don't shrink, keep width */
   min-width: 140px !important;
-  width: 100% !important;
-  max-width: 200px !important;
+  width: 44vw !important;
   max-height: 250px !important;
   min-height: 220px !important;
   padding: 10px 7px !important;
-  margin: 5px !important;
+  margin: 10px 5px !important;
 }
+
 .product-item img{
    width: 100%;
    height: 120px !important;
@@ -667,8 +653,8 @@ form{
 .Cart-Products{
   display: grid !important;
   grid-template-columns: repeat(2,1fr) !important;
-  gap: 15px;
-  padding: 0px 10px;
+  gap: 0px;
+  padding: 0px;
   overflow: scroll;
   margin-bottom: 86px;
 }

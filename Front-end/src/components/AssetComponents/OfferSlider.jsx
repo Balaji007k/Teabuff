@@ -1,51 +1,61 @@
-import React from "react";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Pagination, Autoplay } from "swiper/modules";
-import "swiper/css";
-import "swiper/css/navigation";
-import "swiper/css/pagination";
+import React, { useEffect, useRef } from "react";
+import useEmblaCarousel from "embla-carousel-react";
 import { Link as ScrollLink } from "react-scroll";
 import { useNavigate } from "react-router-dom";
+import "../../style/embla-carousel.css"; // You can make your own css
 
-const OfferSlider = () => {
-
+const OfferSlider = ({ setHideNavbar }) => {
+  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true });
   const Navigate = useNavigate();
 
+  // Optional autoplay
+  const autoplayRef = useRef(null);
+  useEffect(() => {
+    if (!emblaApi) return;
+
+    const autoplay = () => {
+      autoplayRef.current = setInterval(() => {
+        if (emblaApi) emblaApi.scrollNext();
+      }, 3000);
+    };
+
+    autoplay();
+    return () => clearInterval(autoplayRef.current);
+  }, [emblaApi]);
+
   return (
-    <div className="my-5 offer-slider-wrapper mx-3">
-      <div className="shadow-lg rounded overflow-hidden position-relative p-2 p-md-4">
-        <Swiper
-          modules={[Navigation, Pagination, Autoplay]}
-          pagination={{ clickable: true }}
-          autoplay={{ delay: 3000 }}
-          loop
-          navigation={{
-            nextEl: ".offer-slider-wrapper .swiper-button-next",
-            prevEl: ".offer-slider-wrapper .swiper-button-prev",
-          }}
-          className="bg-white"
-        >
+    <div className="my-5 mx-3 offer-slider-wrapper">
+      <div
+        className="shadow-lg rounded overflow-hidden position-relative p-2 p-md-4 embla"
+        ref={emblaRef}
+        onClick={() => setHideNavbar(false)}
+      >
+        <div className="embla__container">
           {/* Slide 1 */}
-          <SwiperSlide>
-            <div className="d-flex flex-column flex-md-row align-items-center justify-content-between px-3 px-md-5 py-4 bg-light">
+          <div className="embla__slide bg-light">
+            <div className="d-flex flex-column flex-md-row align-items-center justify-content-between px-3 px-md-5 py-4">
               {/* Text */}
               <div
                 className="text-center text-md-start mb-4 mb-md-0"
-                style={{ maxWidth: "450px" }} // slightly wider on desktop
+                style={{ maxWidth: "450px" }}
               >
                 <img
                   src="https://images.unsplash.com/photo-1576092768241-dec231879fc3?q=80&w=687&auto=format&fit=crop"
                   alt="Logo"
                   className="mb-3 img-fluid"
-                  style={{ maxHeight: "50px" }} // bigger logo for desktop
+                  style={{ maxHeight: "50px" }}
                 />
                 <h2 className="h4 fw-semibold text-dark">
-                  Exclusive <span className="text-danger fw-bold">Collection</span>
+                  Exclusive{" "}
+                  <span className="text-danger fw-bold">Collection</span>
                 </h2>
                 <p className="text-muted mt-2 fs-6">
                   Get the latest fashion at the best prices.
                 </p>
-                <button onClick={()=>Navigate('/Menu')} className="btn btn-warning mt-3 px-4 py-2 shadow-sm">
+                <button
+                  onClick={() => Navigate("/Menu")}
+                  className="btn btn-warning mt-3 px-4 py-2 shadow-sm"
+                >
                   Shop Now
                 </button>
               </div>
@@ -58,7 +68,7 @@ const OfferSlider = () => {
                   className="img-fluid rounded shadow"
                   style={{
                     maxWidth: "48%",
-                    maxHeight: "320px", // taller images for desktop
+                    maxHeight: "320px",
                     objectFit: "cover",
                   }}
                 />
@@ -74,14 +84,14 @@ const OfferSlider = () => {
                 />
               </div>
             </div>
-          </SwiperSlide>
+          </div>
 
           {/* Slide 2 */}
-          <SwiperSlide>
-            <div
-              className="d-flex flex-column flex-md-row align-items-center justify-content-between px-3 px-md-5 py-4"
-              style={{ background: "linear-gradient(to right, #fff, #f8d7da)" }}
-            >
+          <div
+            className="embla__slide"
+            style={{ background: "linear-gradient(to right, #fff, #f8d7da)" }}
+          >
+            <div className="d-flex flex-column flex-md-row align-items-center justify-content-between px-3 px-md-5 py-4">
               {/* Text */}
               <div
                 className="text-center text-md-start mb-4 mb-md-0"
@@ -91,16 +101,16 @@ const OfferSlider = () => {
                   src="https://images.unsplash.com/photo-1576092768241-dec231879fc3?q=80&w=687&auto=format&fit=crop"
                   alt="Logo"
                   className="mb-3 img-fluid"
-                  style={{ maxHeight: "50px" }} // bigger logo for desktop
+                  style={{ maxHeight: "50px" }}
                 />
                 <h2 className="h4 fw-semibold text-dark">
                   Summer <span className="text-danger fw-bold">Sale</span>
                 </h2>
-                <p className="text-muted mt-2 fs-6">
-                  50% off for All Tea.
-                </p>
+                <p className="text-muted mt-2 fs-6">50% off for All Tea.</p>
                 <button className="btn btn-warning mt-3 px-4 py-2 shadow-sm">
-                  <ScrollLink to="Fresh_Tea" offset={-145}>Shop Now</ScrollLink>
+                  <ScrollLink to="Fresh_Tea" offset={-145}>
+                    Shop Now
+                  </ScrollLink>
                 </button>
               </div>
 
@@ -128,17 +138,26 @@ const OfferSlider = () => {
                 />
               </div>
             </div>
-          </SwiperSlide>
-        </Swiper>
-
-        {/* Scoped arrows (desktop only) */}
-        <div className="d-none d-md-block">
-          <div className="swiper-button-prev"></div>
-          <div className="swiper-button-next"></div>
+          </div>
         </div>
+
+        {/* Navigation Arrows */}
+        <button
+          className="embla__prev d-none d-md-block btn btn-light position-absolute top-50 start-0 translate-middle-y shadow"
+          onClick={() => emblaApi && emblaApi.scrollPrev()}
+        >
+          ‹
+        </button>
+        <button
+          className="embla__next d-none d-md-block btn btn-light position-absolute top-50 end-0 translate-middle-y shadow"
+          onClick={() => emblaApi && emblaApi.scrollNext()}
+        >
+          ›
+        </button>
       </div>
     </div>
   );
 };
 
 export default OfferSlider;
+

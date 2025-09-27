@@ -7,7 +7,7 @@ import EmptyProductCard from './AssetComponents/EmptyProductCard';
 import ViewMore from './AssetComponents/ViewMore';
 import OfferSlider from './AssetComponents/OfferSlider';
 
-function Product({ isAuthenticated, productsItem, category }) {
+function Product({ isAuthenticated, productsItem, category, setHideNavbar }) {
   const small = useMediaQuery({ maxWidth: 600 })
   const Location = useLocation();
   const [value, setValue] = useState(0);
@@ -80,7 +80,7 @@ function Product({ isAuthenticated, productsItem, category }) {
 
   return (
     <>
-    <OfferSlider/>
+    <OfferSlider setHideNavbar={setHideNavbar}/>
     <div className='Product d-flex justify-content-center' id="Product_id">
       <div className='product-inner-box'>
         <div className='search'>
@@ -157,7 +157,7 @@ function Product({ isAuthenticated, productsItem, category }) {
           </div>
         </div>
 
-<OfferSlider/>
+<OfferSlider setHideNavbar={setHideNavbar}/>
         <div className='Home-Products w-100 d-flex justify-content-between align-items-center'><h1 className=' m-0'>Fresh Tea</h1><span className="material-symbols-outlined d-md-none" onClick={()=>{Navigate('/Menu')}}>
               arrow_forward_ios
             </span></div>
@@ -203,7 +203,7 @@ function Product({ isAuthenticated, productsItem, category }) {
           </div>
         </div>
 
-<OfferSlider/>
+<OfferSlider setHideNavbar={setHideNavbar}/>
 <div className='Home-Products w-100 d-flex justify-content-between align-items-center'><h1 className=' m-0'>Recommended</h1><span className="material-symbols-outlined d-md-none" onClick={()=>{Navigate('/Menu')}}>
               arrow_forward_ios
             </span></div>

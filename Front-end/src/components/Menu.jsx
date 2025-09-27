@@ -34,7 +34,7 @@ function Menu({ isAuthenticated }) {
 
                 <div className='Extra-products-container py-3'>
                     <div className='Extra-products'>
-                        <div className="scroll-items">
+                        <div className="scroll-items" style={{justifyContent:small&&'space-around',flexWrap:small&&'wrap'}}>
 
 {items&&items.length?items.map(product=>(
     <ProductCard key={product._id} isAuthenticated={isAuthenticated} e={product} Navigate={Navigate}/>

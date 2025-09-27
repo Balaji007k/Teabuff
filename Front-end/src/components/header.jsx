@@ -6,7 +6,7 @@ import { Link as ScrollLink } from "react-scroll";
 import ApiService from "./Service/ApiService/product-api";
 import { useTheme } from "../ThemeContext";
 
-function Header({ userinputFocus, isAuthenticated, cart, setAlertMessage }) {
+function Header({ userinputFocus, isAuthenticated, cart, setAlertMessage, HideNav }) {
 
     const small = useMediaQuery({maxWidth:600});
     const {OrderId} = useTheme();
@@ -54,6 +54,10 @@ function Header({ userinputFocus, isAuthenticated, cart, setAlertMessage }) {
     }
   }
 };
+
+useEffect(()=>{
+    if(!HideNav){setBarVisible(false);}
+},[HideNav])
 
 
 useEffect(()=>{
