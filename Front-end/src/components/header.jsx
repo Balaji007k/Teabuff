@@ -130,7 +130,7 @@ useEffect(()=>{
                     <ul className="nav-list p-0 m-0">
                         {small&&<div className="w-100 d-flex flex-column align-items-center">
                                     <div className="UserProfileImage">
-                                <img src={preview} alt="Profile" height={'75px'} width={'75px'} className=" rounded-circle bg-black" 
+                                <img src={preview} alt="Profile" height={'100px'} width={'100px'} className=" rounded-circle bg-black" 
                                 onError={(e) => {
     e.currentTarget.onerror = null; // avoid infinite loop
     e.currentTarget.src = "assets/ProfileImage.svg"; // fallback if image not found
@@ -172,8 +172,8 @@ useEffect(()=>{
                                 <img
   src={preview}
   alt="Profile"
-  height="100px"
-  width="100px"
+  height="125px"
+  width="125px"
   className="rounded-circle bg-black"
   onError={(e) => {
     e.currentTarget.onerror = null; // avoid infinite loop

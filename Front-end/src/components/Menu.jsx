@@ -34,7 +34,7 @@ function Menu({ isAuthenticated }) {
 
                 <div className='Extra-products-container py-3'>
                     <div className='Extra-products'>
-                        <div className="scroll-items" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(270px,1fr))', justifyItems: 'center', gap: '20px', maxHeight:'100%'}}>
+                        <div className="scroll-items">
 
 {items&&items.length?items.map(product=>(
     <ProductCard key={product._id} isAuthenticated={isAuthenticated} e={product} Navigate={Navigate}/>

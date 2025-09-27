@@ -185,6 +185,10 @@ overflow-x: hidden;
 
 @keyframes l1 {to{transform: rotate(.5turn)}}
 
+button:hover{
+  box-shadow: 1px 1px 5px #CACA12;
+}
+
 Link,a{
   border: none;
   text-decoration: none !important;
@@ -333,8 +337,8 @@ video{
   object-fit: cover;
 }
 .UserProfileImage i {
-  position: absolute;
-  right: 5px;
+  top: 75px !important;
+  right: 5px !important;
   background: rgb(215, 186, 18);
   color: #000;
   padding: 5px;
@@ -500,17 +504,33 @@ video{
   flex-direction: column;
   align-items: center;
 }
-.scroll-items{
-  min-height: 200px !important;
-  width: 100% !important;
-  max-width: 450px !important;
+.scroll-items {
+  min-height: 200px;
+  width: 100%;
+  max-width: 450px;
   display: grid !important;
-  grid-template-columns: repeat(auto-fill, minmax(150px,1fr)) !important;
-  justify-items: center;
-  gap: 10px !important;
-  padding: 10px 0 !important;
-  overflow-y: scroll;
+  grid-template-columns: none !important;
+  grid-auto-flow: column !important; /* flow horizontally */
+  grid-template-rows: repeat(2, 1fr) !important; /* 2 rows */
+  grid-auto-columns: 175px !important; /* width of each item */
+  gap: 10px;
+  padding: 10px 0px;
+  padding-left: 5px;
+  overflow-x: auto; /* scroll left-right */
+  overflow-y: hidden; /* disable vertical scroll */
+  scroll-snap-type: x mandatory; /* optional: snap items */
 }
+
+.scroll-items > * {
+  scroll-snap-align: start; /* optional for smooth snap */
+}
+
+.scroll-items::-webkit-scrollbar{
+  display: none;
+}
+
+
+
 .product-item{
   min-width: 140px !important;
   width: 100% !important;
@@ -602,7 +622,7 @@ video{
     width: 100% !important;
 }
 .Userlogin-inner-box{
-  width: 90% !important;
+  width: 100% !important;
   min-height: 500px !important;
   justify-content: space-between !important;
 }

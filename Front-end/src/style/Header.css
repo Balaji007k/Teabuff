@@ -131,8 +131,8 @@
 }
 .UserProfileImage i{
   position: absolute;
-  top: 85px;
-  right: 5px;
+  top: 105px;
+  right: 10px;
   cursor: pointer;
   z-index: 99;
   color: black;

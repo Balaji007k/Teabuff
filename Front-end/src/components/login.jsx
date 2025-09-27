@@ -278,7 +278,7 @@ function Login({ userInput, AccoutState, setLoading }) {
   };
 
   return (
-    <div className='Userlogin d-flex flex-column align-items-center justify-content-end'>
+    <div className='Userlogin d-flex flex-column align-items-lg-end align-items-center justify-content-end'>
       <div className="Userlogin-inner-box d-flex flex-column align-items-center justify-content-around gap-2">
         <div className='login-form d-flex flex-column px-4'>
           {Location.pathname === '/Login' ? <h1>Login Here</h1> : <h1>Register Here</h1>}

@@ -56,7 +56,7 @@ useEffect(()=>{
       MyOrders&&MyOrders.length?MyOrders.slice().reverse().map((OrderDetails)=>(
         <div key={OrderDetails?._id} className="container mb-5" style={{marginTop:'75px'}}>
       <div className="card shadow border-0 p-4">
-        <h2 className="h5 fw-semibold mb-3">Ordered: <span className="text-secondary">{new Date(OrderDetails?.createdAt).toLocaleDateString()}
+        <h2 className="h5 fw-semibold mb-3">Ordered: <span className="text-secondary">{new Date(OrderDetails?.createdAt).toLocaleDateString("en-IN", { day: "2-digit", month: "2-digit", year: "numeric" })}
 </span></h2>
         {/* Header */}
 <div className="row border-bottom pb-3 mb-4 align-items-center text-center text-md-start">
@@ -85,7 +85,7 @@ useEffect(()=>{
     <div className="col-12 col-md-4 mb-3">
       <p className="text-muted fw-medium mb-1">Order placed</p>
       <p className="text-success fw-semibold mb-1">
-        Value shipping <br /> Arrives by {new Date(OrderDetails?.deliveryDate).toDateString()} {new Date(OrderDetails?.deliveryDate).toTimeString()}
+        Value shipping <br /> Arrives by {new Date(OrderDetails?.deliveryDate).toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" })}
       </p>
       <p className="small text-muted mb-0">Order #{OrderDetails?.orderId}</p>
     </div>

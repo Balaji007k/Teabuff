@@ -78,6 +78,7 @@ exports.createOrderConfirmation = async (req, res) => {
     const exists = await OrderConfirmationModel.findOne({
       "OrderDetails.orderId": newOrder.orderId
     });
+
     if (exists) {
       return res.status(400).json({ error: "OrderId already exists" });
     }
@@ -88,13 +89,6 @@ exports.createOrderConfirmation = async (req, res) => {
       { new: true, upsert: true }
     );
 
-    // Send confirmation email
-    // if (newOrder.email) {
-    //   const subject = `Order Confirmation - ${newOrder.orderId}`;
-    //   const text = `Hi ${newOrder.customerName},\n\nYour order (${newOrder.orderId}) has been successfully placed!\n\nTotal: ₹${newOrder.total}\n\nThank you for shopping with Teabuff.`;
-    //   await sendOrderConfirmation(newOrder.email, subject, text);
-    // }
-
     if (newOrder.email) {
   const subject = `Order Confirmation - ${newOrder.orderId}`;
 
@@ -102,7 +96,7 @@ exports.createOrderConfirmation = async (req, res) => {
   const productsList = newOrder.products
     .map(
       (p, i) =>
-        `${i + 1}. ${p.name}\n   Quantity: ${p.qty}\n   Price: ₹${p.price}\n   CategoryId: ${p.categoryId}\n   Image: ${p.image}`
+        `${i + 1}. ${p.name}\n   Quantity: ${p.qty}\n   Price: ₹${p.price}\n   Image: ${p.image}`
     )
     .join("\n\n");
 
@@ -111,7 +105,8 @@ Hi ${newOrder.customerName},
 
 Your order (${newOrder.orderId}) has been successfully placed! Here are the full details:
 
-Delivery Date: ${newOrder.deliveryDate}
+Order Date: ${new Date().toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" })}
+Delivery Date: ${new Date(newOrder.deliveryDate).toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" })}
 Shipping Address: ${newOrder.address}
 Contact: ${newOrder.contact}
 
@@ -124,9 +119,7 @@ Tax: ₹${newOrder.tax}
 Total: ₹${newOrder.total}
 
 Payment Type: ${newOrder.paymentType}
-Card Ending: ${newOrder.cardEnding}
-
-Contact : ${newOrder.contact}
+${newOrder.cardEnding ? `Card Ending: ${newOrder.cardEnding}` : ""}
 
 Thank you for shopping with Teabuff!
 
