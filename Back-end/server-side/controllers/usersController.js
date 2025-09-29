@@ -178,6 +178,50 @@ exports.verifyUser = async (req, res, next) => {
   }
 };
 
+// exports.updateUser = async (req, res) => {
+//   try {
+//     const userId = req.params.id;
+//     const { oldPassword, newPassword, username, address, phoneNumber } = req.body;
+
+//     // 1. Find user
+//     const user = await usersModel.findById(userId);
+//     if (!user) return res.status(404).json({ message: "User not found" });
+
+//     // 2. Compare old password
+//     const isMatch = await bcrypt.compare(oldPassword, user.password);
+//     if (!isMatch) return res.status(400).json({ message: "Old password is incorrect" });
+
+//     // 3. Hash new password (only if provided)
+//     let hashedPassword = user.password;
+//     if (newPassword && newPassword.trim() !== "") {
+//       hashedPassword = await bcrypt.hash(newPassword, 10);
+//     }
+
+//     // 4. Update user details
+//     user.username = username || user.username;
+//     user.password = hashedPassword;
+//     user.address = address || user.address;
+//     user.phoneNumber = phoneNumber || user.phoneNumber;
+
+//     const updatedUser = await user.save();
+
+//     res.status(200).json({
+//       message: "User updated successfully",
+//       user: {
+//         id: updatedUser._id,
+//         username: updatedUser.username,
+//         email: updatedUser.email,
+//         phoneNumber: updatedUser.phoneNumber,
+//         address: updatedUser.address,
+//       },
+//     });
+//   } catch (error) {
+//     console.error("Update User Error:", error);
+//     res.status(500).json({ message: "Server error", error: error.message });
+//   }
+// };
+
+
 exports.updateUser = async (req, res) => {
   try {
     const userId = req.params.id;
@@ -204,6 +248,13 @@ exports.updateUser = async (req, res) => {
     user.phoneNumber = phoneNumber || user.phoneNumber;
 
     const updatedUser = await user.save();
+
+    // 5. Update username in product comments everywhere
+    await productsModel.updateMany(
+      { "comments.User.UserId": userId },  // find products with this user's reviews
+      { $set: { "comments.$[].User.$[elem].username": updatedUser.username } },
+      { arrayFilters: [{ "elem.UserId": userId }] }
+    );
 
     res.status(200).json({
       message: "User updated successfully",

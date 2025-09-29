@@ -70,6 +70,7 @@ useEffect(()=>{
     const CartLength = cart?.items?.length
 
     useEffect(() => {
+        
         const handleClickOutside = (event) => {
             if (
                 BarVisible &&
@@ -84,9 +85,11 @@ useEffect(()=>{
         };
 
         document.addEventListener("mousedown", handleClickOutside);
+
         return () => {
             document.removeEventListener("mousedown", handleClickOutside);
         };
+        
     }, [BarVisible, Location.pathname]);
 
 
@@ -140,7 +143,7 @@ useEffect(()=>{
                     {!small&&<nav ref={accountNavRef} className={`AccountNav ${BarVisible ? 'show' : 'hide'} position-fixed end-0`} style={{ top: '65px' }}>
                         <ul className="py-0 d-flex flex-column justify-content-around px-2 mx-2 w-100 h-100">
                             <div>
-                                <div className="w-100 d-flex flex-column align-items-center">
+                                <div className="w-100 d-flex flex-column align-items-center my-4">
                                     <div className="UserProfileImage">
                                 <img
   src={preview}

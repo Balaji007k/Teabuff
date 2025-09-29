@@ -32,6 +32,7 @@ export default function ProfilePage({ isAuthenticated }) {
 
   useEffect(() => {
     fetchUserProfile();
+    window.scrollTo(0,0);
   }, []);
 
    const fileInputRef = useRef(null);

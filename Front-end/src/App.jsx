@@ -79,7 +79,7 @@ function App() {
           element={<Main AlertMessageMain={AlertMessage}/>}
         />
         <Route 
-          path={`/Profile/${isAuthenticated.userId}`}
+          path={`/Profile/${isAuthenticated?.userId}`}
           element={<ProfilePage isAuthenticated={isAuthenticated}/>}
         />
         <Route
