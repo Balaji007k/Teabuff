@@ -27,7 +27,7 @@ function Main({ userInput, AccountSet, createdAccount, AlertMessageMain, setHide
     <div className="App">
       <Home userInput={userInput} Review={Review} isAuthenticated={isAuthenticated} AccountSet={AccountSet} createdAccount={createdAccount} AccoutState={setAlertMessage} PopupMessage={AlertMessage}/>
       <Product setHideNavbar={setHideNavbar} productsItem={productsItem} category={category} isAuthenticated={isAuthenticated} />
-      <About image={image} />
+      {/* <About image={image} /> */}
       <Service />
       <Contact />
       <Footer />

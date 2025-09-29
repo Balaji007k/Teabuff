@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const { OrderConfirmationModel } = require('../models/Models');
+const { OrderConfirmationModel, usersModel } = require('../models/Models');
 const { sendOrderConfirmation } = require("../utils/sendEmail");
 
 // CREATE ORDER (push into same userId's array)
@@ -76,8 +76,9 @@ exports.createOrderConfirmation = async (req, res) => {
     const { userId, newOrder } = req.body;
 
     const exists = await OrderConfirmationModel.findOne({
-      "OrderDetails.orderId": newOrder.orderId
-    });
+  userId: new mongoose.Types.ObjectId(userId),
+  "OrderDetails.orderId": newOrder.orderId
+});
 
     if (exists) {
       return res.status(400).json({ error: "OrderId already exists" });
@@ -106,7 +107,15 @@ Hi ${newOrder.customerName},
 Your order (${newOrder.orderId}) has been successfully placed! Here are the full details:
 
 Order Date: ${new Date().toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" })}
-Delivery Date: ${new Date(newOrder.deliveryDate).toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" })}
+Delivery Date: ${
+  newOrder.deliveryDate
+    ? new Date(newOrder.deliveryDate).toLocaleDateString("en-IN", { 
+        day: "2-digit", month: "short", year: "numeric", 
+        hour: "2-digit", minute: "2-digit" 
+      })
+    : "N/A"
+}
+
 Shipping Address: ${newOrder.address}
 Contact: ${newOrder.contact}
 
@@ -127,7 +136,17 @@ Regards,
 Teabuff Store
 `;
 
-  await sendOrderConfirmation(newOrder.email, subject, text);
+if (newOrder.email) {
+  try {
+    await sendOrderConfirmation(newOrder.email, subject, text);
+  } catch (emailErr) {
+    console.error("Failed to send email:", emailErr);
+  }
+}
+}
+
+  if (newOrder?.address) {
+  await usersModel.findByIdAndUpdate(userId, { address: newOrder.address });
 }
 
 

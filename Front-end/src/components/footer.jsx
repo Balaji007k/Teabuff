@@ -1,10 +1,15 @@
 import { Link as ScrollLink } from "react-scroll";
 import { NavLink } from "react-router-dom";
 import { useLocation } from "react-router-dom";
+import { useEffect } from "react";
 
 function Footer() {
 
     const Location = useLocation();
+
+    useEffect(()=>{
+        window.scrollTo(0,0);
+    },[])
 
     return (
         <footer className='footer d-flex flex-column justify-content-center align-items-center mt-4'>
@@ -21,12 +26,14 @@ function Footer() {
                     <div className='Footer-Details Links d-flex justify-content-center align-items-start'>
                         <div className='w-100 d-flex flex-column justify-content-center align-items-start gap-2'>
                             <h5 className='head'>Links</h5>
-                            {Location.pathname==='/'?<>
+                            {Location.pathname==='/'?
+                            <>
                             <h6><ScrollLink offset={-70} to="Home">Home</ScrollLink></h6>
-                            <h6><ScrollLink offset={-70} to="About">About Us</ScrollLink></h6>
+                            <h6><NavLink to="/About">About Us</NavLink></h6>
                             <h6><ScrollLink offset={-70} to="Product_id">Menu</ScrollLink></h6>
                             <h6><ScrollLink offset={-70} to="Contact_id">Contact Us</ScrollLink></h6>
-                            </>:<>
+                            </>:
+                            <>
                             <h6><NavLink to="/">Home</NavLink></h6>
                             <h6><NavLink to="/About">About Us</NavLink></h6>
                             <h6><NavLink to="/Menu">Menu</NavLink></h6>

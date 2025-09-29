@@ -20,6 +20,9 @@ import Service from './components/service';
 import PageNotFound from './components/AssetComponents/PageNotFound';
 import Payment from './components/AssetComponents/Payment';
 import OrderConfirmation from './components/OrderConfirmation';
+import ProfilePage from './components/ProfilePage';
+
+// import { fetchData } from './utils/fetchData';
 
 function App() {
   const { isAuthenticated, cart, image, Review, AllReview, productsItem, category, AlertMessageTheme } = useTheme();
@@ -28,6 +31,12 @@ function App() {
   const [AlertMessage,setAlertMessage] = useState(null);
   const [HideNavbar,setHideNavbar] = useState(true);
 
+
+  // useEffect(() => {
+  //   fetchData("/products").then((data) => {
+  //     console.log("testing Data",data.data || []); // fallback to empty array
+  //   });
+  // }, []);
 
   useEffect(() => {
     if (location.pathname === '/Login') {
@@ -68,6 +77,10 @@ function App() {
         <Route
           path="/Register"
           element={<Main AlertMessageMain={AlertMessage}/>}
+        />
+        <Route 
+          path={`/Profile/${isAuthenticated.userId}`}
+          element={<ProfilePage isAuthenticated={isAuthenticated}/>}
         />
         <Route
           path="/Menu"

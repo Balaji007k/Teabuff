@@ -1,6 +1,6 @@
 import { useMediaQuery } from "react-responsive";
 import { useState, useRef, useEffect } from "react";
-import { NavLink as Link } from "react-router-dom";
+import { NavLink as Link, useNavigate } from "react-router-dom";
 import { useLocation } from 'react-router-dom';
 import { Link as ScrollLink } from "react-scroll";
 import ApiService from "./Service/ApiService/product-api";
@@ -19,41 +19,14 @@ function Header({ userinputFocus, isAuthenticated, cart, setAlertMessage, HideNa
     const accountNavRef = useRef(null);
     const buttonRef = useRef(null);
     const [preview, setPreview] = useState('assets/ProfileImage.svg');
+    const Navigate = useNavigate();
 
-    const fileInputRef = useRef(null);
-
-  const handleIconClick = () => {
-    fileInputRef.current.click(); // open file dialog
-  };
-
-  const fetchProfileImage = async () => {
+    const fetchProfileImage = async () => {
         const { Result, Error } = await ApiService.fetchData(`/userProfileImage/${isAuthenticated.userId}`);
         if (Result?.profileImage) {
             setPreview(`${ApiService.Backend+Result?.profileImage}`);
         }
     };
-  const handleFileChange = async (event) => {
-  const file = event.target.files[0];
-  if (file) {
-
-    // Upload to backend
-    const formData = new FormData();
-    formData.append("profileImage", file);
-    formData.append("userId", isAuthenticated?.userId); // pass userId
-
-    try {
-        const { Result, Error } = await ApiService.fetchData(`/api/users/${isAuthenticated.userId}`,"PUT",formData);
-      if (Result?.profileImage) {
-        // backend URL replaces temporary preview
-        setPreview(`${ApiService.Backend+Result?.profileImage}`);
-      } else {
-        console.error("Upload failed:", Error);
-      }
-    } catch (err) {
-      console.error("Error uploading image:", err);
-    }
-  }
-};
 
 useEffect(()=>{
     if(!HideNav){setBarVisible(false);}
@@ -123,28 +96,24 @@ useEffect(()=>{
                 <div className="logo name">
                     <h1 className=" fs-3 m-0">Teabuff</h1>
                 </div>
-                <input
-          type="file"
-          ref={fileInputRef}
-          style={{ display: "none" }}
-          accept="image/*"
-          onChange={handleFileChange}
-        />
+        <div className="right-Line position-fixed end-0 top-0"></div>
                 <nav ref={small?accountNavRef:null} className={`navbar ${small&&BarVisible?'show':'hide'}`}>
-                    <ul className="nav-list p-0 m-0">
+                    {small&&<i className="fa-solid fa-xmark position-absolute top-0 end-0 p-4 fs-3" style={{cursor:'pointer'}} onClick={()=>setBarVisible(false)}></i>}
+                    <ul className="nav-list p-0 m-0 overflow-x-hidden">
                         {small&&<div className="w-100 d-flex flex-column align-items-center">
                                     <div className="UserProfileImage">
-                                <img src={preview} alt="Profile" height={'100px'} width={'100px'} className=" rounded-circle bg-black" 
+                                <img src={preview} alt="Profile" height={'125px'} width={'125px'} className=" rounded-circle bg-black" 
+                                onClick={()=>{Navigate(`/Profile/${isAuthenticated?.userId}`)}}
                                 onError={(e) => {
     e.currentTarget.onerror = null; // avoid infinite loop
     e.currentTarget.src = "assets/ProfileImage.svg"; // fallback if image not found
   }} />
-                                <i className="fa-solid fa-pen-to-square" onClick={handleIconClick} style={{top:'60px'}}></i>
+                                <i className="fa-solid fa-pen-to-square" onClick={()=>{Navigate(`/Profile/${isAuthenticated?.userId}`)}} style={{top:'60px'}}></i>
                                     </div>
                             <span className=" fs-3 text-white">{isAuthenticated?.userName}</span>
                                 </div>}
-                        <li data-aos="fade-down" data-aos-duration="600">{Location.pathname==='/'?<ScrollLink offset={-70} to="Home">Home</ScrollLink>:<Link to={"/"}>Home</Link>}</li>
-                        {Location.pathname === `/product/${id}` ? <li data-aos="fade-down" data-aos-duration="1000"><ScrollLink offset={-70} to="suggestItems">Suggested items</ScrollLink></li> :Location.pathname==='/'?<li data-aos="fade-down" data-aos-duration="1000"><ScrollLink offset={-70} to="About">About</ScrollLink></li>:<li data-aos="fade-down" data-aos-duration="2200"><Link to="/About">About</Link></li>}
+                        <li data-aos="fade-down" data-aos-duration="600">{Location.pathname==='/'?<ScrollLink offset={-70} to="Home">Home</ScrollLink>:<Link to="/">Home</Link>}</li>
+                        {Location.pathname === `/product/${id}` ? <li data-aos="fade-down" data-aos-duration="1000"><ScrollLink offset={-70} to="suggestItems">Suggested items</ScrollLink></li> :<li data-aos="fade-down" data-aos-duration="1200"><Link to="/About">About</Link></li>}
                         {Location.pathname === `/product/${id}` ? <li data-aos="fade-down" data-aos-duration="1400"><Link to="/Menu">More items</Link></li>:<li data-aos="fade-down" data-aos-duration="1400"><Link to={'/Menu'}>Menu</Link></li>}
                         {Location.pathname === `/product/${id}` ? null : Location.pathname==='/'?<li data-aos="fade-down" data-aos-duration="1800"><ScrollLink offset={-70} to="Service_id">Service</ScrollLink></li>:<li data-aos="fade-down" data-aos-duration="1800"><Link to="/Service">Service</Link></li>}
                         {Location.pathname === `/product/${id}` ? null : Location.pathname==='/'?<li data-aos="fade-down" data-aos-duration="2200"><ScrollLink offset={-70} to="Contact_id">Contact Us</ScrollLink></li>:<li data-aos="fade-down" data-aos-duration="2200"><Link to="/Contact_Us">Contact Us</Link></li>}
