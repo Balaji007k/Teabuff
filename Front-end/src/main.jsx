@@ -14,13 +14,13 @@ ReactDOM.createRoot(document.getElementById('root')).render(
   </ThemeProvider>
 );
 
-// if ("serviceWorker" in navigator) {
-//   window.addEventListener("load", () => {
-//     navigator.serviceWorker
-//       .register("/Teabuff/sw.js")
-//       .then((reg) => console.log("✅ Service Worker registered:", reg))
-//       .catch((err) => console.log("❌ SW registration failed:", err));
-//   });
-// }
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker
+      .register("/Teabuff/sw.js")
+      .then((reg) => console.log("✅ Service Worker registered:", reg))
+      .catch((err) => console.log("❌ SW registration failed:", err));
+  });
+}
 
 
