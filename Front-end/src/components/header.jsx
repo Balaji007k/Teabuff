@@ -148,13 +148,14 @@ useEffect(()=>{
   height="125px"
   width="125px"
   className="rounded-circle bg-black"
+  onClick={()=>{Navigate(`/Profile/${isAuthenticated?.userId}`)}}
   onError={(e) => {
     e.currentTarget.onerror = null; // avoid infinite loop
     e.currentTarget.src = "assets/ProfileImage.svg"; // fallback if image not found
   }}
 />
 
-                                <i className="fa-solid fa-pen-to-square" onClick={handleIconClick}></i>
+                                <i className="fa-solid fa-pen-to-square" onClick={()=>{Navigate(`/Profile/${isAuthenticated?.userId}`)}}></i>
                                     </div>
                             <span className=" fs-3 text-black">{isAuthenticated?.userName}</span>
                                 </div>
