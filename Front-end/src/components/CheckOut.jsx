@@ -114,7 +114,7 @@ export default function CheckOut({isAuthenticated,cart}){
                         <form onSubmit={PostCheckOut} className=" d-flex flex-column gap-3">
                             <div className='Contact-information w-100 d-flex flex-column gap-3'>
                                 <h2>Contact information</h2>
-                            <input type='email' value={contactEmail} onChange={(e)=>setcontactEmail(e.target.value)} placeholder='Email'  required/>
+                            <input type='email' value={contactEmail} onChange={(e)=>setcontactEmail(e.target.value)} placeholder='Email'  required disabled={contactEmail}/>
                             <span className=' d-flex align-items-center gap-2'>
                                 <input className='check-box' type='checkbox' /><label>Email me with news and offers</label>
                             </span>

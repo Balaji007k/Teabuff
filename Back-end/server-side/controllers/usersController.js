@@ -44,7 +44,7 @@ exports.verifyOTP = (req, res) => {
   const { email, otp } = req.body;
   if (otpStore[email] && otpStore[email] == otp) {
     delete otpStore[email];
-    return res.json({ success: true, message: "Email verified successfully!" });
+    return res.json({ success: true, message: "Email verified successfully!", email:email });
   }
   return res.json({ success: false, message: "Invalid or expired OTP" });
 };
@@ -101,7 +101,7 @@ exports.createUsers = async (req, res, next) => {
 
         const userverify = users.find(u => u.email === email)
 
-        if (userverify) return res.status(401).json({ message: "username is already taken" })
+        if (userverify) return res.status(401).json({ message: "email is already taken" })
 
 
         const newUser = {
@@ -188,7 +188,7 @@ exports.verifyUser = async (req, res, next) => {
     const user = await usersModel.findOne({ email });
 
     if (!user) {
-      return res.status(404).json({ message: "User not found" });
+      return res.status(404).json({ message: "User eamil not found" });
     }
 
     // Compare hashed password

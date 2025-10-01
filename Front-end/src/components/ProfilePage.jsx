@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import ApiService from "./Service/ApiService/product-api";
 import AlertMessage from './AssetComponents/AlertMessage';
+import "../style/ProfilePage.css"
 
 export default function ProfilePage({ isAuthenticated }) {
   const [User, setUser] = useState(null);
@@ -112,7 +113,7 @@ const handleSubmit = async (e) => {
   return (
     <>
     {AlertMessageProfile&&AlertMessageProfile?.message&&<AlertMessage message={AlertMessageProfile}/>}
-    <div className="container mb-3" style={{ marginTop: "75px" }}>
+    <div className="Profile-page-main-container container mb-3" style={{ marginTop: "75px" }}>
       <div className="row justify-content-center">
         <div className="col-md-8 col-lg-6">
           <div className="card shadow-sm border-0">
@@ -152,7 +153,7 @@ const handleSubmit = async (e) => {
 
               {/* Profile Form */}
               <form
-                className=" d-sm-flex flex-sm-column gap-sm-4"
+                className=" d-sm-flex flex-sm-column gap-sm-4 align-items-center"
                 onSubmit={handleSubmit}
               >
                 {/* Email */}
@@ -168,8 +169,8 @@ const handleSubmit = async (e) => {
 
 
                 {/* Full Name */}
-                <div className="row mb-3">
-                  <div className="col">
+                <div className="d-flex gap-3 mb-3">
+                  <div className="w-50">
                     <label className="form-label">First Name</label>
                     <input
                       type="text"
@@ -179,7 +180,7 @@ const handleSubmit = async (e) => {
                       placeholder="First Name"
                     />
                   </div>
-                  <div className="col">
+                  <div className="w-50">
                     <label className="form-label">Last Name</label>
                     <input
                       type="text"
@@ -253,7 +254,7 @@ const handleSubmit = async (e) => {
     type="button"
     onClick={() => setIsEditingPassword(!isEditingPassword)}
     className="btn btn-sm btn-outline-secondary position-absolute"
-    style={{ top: "32px", right: "10px" }}
+    style={{ top: "50%", right: "10px" }}
   >
     ✏️
   </button>

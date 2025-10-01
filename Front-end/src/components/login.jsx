@@ -18,8 +18,7 @@ function Login({ userInput, AccoutState, setLoading }) {
   const [otp, setOtp] = useState("");
   const [step, setStep] = useState(1); // 1: check email, 2: verify OTP, 3: ready to register
   const [emailVerify, setEmailVerify] = useState(false);
-
-  //test
+  const [emailChange, setEmailChange] = useState(true);
 
 // ✅ Step 1: Check email domain
 const checkEmailDomain = async () => {
@@ -46,24 +45,43 @@ const sendOTP = async () => {
     AccoutState({ message: "Failed to send OTP", state: false });
   } else {
     setStep(2);
-    setEmailVerify(true);
     AccoutState({ message: "OTP sent to your email", state: true });
   }
 };
 
+const tempEmail = useRef("");
+
 // ✅ Step 3: Verify OTP
 const verifyOTP = async () => {
   const { Result, Error } = await ApiService.fetchData("/login/verifyOTP", "POST", { email, otp });
+  console.log(Result)
   if (Error || !Result.success) {
     setErrors(Result?.message || "Invalid OTP");
     AccoutState({ message: "Invalid or expired OTP", state: false });
   } else {
     setStep(3);
-    AccoutState({ message: "Email verified ✅, now you can register", state: true });
+    setEmailVerify(true);
+    setEmailChange(false);
+    tempEmail.current = Result?.email; // ✅ store in ref
+    console.log(tempEmail.current);
+    AccoutState({ message: "Email verified, now you can register", state: true });
   }
 };
 
-//test
+useEffect(() => {
+  // console.log("verify: ", emailVerify);
+  // console.log("tempemail: "+ tempEmail.current, "tempEqual", tempEmail.current !== "");
+  // console.log("verifyEqual: ", email === tempEmail.current);
+
+  if (emailVerify && tempEmail.current && email === tempEmail.current) {
+    setStep(3);
+    setEmailChange(false);
+  } else {
+    setStep(1);
+    setEmailChange(true);
+  }
+}, [email]);
+
 
   const handleLogin = () => {
     setLoading(true);
@@ -208,7 +226,7 @@ const verifyOTP = async () => {
             </>
           )}
 
-          <input type="email" ref={userInput} value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" required />
+          <input type="email" ref={userInput} value={email} onChange={(e) => {setEmail(e.target.value);}} placeholder="Email" required />
           {errors === "User not found" && <p ref={errorTimerRef} className="text-danger">{errors}</p>}
 
           {/* Test Show email verification buttons */}
@@ -234,7 +252,7 @@ const verifyOTP = async () => {
             </>
           )}
 
-          {Location.pathname === '/Register'&&emailVerify ? (
+          {Location.pathname === '/Register'&&!emailChange ? (
             <button className="" onClick={() => newUser()}>Register</button>
           ) : Location.pathname === '/Login'&&(
             <button className="" onClick={() => handleLogin()}>Login</button>

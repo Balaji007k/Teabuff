@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import ApiService from '../Service/ApiService/product-api';
 
 const ReviewSlider = () => {
-  const { isAuthenticated,AllReview,fetchAllReviews } = useTheme(); // Review = [ { title, comments: [ { User: [reviewers...] } ] } ]
+  const { isAuthenticated,AllReview } = useTheme(); // Review = [ { title, comments: [ { User: [reviewers...] } ] } ]
   const Navigate = useNavigate();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [flattenedReviews, setFlattenedReviews] = useState([]);
@@ -62,7 +62,7 @@ useEffect(() => {
         }}
       >
         {flattenedReviews.length === 0 ? (
-          <div style={{ height: '160px' }}>Loading...</div>
+          <div style={{ height: '160px' }}><span className=' fs-3'>🔍 </span> No comments...</div>
         ) : (
           flattenedReviews.map((user, idx) => (
             <div
