@@ -165,7 +165,7 @@ function Products({ productsItem }) {
       <input type="file" accept=".json" onChange={handleFileChange} />
       <button
         onClick={handleUpload}
-        className="ml-2 px-4 py-2 bg-green-600 text-white rounded"
+        className="ml-2 px-4 py-2 bg-green-600 text-black rounded"
       >
         Import Products
       </button>
@@ -309,7 +309,7 @@ function Products({ productsItem }) {
         </tbody>
       </table>
     </div>
-<button className="ml-2 px-4 py-2 bg-green-600 text-white rounded ms-2" style={{width:'fit-content'}} onClick={()=>{deleteProductAll()}}>DeleteAll</button>
+<button className="ml-2 px-4 py-2 bg-green-600 text-black rounded ms-2" style={{width:'fit-content'}} onClick={()=>{deleteProductAll()}}>DeleteAll</button>
     </div>
   );
 }

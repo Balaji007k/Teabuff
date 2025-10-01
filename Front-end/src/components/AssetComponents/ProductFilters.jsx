@@ -44,7 +44,12 @@ export default function ProductFilters({ Products, id, searchingProduct }) {
     } else if (value === 'HighToLow') {
       const Sorted = [...source].sort((a, b) => b.price - a.price);
       Products(Sorted);
-    } else if (value === 'Cancel') {
+    } else if (value === 'New') {
+    const Sorted = [...source].sort(
+      (a, b) => new Date(b.createdAt) - new Date(a.createdAt) // newest first
+    );
+    Products(Sorted);
+  } else if (value === 'Cancel') {
       setSort(false);
         if (Location.pathname==='/Menu')Products(source);
         else{

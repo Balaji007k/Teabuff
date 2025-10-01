@@ -14,6 +14,10 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: false,
   },
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
 });
 
 // Create a model from the schema
@@ -36,6 +40,10 @@ const CartSchema = new mongoose.Schema({
 // Define the schema for each usercart
 const userCartSchema = new mongoose.Schema({
   userId: { type: String, required: true , unique:true},
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
   items: [CartSchema]
 });
 
@@ -58,7 +66,11 @@ const reviewsModel = mongoose.model('reviews', reviewSchema);
 // Create the model for the shop
 const shopSchema = new mongoose.Schema({
       url: { type: String, required: true },
-      content: { type: String, required: true }
+      content: { type: String, required: true },
+      createdAt: {
+    type: Date,
+    default: Date.now,
+  },
 });
 
 // Create a model from the schema
@@ -78,7 +90,11 @@ const ProductReviewsSchema = mongoose.Schema({
   userImage:{type:String,required:false},
   username:{type:String,required:true},
   ProductUserRating:{type:Number,default:0},
-  comment:{type:String,default:null}
+  comment:{type:String,default:null},
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
 })
 
 const commentsSchemaa = mongoose.Schema({
@@ -98,6 +114,10 @@ const prouctSchema = new mongoose.Schema({
   features: { type: String, required: true },
   purchaseLink: { type: String, required: true },
   likes:{type:Number , default:false},
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
   comments:[commentsSchemaa],
 });
 
@@ -146,6 +166,10 @@ const ShippingDetail = new mongoose.Schema({
 const CheckOutData = new mongoose.Schema({
   UserId:{type:String,required:true},
   contactEmail:{type:String,required:true},
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
   ShippingDetails:[ShippingDetail]
 })
 

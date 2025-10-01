@@ -113,7 +113,7 @@ const handleSubmit = async (e) => {
   return (
     <>
     {AlertMessageProfile&&AlertMessageProfile?.message&&<AlertMessage message={AlertMessageProfile}/>}
-    <div className="Profile-page-main-container container mb-3" style={{ marginTop: "75px" }}>
+    <div className="Profile-page-main-container container-md mb-md-4" style={{ marginTop: "75px" }}>
       <div className="row justify-content-center">
         <div className="col-md-8 col-lg-6">
           <div className="card shadow-sm border-0">
@@ -250,14 +250,16 @@ const handleSubmit = async (e) => {
     placeholder="****************"
     disabled={!isEditingPassword}
   />
-  <button
+  {/* <button
     type="button"
     onClick={() => setIsEditingPassword(!isEditingPassword)}
     className="btn btn-sm btn-outline-secondary position-absolute"
     style={{ top: "50%", right: "10px" }}
   >
     ✏️
-  </button>
+  </button> */}
+  <i class="fa-solid fa-pencil position-absolute p-2 border border-1 border-dark-subtle rounded-2" style={{ top: "48%", right: "10px", cursor:'pointer'}}
+  onClick={() => setIsEditingPassword(!isEditingPassword)}></i>
 </div>
 
 
