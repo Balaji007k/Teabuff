@@ -84,7 +84,7 @@ function Product({ isAuthenticated, productsItem, category, setHideNavbar }) {
     <div className='Product d-flex justify-content-center' id="Product_id">
       <div className='product-inner-box'>
         <div className='search'>
-          <div className='product top px-2'>
+          <div className='product top home-search px-2'>
             <select
               value={value}
               className='item category'
@@ -101,7 +101,7 @@ function Product({ isAuthenticated, productsItem, category, setHideNavbar }) {
             </select>
           </div>
           <h1 className='menu-head fw-bolder'>Menu</h1>
-          <div className='top d-flex align-items-center'>
+          <div className='top home-search d-flex align-items-center'>
             <input type='search' className='item search-tag' onKeyUp={() => handleSearch(SearchItem)} onChange={(e) => setSearchItem(e.target.value.trim().toLowerCase())} placeholder='search' />
             <button type='submit' className='search-i-product' onClick={() => handleSearch(SearchItem)}>
               <i className="fa-solid fa-magnifying-glass"></i>

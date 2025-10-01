@@ -19,7 +19,12 @@ function Home({ userInput, isAuthenticated, AccoutState, PopupMessage }) {
   const Location = useLocation();
 
   useEffect(()=>{
-    if(PopupMessage&&PopupMessage.message) setLoading(false);
+    if(PopupMessage&&PopupMessage.message) {
+      setLoading(false)
+      setTimeout(()=>{
+        AccoutState(null);
+      },1500)
+    };
   },[PopupMessage])
 
   return (

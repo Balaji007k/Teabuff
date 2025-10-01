@@ -67,7 +67,11 @@ useEffect(()=>{
     };
 
 
-    const CartLength = cart?.items?.length
+    const CartLength = cart?.items?.length;
+
+    useEffect(()=>{
+        setBarVisible(false);
+    },[Location.pathname])
 
     useEffect(() => {
         
@@ -90,7 +94,7 @@ useEffect(()=>{
             document.removeEventListener("mousedown", handleClickOutside);
         };
         
-    }, [BarVisible, Location.pathname]);
+    }, [BarVisible]);
 
 
     return (

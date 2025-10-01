@@ -1,142 +1,4 @@
-// import { useState, useRef } from "react";
-// import { Link } from "react-router-dom";
-// import { useLocation, useNavigate } from "react-router-dom";
-// import ApiService from './Service/ApiService/product-api';
-
-// function Login({ userInput,AccoutState,setLoading}) {
-
-//     const Location = useLocation();
-//     const Navigate = useNavigate();
-//     const errorTimerRef = useRef(null);
-//     const [errors,setErrors] = useState("");
-//     //const [AccoutState,setAccoutState] = useState("");
-
-//     const [username,setuser] = useState("");
-//     const [email,setemail] = useState("");
-//     const [password,setPass] = useState("");
-//     const [phoneNumber,setPhone] = useState("");
-
-// const handleLogin = () => {
-//   setLoading(true);
-//   setErrors("");
-//   if (errorTimerRef.current) {
-//     clearTimeout(errorTimerRef.current);
-//     errorTimerRef.current = null;
-//   }
-
-//   const User = { email, password };
-
-//   if (User.email === "" || User.password === "") {
-//       AccoutState({message:"please enter email and password",state:false});
-//       return setTimeout(()=>{
-//         AccoutState("");
-//       },3000);
-//   }
-
-//   ApiService.fetchData('/login', "POST", User)
-//     .then(({ Result, Error }) => {
-//       if (Error==="Failed to fetch"){
-//         AccoutState({message:"Server failed to fetch!",state:false});
-//         console.log("Error: "+Error)
-//         setTimeout(()=>{
-//         AccoutState(null);
-//       },1500);
-//       }
-//       else if (Error) {
-//         setLoading(false);
-//         setErrors(Error);
-//         errorTimerRef.current = setTimeout(() => {
-//           setErrors("");
-//         }, 3000);
-//         return;
-//       }
-
-//       // alert("Account successfully logged in");
-//       AccoutState({message:"Account successfully logged in",state:true});
-//       setTimeout(()=>{
-//         AccoutState(null);
-//         console.log("Logged in user:", Result.user);
-//         Navigate('/');
-//         window.location.reload();
-//       },1500);
-//     })
-//     .catch(err => {
-//       console.error("Unexpected error:", err);
-//       // alert("Something went wrong.");
-//       AccoutState({message:"Something went wrong.",state:false});
-//       setTimeout(()=>{
-//         AccoutState(null);
-//       },1500);
-//     });
-// };
-
-
-//     const newUser = async () => {
-//       setLoading(true);
-
-//       const newUser = {username,email,password,phoneNumber}
-
-//       if(newUser.username === "" || newUser.email === "" || newUser.password === "" || newUser.phoneNumber === ""){
-//         setLoading(false);
-//         AccoutState({message:"please enter all feild",state:false});
-//       return setTimeout(()=>{
-//         AccoutState(null);
-//       },1500);
-//       }
-
-//       ApiService.fetchData('/users',"POST",newUser)
-//       .then(({Error})=>{
-//         if (Error) {
-//          AccoutState({message:Error,state:false});
-//       setTimeout(()=>{
-//         AccoutState(null);
-//       },1500);
-//         return;
-//        }
-//         setuser("")
-//         setemail("")
-//         setPass("")
-//         setPhone("")
-//         setLoading(false);
-//         AccoutState({message:"Account successfully created",state:true});
-//       setTimeout(()=>{
-//         AccoutState(null);
-//         Navigate('/Login')
-//       },1500);
-//       })
-//       .catch(err => console.log(err));
-
-//     };
-
-//     return (
-//       <>
-//         <div className='Userlogin d-flex flex-column align-items-center justify-content-end'>
-//             <div className="Userlogin-inner-box d-flex flex-column align-items-center justify-content-around gap-2">
-//                 <div className='login-form d-flex flex-column px-4'>
-//                     {Location.pathname === '/Login' ? <h1>Login Here</h1> : <h1>Register Here</h1>}
-//                     {Location.pathname === '/Register' ?<input type="email" ref={userInput} value={username} onChange={(e)=>setuser(e.target.value)} placeholder="Enter Username Here" required />:null}
-//                     <input type="email" ref={userInput} value={email} onChange={(e)=>setemail(e.target.value)} placeholder="Enter Email Here" required />
-//                     {errors === "User not found"&&<p ref={errorTimerRef} className="text-danger">{errors}</p>}
-//                     <input type="password" value={password} onChange={(e)=>setPass(e.target.value)}  minLength={8} placeholder="Enter Password Here" required />
-//                     {errors === "Password does not match"&&<p ref={errorTimerRef} className="text-danger">{errors}</p>}
-//                     {Location.pathname === '/Register' ?
-//                         (<><input type="tel" name="phone" value={phoneNumber} onChange={(e)=>setPhone(e.target.value)} minLength={10} maxLength={10} placeholder="Enter Phone Number" pattern="[0-9]{10}" required={Location.pathname === '/Register'} /><button onClick={()=>newUser()}>Register</button></>) :
-//                         <button className="my-5" onClick={()=>handleLogin()}>Login</button>}
-//                 </div>
-//                 <div className="login-way">
-//                     <h5>Dont't have an account?</h5>
-//                     {Location.pathname === '/Register' ? <p><Link to='/Login' className="text-info text-decoration-underline">Login</Link> here</p> : <p><Link to='/Register' className=" text-info text-decoration-underline">Sign up</Link> here</p>}
-//                 </div>
-//             </div>
-//         </div>
-//         </>
-//     )
-// }
-
-// export default Login;
-
-
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useLocation, useNavigate } from "react-router-dom";
 import ApiService from './Service/ApiService/product-api';
@@ -153,7 +15,55 @@ function Login({ userInput, AccoutState, setLoading }) {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
+  const [otp, setOtp] = useState("");
+  const [step, setStep] = useState(1); // 1: check email, 2: verify OTP, 3: ready to register
+  const [emailVerify, setEmailVerify] = useState(false);
 
+  //test
+
+// ✅ Step 1: Check email domain
+const checkEmailDomain = async () => {
+  const { Result, Error } = await ApiService.fetchData("/login/CheckEmail", "POST", { email });
+  if (Error) {
+    setErrors("Server error, try again.");
+    AccoutState({ message: "Server error, try again.", state: false });
+    return;
+  }
+  console.log(Result)
+  if (Result.success) {
+    AccoutState({ message: "Valid email, sending OTP...", state: true });
+    sendOTP();
+  } else {
+    setErrors(Result.message);
+  }
+};
+
+// ✅ Step 2: Send OTP
+const sendOTP = async () => {
+  const { Result, Error } = await ApiService.fetchData("/login/sendOTP", "POST", { email });
+  if (Error || !Result.success) {
+    setErrors(Result?.message || "Failed to send OTP");
+    AccoutState({ message: "Failed to send OTP", state: false });
+  } else {
+    setStep(2);
+    setEmailVerify(true);
+    AccoutState({ message: "OTP sent to your email", state: true });
+  }
+};
+
+// ✅ Step 3: Verify OTP
+const verifyOTP = async () => {
+  const { Result, Error } = await ApiService.fetchData("/login/verifyOTP", "POST", { email, otp });
+  if (Error || !Result.success) {
+    setErrors(Result?.message || "Invalid OTP");
+    AccoutState({ message: "Invalid or expired OTP", state: false });
+  } else {
+    setStep(3);
+    AccoutState({ message: "Email verified ✅, now you can register", state: true });
+  }
+};
+
+//test
 
   const handleLogin = () => {
     setLoading(true);
@@ -233,6 +143,13 @@ function Login({ userInput, AccoutState, setLoading }) {
     setLoading(true);
     const username = firstName + " " + lastName;
 
+     // Email not verified yet
+  if (step < 3) {
+    setLoading(false);
+    AccoutState({ message: "Please verify your email first!", state: false });
+    
+  }
+
     if (!firstName || !lastName || !email || !password || !confirmPassword || !phoneNumber) {
       setLoading(false);
       AccoutState({ message: "Please enter all fields", state: false });
@@ -277,6 +194,7 @@ function Login({ userInput, AccoutState, setLoading }) {
       .catch(err => console.log(err));
   };
 
+
   return (
     <div className='Userlogin d-flex flex-column align-items-lg-end align-items-center justify-content-end'>
       <div className="Userlogin-inner-box d-flex flex-column align-items-center justify-content-around gap-2">
@@ -293,6 +211,19 @@ function Login({ userInput, AccoutState, setLoading }) {
           <input type="email" ref={userInput} value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" required />
           {errors === "User not found" && <p ref={errorTimerRef} className="text-danger">{errors}</p>}
 
+          {/* Test Show email verification buttons */}
+{Location.pathname === '/Register' && step === 1 && (
+  <button onClick={checkEmailDomain}>Verify Email</button>
+)}
+
+{step === 2 && (
+  <>
+    <input type="text" value={otp} onChange={(e) => setOtp(e.target.value)} placeholder="Enter OTP" />
+    <button onClick={verifyOTP}>Verify OTP</button>
+  </>
+)}
+{/* Test Show email verification buttons */}
+
           <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" minLength={8} required />
           {errors === "Password does not match" && <p ref={errorTimerRef} className="text-danger">{errors}</p>}
 
@@ -303,9 +234,9 @@ function Login({ userInput, AccoutState, setLoading }) {
             </>
           )}
 
-          {Location.pathname === '/Register' ? (
+          {Location.pathname === '/Register'&&emailVerify ? (
             <button className="" onClick={() => newUser()}>Register</button>
-          ) : (
+          ) : Location.pathname === '/Login'&&(
             <button className="" onClick={() => handleLogin()}>Login</button>
           )}
         </div>

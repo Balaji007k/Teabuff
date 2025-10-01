@@ -16,13 +16,16 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 
-const { getUsers, getSingleUser, getSingleUserProfileImage, createUsers, updateProfileImage, verifyUser, updateUser, LogoutUser, deleteUser, GetUserSate, GetSingleUserSate, CreateUserState } = require('../controllers/usersController');
+const { getUsers, getSingleUser, getSingleUserProfileImage, CheckEmail, createUsers, updateProfileImage, verifyUser, sendOTP, verifyOTP, updateUser, LogoutUser, deleteUser, GetUserSate, GetSingleUserSate, CreateUserState } = require('../controllers/usersController');
 
 router.route('/users').get(getUsers);
 router.route('/user/:id').get(getSingleUser);
 router.route('/userProfileImage/:id').get(getSingleUserProfileImage);
+router.route('/login/CheckEmail').post(CheckEmail);
 router.route('/users').post(createUsers);
 router.put("/users/:id", upload.single("profileImage"), updateProfileImage);
+router.route('/login/sendOTP').post(sendOTP);
+router.route('/login/verifyOTP').post(verifyOTP);
 router.route('/login').post(verifyUser);
 router.route('/users/update/:id').put(updateUser);
 router.route('/Logout/:id').post(LogoutUser);

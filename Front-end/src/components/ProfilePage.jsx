@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import ApiService from "./Service/ApiService/product-api";
+import AlertMessage from './AssetComponents/AlertMessage';
 
 export default function ProfilePage({ isAuthenticated }) {
   const [User, setUser] = useState(null);
@@ -12,6 +13,12 @@ export default function ProfilePage({ isAuthenticated }) {
   const [newPassword, setNewPassword] = useState("");
   const [contact, setcontact] = useState(null);
   const [preview, setPreview] = useState('assets/ProfileImage.svg');
+  const [AlertMessageProfile,setAlertMessage] = useState(null);
+
+  // add states
+const [isEditingPassword, setIsEditingPassword] = useState(false);
+//tset
+
 
   const Backend = `/users/update/${isAuthenticated.userId}`;
 
@@ -41,33 +48,6 @@ export default function ProfilePage({ isAuthenticated }) {
       fileInputRef.current.click(); // open file dialog
     };
 
-  // 👉 Handle Form Submit
-//   const handleSubmit = async (e) => {
-//     e.preventDefault();
-
-//     try {
-//       const formData = new FormData();
-//       formData.append("username", `${firstName} ${lastName}`.trim());
-//       formData.append("address", address);
-//       formData.append("oldPassword", oldPassword);
-//       formData.append("newPassword", newPassword);
-//       formData.append("phoneNumber", contact);
-
-//       console.log(formData)
-
-//       const { Result, Error } = await ApiService.fetchData(Backend, "PUT", formData);
-
-//       if (Result) {
-//         alert("Profile updated successfully ✅");
-//         window.location.reload();
-//       } else {
-//         alert(Error || "Something went wrong ❌");
-//       }
-//     } catch (err) {
-//       console.error("Update error:", err);
-//       alert("Server error ❌");
-//     }
-//   };
 
 const handleSubmit = async (e) => {
   e.preventDefault();
@@ -81,19 +61,18 @@ const handleSubmit = async (e) => {
       phoneNumber: contact,
     };
 
-    console.log(payload)
+    //console.log(payload)
 
     const { Result, Error } = await ApiService.fetchData(Backend, "PUT", payload);
 
     if (Result) {
-      alert("Profile updated successfully ✅");
-      window.location.reload();
+      setAlertMessage({message:"Profile updated successfully",state:true})
     } else {
-      alert(Error || "Something went wrong ❌");
+      setAlertMessage({message:Error || `Something went wrong`,state:false})
     }
   } catch (err) {
     console.error("Update error:", err);
-    alert("Server error ❌");
+    setAlertMessage({message:"Server error",state:false})
   }
 };
 
@@ -121,7 +100,18 @@ const handleSubmit = async (e) => {
     }
   };
 
+  useEffect(()=>{
+    if(AlertMessageProfile&&AlertMessageProfile?.message){
+      setTimeout(()=>{
+        setAlertMessage(null);
+        if(AlertMessageProfile&&AlertMessageProfile?.state){window.location.reload()};
+      },1500)
+    }
+  },[AlertMessageProfile])
+
   return (
+    <>
+    {AlertMessageProfile&&AlertMessageProfile?.message&&<AlertMessage message={AlertMessageProfile}/>}
     <div className="container mb-3" style={{ marginTop: "75px" }}>
       <div className="row justify-content-center">
         <div className="col-md-8 col-lg-6">
@@ -143,13 +133,9 @@ const handleSubmit = async (e) => {
           accept="image/*"
           onChange={handleFileChange}
         />
-                  <label
-                    onClick={handleIconClick}
-                    className="btn btn-sm btn-light border position-absolute"
-                    style={{ bottom: 0, right: 0, cursor: "pointer" }}
-                  >
-                    ✏️
-                  </label>
+                  <i className="fa-solid fa-pen-to-square p-2 fs-4 position-absolute"
+                  onClick={handleIconClick}
+                    style={{ bottom: 0, right: 0, cursor: "pointer" }}></i>
                 </div>
                 <h4 className="mt-3 mb-0">{User?.username}</h4>
               </div>
@@ -179,6 +165,7 @@ const handleSubmit = async (e) => {
                     disabled
                   />
                 </div>
+
 
                 {/* Full Name */}
                 <div className="row mb-3">
@@ -217,7 +204,7 @@ const handleSubmit = async (e) => {
                 </div>
 
                 {/* Old Password */}
-                <div className="mb-3">
+                {/* <div className="mb-3">
                   <label className="form-label">Old Password</label>
                   <input
                     type="password"
@@ -226,10 +213,10 @@ const handleSubmit = async (e) => {
                     className="form-control"
                     placeholder="****************"
                   />
-                </div>
+                </div> */}
 
                 {/* New Password */}
-                <div className="mb-3">
+                {/* <div className="mb-3">
                   <label className="form-label">New Password</label>
                   <input
                     type="password"
@@ -238,7 +225,40 @@ const handleSubmit = async (e) => {
                     className="form-control"
                     placeholder="****************"
                   />
-                </div>
+                </div> */}
+
+                <div className="mb-3 position-relative">
+  <label className="form-label">Old Password</label>
+  <input
+    type="password"
+    value={oldPassword}
+    onChange={(e) => setOldPassword(e.target.value)}
+    className="form-control"
+    placeholder="****************"
+    disabled={!isEditingPassword}
+  />
+</div>
+
+<div className="mb-3 position-relative">
+  <label className="form-label">New Password</label>
+  <input
+    type="password"
+    value={newPassword}
+    onChange={(e) => setNewPassword(e.target.value)}
+    className="form-control"
+    placeholder="****************"
+    disabled={!isEditingPassword}
+  />
+  <button
+    type="button"
+    onClick={() => setIsEditingPassword(!isEditingPassword)}
+    className="btn btn-sm btn-outline-secondary position-absolute"
+    style={{ top: "32px", right: "10px" }}
+  >
+    ✏️
+  </button>
+</div>
+
 
                 {/* Contact */}
                 <div className="mb-3">
@@ -264,5 +284,6 @@ const handleSubmit = async (e) => {
         </div>
       </div>
     </div>
+    </>
   );
 }

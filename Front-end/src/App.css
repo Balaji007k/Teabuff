@@ -292,7 +292,7 @@ video{
   top: 0;
   left: 0;
   height: 100vh;
-  width: 85%; /* sidebar width */
+  width: 90%; /* sidebar width */
   backdrop-filter: blur(15px);
   background: linear-gradient(180deg, rgba(0, 0, 0, 0.95), rgba(30, 30, 30, 0.98));
   box-shadow: 3px 0px 20px rgba(0, 0, 0, 0.6);
@@ -571,8 +571,12 @@ video{
 }
 .search .top{
   width: 20% !important;
-  min-width: 150px !important;
+  min-width: 200px !important;
   background-color: var(--bOX-background-color) !important;
+}
+.search .top.home-search{
+  width: 20% !important;
+  min-width: 150px !important;
 }
 .search h1{
   display: none;

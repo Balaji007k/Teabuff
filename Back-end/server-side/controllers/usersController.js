@@ -4,6 +4,50 @@ const jwt = require('jsonwebtoken')
 const sharp = require("sharp");
 const fs = require("fs").promises;
 const path = require("path");
+const dns = require("dns");
+const { sendOtpMail } = require("../utils/sendEmail");
+
+
+
+
+let otpStore = {};
+
+// ✅ Check email domain
+exports.CheckEmail = (req, res) => {
+  const { email } = req.body;
+  const domain = email.split("@")[1];
+
+  dns.resolveMx(domain, (err, addresses) => {
+    if (err || !addresses || addresses.length === 0) {
+      return res.json({ success: false, message: "Invalid email domain" });
+    }
+    return res.json({ success: true, message: "Valid email domain" });
+  });
+};
+
+// Send OTP
+exports.sendOTP = async(req, res) => {
+  const { email } = req.body;
+  const otp = Math.floor(100000 + Math.random() * 900000);
+  otpStore[email] = otp;
+
+  const success = await sendOtpMail(email, otp);
+  if (success) {
+    res.json({ success: true, message: "OTP sent successfully" });
+  } else {
+    res.json({ success: false, message: "Failed to send OTP" });
+  }
+};
+
+// Verify OTP
+exports.verifyOTP = (req, res) => {
+  const { email, otp } = req.body;
+  if (otpStore[email] && otpStore[email] == otp) {
+    delete otpStore[email];
+    return res.json({ success: true, message: "Email verified successfully!" });
+  }
+  return res.json({ success: false, message: "Invalid or expired OTP" });
+};
 
 const maxAge = 3 * 24 * 60 * 60;
 
@@ -178,50 +222,6 @@ exports.verifyUser = async (req, res, next) => {
   }
 };
 
-// exports.updateUser = async (req, res) => {
-//   try {
-//     const userId = req.params.id;
-//     const { oldPassword, newPassword, username, address, phoneNumber } = req.body;
-
-//     // 1. Find user
-//     const user = await usersModel.findById(userId);
-//     if (!user) return res.status(404).json({ message: "User not found" });
-
-//     // 2. Compare old password
-//     const isMatch = await bcrypt.compare(oldPassword, user.password);
-//     if (!isMatch) return res.status(400).json({ message: "Old password is incorrect" });
-
-//     // 3. Hash new password (only if provided)
-//     let hashedPassword = user.password;
-//     if (newPassword && newPassword.trim() !== "") {
-//       hashedPassword = await bcrypt.hash(newPassword, 10);
-//     }
-
-//     // 4. Update user details
-//     user.username = username || user.username;
-//     user.password = hashedPassword;
-//     user.address = address || user.address;
-//     user.phoneNumber = phoneNumber || user.phoneNumber;
-
-//     const updatedUser = await user.save();
-
-//     res.status(200).json({
-//       message: "User updated successfully",
-//       user: {
-//         id: updatedUser._id,
-//         username: updatedUser.username,
-//         email: updatedUser.email,
-//         phoneNumber: updatedUser.phoneNumber,
-//         address: updatedUser.address,
-//       },
-//     });
-//   } catch (error) {
-//     console.error("Update User Error:", error);
-//     res.status(500).json({ message: "Server error", error: error.message });
-//   }
-// };
-
-
 exports.updateUser = async (req, res) => {
   try {
     const userId = req.params.id;
@@ -231,30 +231,43 @@ exports.updateUser = async (req, res) => {
     const user = await usersModel.findById(userId);
     if (!user) return res.status(404).json({ message: "User not found" });
 
-    // 2. Compare old password
-    const isMatch = await bcrypt.compare(oldPassword, user.password);
-    if (!isMatch) return res.status(400).json({ message: "Old password is incorrect" });
-
-    // 3. Hash new password (only if provided)
-    let hashedPassword = user.password;
+    // 2. Password update (only if newPassword is provided)
     if (newPassword && newPassword.trim() !== "") {
-      hashedPassword = await bcrypt.hash(newPassword, 10);
+      if (!oldPassword) {
+        return res.status(400).json({ message: "Old password is required to set a new password" });
+      }
+
+      const isMatch = await bcrypt.compare(oldPassword, user.password);
+      if (!isMatch) {
+        return res.status(400).json({ message: "Old password is incorrect" });
+      }
+
+      user.password = await bcrypt.hash(newPassword, 10);
     }
 
-    // 4. Update user details
-    user.username = username || user.username;
-    user.password = hashedPassword;
-    user.address = address || user.address;
-    user.phoneNumber = phoneNumber || user.phoneNumber;
+    // 3. Update other details (independent of password change)
+    if (username) user.username = username;
+    if (address) {
+  user.address = address;
+
+  // Update ShippingDetail address in CheckOutModel
+  await CheckOutModel.updateMany(
+    { UserId: userId },                       // find by userId
+    { $set: { "ShippingDetails.$[].address": address } } // update all shipping addresses
+  );
+}
+    if (phoneNumber) user.phoneNumber = phoneNumber;
 
     const updatedUser = await user.save();
 
-    // 5. Update username in product comments everywhere
-    await productsModel.updateMany(
-      { "comments.User.UserId": userId },  // find products with this user's reviews
-      { $set: { "comments.$[].User.$[elem].username": updatedUser.username } },
-      { arrayFilters: [{ "elem.UserId": userId }] }
-    );
+    // 4. Update username in product comments everywhere
+    if (username) {
+      await productsModel.updateMany(
+        { "comments.User.UserId": userId },
+        { $set: { "comments.$[].User.$[elem].username": updatedUser.username } },
+        { arrayFilters: [{ "elem.UserId": userId }] }
+      );
+    }
 
     res.status(200).json({
       message: "User updated successfully",

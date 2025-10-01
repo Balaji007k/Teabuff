@@ -120,6 +120,10 @@ function ProductItem({ isAuthenticated, Review, productsItem, cart, AlertMessage
         }
     };
 
+    useEffect(()=>{
+      setSearchItem("");
+    },[id])
+
     // , Review, cart, productsItem, id, Location.pathname
 
   useEffect(() => {
@@ -251,7 +255,7 @@ function ProductItem({ isAuthenticated, Review, productsItem, cart, AlertMessage
                       ))}</div>
                       <div><p className={`${expanded[ProductReview._id]?'show':'hide'}`}>{ProductReview.comment}</p><span className=' fw-bold opacity-75' style={{cursor:'pointer'}} onClick={() => toggleReadMore(ProductReview._id)}>{!expanded[ProductReview._id] ? "Readmore" : "Readless..."}</span></div>
                     </div>) : <div className=' d-flex flex-column gap-2'>
-                      <div className=' d-flex align-items-center gap-2'><img src={selectedProductReview[0]?.image} alt="loading" /><span className=' fs-4'>{selectedProductReview[0]?.name ? selectedProductReview[0]?.name : 'Bot'}</span></div>
+                      <div className=' d-flex align-items-center gap-2'><img src={"assets/user.png"} alt="loading" /><span className=' fs-4'>{selectedProductReview[0]?.name ? selectedProductReview[0]?.name : 'Bot'}</span></div>
                       <div className=' d-flex align-items-center gap-2 mt-2'>{Array.from({ length: selectedProductReview[0]?.rating ? selectedProductReview[0]?.rating : 5 }, (_, i) => (
                         <i key={i} className="fa-solid fa-star"></i>
                       ))}</div>
