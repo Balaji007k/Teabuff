@@ -227,7 +227,7 @@ Please keep commit messages clear and run linters/tests before submitting.
 
 ## Contact
 
-Project maintained by: **Balaji007k** — replace with your email or link to profile.
+Project maintained by: **Balaji007k**
 
 Found a bug or want a feature? Open an issue on the repo.
 
