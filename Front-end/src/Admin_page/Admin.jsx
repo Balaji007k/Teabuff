@@ -9,9 +9,10 @@ import ApiService from '../components/Service/ApiService/product-api';
 function Admin({AllReview, productsItem, category}) {
 
     const [Users,setUser] = useState([]);
+    const [Orders,setOrders] = useState([]);
     const Location = useLocation();
 
-    const fetchProducts = async () => {
+    const fetchUsers = async () => {
         const { Result, Error } = await ApiService.fetchData('/users');
         if (Array.isArray(Result)) {
         setUser(Result);
@@ -22,10 +23,20 @@ function Admin({AllReview, productsItem, category}) {
       }
     };
 
+    const fetchOrders = async () => {
+        const { Result, Error } = await ApiService.fetchData('/orders');
+        if (Result) {
+        setOrders(Result?.Orders);
+      } else {
+        console.error("Unexpected data format:", Error);
+      }
+    };
+
 
     useEffect(()=>{
 
-    fetchProducts();
+    fetchUsers();
+    fetchOrders();
 
   // fetch(`https://teabuff.onrender.com/users`)
   //   .then(res => res.json())
@@ -45,7 +56,7 @@ function Admin({AllReview, productsItem, category}) {
         <div className='main-Admin d-flex w-100'>
             <AdminNavbar/>
             {Location.pathname === '/Admin'&&<DashBoard Users={Users} AllReview={AllReview} productsItem={productsItem} category={category}/>}
-            <Outlet context={Users}/>
+            <Outlet context={{Users,Orders}}/>
         </div>
     )
 }

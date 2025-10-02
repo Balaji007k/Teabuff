@@ -12,10 +12,14 @@ import PageNotFound from './AssetComponents/PageNotFound';
 import AlertMessage from './AssetComponents/AlertMessage';
 import LoadingPage from './AssetComponents/LoadingPage';
 import ApiService from './Service/ApiService/product-api';
+import { TimeContext,formatShortTimeAgo } from "../TimeContext";
+import { useContext } from "react";
 
 function ProductItem({ isAuthenticated, Review, productsItem, cart, AlertMessageMain }) {
 
   const { handleCart, PostUserLikedState, UserLikedState, UpdateProduct, UserProductReviews, fetchProductReviews, ProductAvgRating } = useTheme();
+
+    const now = useContext(TimeContext);
 
   const reviews = UserProductReviews?.User || [];
   const ratingCounts = [0, 0, 0, 0, 0]; // index 0 = 1-star, ..., index 4 = 5-star
@@ -243,7 +247,9 @@ function ProductItem({ isAuthenticated, Review, productsItem, cart, AlertMessage
 
                   <div className='User Reviews'>
                     <div className='Comment-box d-flex flex-column gap-2'>
-                    {UserProductReviews?.ProductId === selectedProduct?._id && UserProductReviews?.User.length > 0? UserProductReviews.User.map(ProductReview => <div key={ProductReview._id} className=' d-flex flex-column gap-2'>
+                    {UserProductReviews?.ProductId === selectedProduct?._id && UserProductReviews?.User.length > 0? UserProductReviews.User.map(ProductReview => 
+                    <div key={ProductReview._id} className=' d-flex flex-column gap-2 position-relative'>
+                      <span className=" position-absolute top-0 end-0 py-1 px-2">{formatShortTimeAgo(ProductReview?.createdAt)}</span>
                       <div className=' d-flex align-items-center gap-2'><img src={`${ApiService.Backend+ProductReview?.userImage}`} alt="loading" 
                       onError={(e) => {
     e.currentTarget.onerror = null; // avoid infinite loop

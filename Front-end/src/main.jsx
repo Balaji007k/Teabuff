@@ -5,14 +5,18 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 import App from './App';
 import { ThemeProvider } from './ThemeContext';
+import { TimeProvider } from './TimeContext'; // ✅ create a separate file for TimeProvider
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <ThemeProvider>
-    <HashRouter>
-      <App />
-    </HashRouter>
+    <TimeProvider>   {/* ✅ global clock for the entire app */}
+      <HashRouter>
+        <App />
+      </HashRouter>
+    </TimeProvider>
   </ThemeProvider>
 );
+
 
 // if ("serviceWorker" in navigator) {
 //   window.addEventListener("load", () => {

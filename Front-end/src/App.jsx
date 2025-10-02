@@ -21,6 +21,7 @@ import PageNotFound from './components/AssetComponents/PageNotFound';
 import Payment from './components/AssetComponents/Payment';
 import OrderConfirmation from './components/OrderConfirmation';
 import ProfilePage from './components/ProfilePage';
+import Orders from './Admin_page/Admin_Component/Orders';
 
 // import { fetchData } from './utils/fetchData';
 
@@ -115,6 +116,10 @@ function App() {
           <Route
             path="Categorys"
             element={<Category category={category} />}
+          />
+          <Route
+            path='Orders'
+            element={<Orders/>}
           />
         </Route>
         <Route

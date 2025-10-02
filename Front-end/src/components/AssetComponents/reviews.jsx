@@ -2,12 +2,15 @@ import React, { useEffect, useState } from 'react';
 import { useTheme } from '../../ThemeContext';
 import { useNavigate } from 'react-router-dom';
 import ApiService from '../Service/ApiService/product-api';
+import { TimeContext,formatShortTimeAgo } from "../../../src/TimeContext";
+import { useContext } from "react";
 
 const ReviewSlider = () => {
   const { isAuthenticated,AllReview } = useTheme(); // Review = [ { title, comments: [ { User: [reviewers...] } ] } ]
   const Navigate = useNavigate();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [flattenedReviews, setFlattenedReviews] = useState([]);
+    const now = useContext(TimeContext);
 
   // Utility to shuffle array
 const shuffleArray = (array) => {
@@ -71,7 +74,11 @@ useEffect(() => {
               className="d-flex flex-column gap-2 px-3"
               style={{ width: '100%', height: '160px' }}
             >
-              <h6 className="fw-bold">{user.title}</h6>
+              <div className=' d-flex flex-row-reverse align-items-center justify-content-between'>
+                <span className="" style={{whiteSpace:'nowrap'}}>{formatShortTimeAgo(user?.createdAt)}</span>
+              <span className="fw-bold" style={{whiteSpace:'nowrap',overflow:'hidden',textOverflow:"ellipsis"}}>{user.title}</span>
+              </div>
+              
               <div className="star d-flex align-items-center gap-1" style={{ fontSize: '14px' }}>
                 {Array.from({ length: 5 }, (_, i) => (
                   <i key={i} className={`fa-solid fa-star ${i + 1 <=user.ProductUserRating?"text-warning":"text-white"}`}></i>

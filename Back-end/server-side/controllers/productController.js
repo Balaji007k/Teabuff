@@ -98,6 +98,100 @@ exports.createProduct = async (req, res) => {
 
 
 
+// exports.updateProduct = async (req, res) => {
+//   try {
+//     const id = req.params.id;
+//     const SelectedProduct = await productsModel.findById(id);
+
+//     if (!SelectedProduct) {
+//       return res.status(404).json({ message: "Product not found" });
+//     }
+
+//     const {
+//       title,
+//       price,
+//       description,
+//       url,
+//       categoryId,
+//       rating,
+//       ingredients,
+//       features,
+//       purchaseLink,
+//       UserId,
+//       userImage,
+//       username,
+//       ProductUserRating,
+//       comment
+//     } = req.body;
+
+//      const profileImage = await usersModel.findById(UserId);
+
+//     // Update product fields
+//     if (title) SelectedProduct.title = title;
+//     if (price) SelectedProduct.price = price;
+//     if (description) SelectedProduct.description = description;
+//     if (url) SelectedProduct.url = url;
+//     if (categoryId) SelectedProduct.categoryId = categoryId;
+//     if (rating) SelectedProduct.rating = rating;
+//     if (ingredients) SelectedProduct.ingredients = ingredients;
+//     if (features) SelectedProduct.features = features;
+//     if (purchaseLink) SelectedProduct.purchaseLink = purchaseLink;
+
+//     // Add or update comment only if comment-related fields are present
+//     // Add or update comment only if comment-related fields are present
+// if (UserId && username && comment) {
+//   const userComment = {
+//     UserId,
+//     userImage:userImage?userImage:profileImage.profileImage,
+//     username,
+//     ProductUserRating,
+//     comment
+//   };
+
+//   let commentBlock = SelectedProduct.comments?.find(c => c.ProductId === id);
+
+//   if (!commentBlock) {
+//     SelectedProduct.comments.push({
+//       ProductId: id,
+//       User: [userComment]
+//     });
+//   } else {
+//     const existingUser = commentBlock.User.find(u => u.UserId === UserId);
+//     if (existingUser) {
+//       existingUser.ProductUserRating = ProductUserRating;
+//       existingUser.comment = comment;
+//     } else {
+//       commentBlock.User.push(userComment);
+//     }
+//   }
+// }
+
+//     // Re-fetch updated commentBlock
+//     commentBlock = SelectedProduct.comments.find(c => c.ProductId === id);
+
+//     // Calculate average rating
+//     const ratings = commentBlock?.User.map(r => r.ProductUserRating).filter(r => typeof r === 'number');
+
+//     const avgRating = ratings?.length > 0? (ratings.reduce((acc, val) => acc + val, 0) / ratings.length).toFixed(1): 0;
+
+//     SelectedProduct.rating=avgRating;
+
+//     const updatedProduct = await SelectedProduct.save();
+
+//     res.json({
+//       message: "Successfully updated product",
+//       avgRating,
+//       updatedProduct
+//     });
+//   } catch (error) {
+//     console.error("Error updating product:", error);
+//     res.status(500).json({
+//       message: "Update not completed",
+//       error: error.message
+//     });
+//   }
+// };
+
 exports.updateProduct = async (req, res) => {
   try {
     const id = req.params.id;
@@ -124,7 +218,7 @@ exports.updateProduct = async (req, res) => {
       comment
     } = req.body;
 
-     const profileImage = await usersModel.findById(UserId);
+    const profileImage = await usersModel.findById(UserId);
 
     // Update product fields
     if (title) SelectedProduct.title = title;
@@ -138,43 +232,45 @@ exports.updateProduct = async (req, res) => {
     if (purchaseLink) SelectedProduct.purchaseLink = purchaseLink;
 
     // Add or update comment only if comment-related fields are present
-    // Add or update comment only if comment-related fields are present
-if (UserId && username && comment) {
-  const userComment = {
-    UserId,
-    userImage:userImage?userImage:profileImage.profileImage,
-    username,
-    ProductUserRating,
-    comment
-  };
+    if (UserId && username && comment) {
+      const userComment = {
+        UserId,
+        userImage: userImage ? userImage : profileImage.profileImage,
+        username,
+        ProductUserRating,
+        comment,
+        createdAt: new Date()  // <-- add timestamp
+      };
 
-  let commentBlock = SelectedProduct.comments?.find(c => c.ProductId === id);
+      let commentBlock = SelectedProduct.comments?.find(c => c.ProductId === id);
 
-  if (!commentBlock) {
-    SelectedProduct.comments.push({
-      ProductId: id,
-      User: [userComment]
-    });
-  } else {
-    const existingUser = commentBlock.User.find(u => u.UserId === UserId);
-    if (existingUser) {
-      existingUser.ProductUserRating = ProductUserRating;
-      existingUser.comment = comment;
-    } else {
-      commentBlock.User.push(userComment);
+      if (!commentBlock) {
+        SelectedProduct.comments.push({
+          ProductId: id,
+          User: [userComment]
+        });
+      } else {
+        const existingUser = commentBlock.User.find(u => u.UserId === UserId);
+        if (existingUser) {
+          existingUser.ProductUserRating = ProductUserRating;
+          existingUser.comment = comment;
+          existingUser.createdAt = new Date(); // <-- update timestamp on edit
+        } else {
+          commentBlock.User.push(userComment);
+        }
+      }
     }
-  }
-}
 
     // Re-fetch updated commentBlock
-    commentBlock = SelectedProduct.comments.find(c => c.ProductId === id);
+    const commentBlock = SelectedProduct.comments.find(c => c.ProductId === id);
 
     // Calculate average rating
     const ratings = commentBlock?.User.map(r => r.ProductUserRating).filter(r => typeof r === 'number');
+    const avgRating = ratings?.length > 0
+      ? (ratings.reduce((acc, val) => acc + val, 0) / ratings.length).toFixed(1)
+      : 0;
 
-    const avgRating = ratings?.length > 0? (ratings.reduce((acc, val) => acc + val, 0) / ratings.length).toFixed(1): 0;
-
-    SelectedProduct.rating=avgRating;
+    SelectedProduct.rating = avgRating;
 
     const updatedProduct = await SelectedProduct.save();
 

@@ -2,75 +2,6 @@ const mongoose = require("mongoose");
 const { OrderConfirmationModel, usersModel } = require('../models/Models');
 const { sendOrderConfirmation } = require("../utils/sendEmail");
 
-// CREATE ORDER (push into same userId's array)
-// exports.createOrderConfirmation = async (req, res) => {
-//   try {
-//     const { userId, newOrder } = req.body;
-
-//     const exists = await OrderConfirmationModel.findOne({
-//   "OrderDetails.orderId": newOrder.orderId
-// });
-// if (exists) {
-//   return res.status(400).json({ error: "OrderId already exists" });
-// }
-
-
-//     const order = await OrderConfirmationModel.findOneAndUpdate(
-//   { userId: new mongoose.Types.ObjectId(userId) },
-//   { $push: { OrderDetails: newOrder } },
-//   { new: true, upsert: true }
-// );
-
-//     res.status(201).json({ message: "Order created", newOrder:newOrder.orderId });
-//   } catch (err) {
-//     console.error("Error creating order:", err);
-//     res.status(500).json({ error: err.message });
-//   }
-// };
-
-// const twilio = require("twilio");
-// const accountSid = process.env.TWILIO_ACCOUNT_SID;
-// const authToken = process.env.TWILIO_AUTH_TOKEN;
-// const fromNumber = process.env.TWILIO_PHONE_NUMBER; 
-// const client = twilio(accountSid, authToken);
-
-// exports.createOrderConfirmation = async (req, res) => {
-//   try {
-//     const { userId, newOrder } = req.body;
-
-//     // Check if order exists
-//     const exists = await OrderConfirmationModel.findOne({
-//       "OrderDetails.orderId": newOrder.orderId
-//     });
-//     if (exists) {
-//       return res.status(400).json({ error: "OrderId already exists" });
-//     }
-
-//     // Save order
-//     const order = await OrderConfirmationModel.findOneAndUpdate(
-//       { userId: new mongoose.Types.ObjectId(userId) },
-//       { $push: { OrderDetails: newOrder } },
-//       { new: true, upsert: true }
-//     );
-
-//     // Send SMS if contact exists
-//     if (newOrder.contact) {
-//       await client.messages.create({
-//         body: `Hi ${newOrder.customerName}, your order (${newOrder.orderId}) has been successfully placed! Total: ₹${newOrder.total}.`,
-//         from: fromNumber,
-//         to: newOrder.contact, // e.g. +91XXXXXXXXXX
-//       });
-//     }
-
-//     res.status(201).json({ message: "Order created and SMS sent", newOrder: newOrder.orderId });
-//   } catch (err) {
-//     console.error("Error creating order:", err);
-//     res.status(500).json({ error: err.message });
-//   }
-// };
-
-
-
 exports.createOrderConfirmation = async (req, res) => {
   try {
     const { userId, newOrder } = req.body;
@@ -199,6 +130,16 @@ exports.getUserOrders = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+
+exports.getAllorders = async(req,res) => {
+  try {
+    const Orders = await OrderConfirmationModel.find({});
+    if(Orders) {res.status(200).json({message:"Successfully fetched",Orders:Orders});}
+    else{res.status(404).json({message:"No Orders found"})}
+  } catch (error) {
+    res.status(500).json({error:error.message});
+  }
+}
 
 // DELETE all orders for a user
 exports.deleteUserOrders = async (req, res) => {

@@ -20,6 +20,9 @@ function AdminNavbar() {
         <li className="nav-item">
           <Link to="/Admin/Categorys" className="nav-link">Categories</Link>
         </li>
+        <li className="nav-item">
+          <Link to="/Admin/Orders" className="nav-link">Orders</Link>
+        </li>
       </ul>
     </nav>
   );

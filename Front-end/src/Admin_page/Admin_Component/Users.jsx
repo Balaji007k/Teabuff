@@ -3,7 +3,8 @@ import "../assets_Admin/AdminPages.css";
 import ApiService from "../../components/Service/ApiService/product-api";
 
 function Users() {
-  const users = useOutletContext();
+  const {Users} = useOutletContext();
+  console.log(Users)
 
   return (
     <div className="Admin_page p-3">
@@ -21,17 +22,17 @@ function Users() {
             </tr>
           </thead>
           <tbody>
-            {users.map((user) => (
-              <tr key={user._id}>
-                <td>{user._id}</td>
-                <td>{user.username}</td>
-                <td>{user.email}</td>
+            {Users.map((User) => (
+              <tr key={User._id}>
+                <td>{User._id}</td>
+                <td>{User.username}</td>
+                <td>{User.email}</td>
                 <td className="text-truncate" style={{ maxWidth: "150px" }}>
-                  {user.password}
+                  {User.password}
                 </td>
-                <td>{user.phoneNumber}</td>
-                <td>{user?.profileImage}</td>
-                {user?.profileImage&&<td><a href={ApiService.Backend+user?.profileImage} className=" bg-info p-3 rounded-2">View</a></td>}
+                <td>{User.phoneNumber}</td>
+                <td>{User?.profileImage}</td>
+                {User?.profileImage&&<td><a href={ApiService.Backend+User?.profileImage} className=" bg-info p-3 rounded-2">View</a></td>}
               </tr>
             ))}
           </tbody>

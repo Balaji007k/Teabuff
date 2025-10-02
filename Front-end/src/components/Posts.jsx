@@ -2,11 +2,14 @@ import { useEffect, useState } from "react";
 import { useTheme } from "../ThemeContext";
 import "../style/Post.css"
 import ApiService from "./Service/ApiService/product-api";
+import { TimeContext,formatShortTimeAgo } from "../TimeContext";
+import { useContext } from "react";
 
 function Posts() {
   const { isAuthenticated,AllReview,fetchAllReviews } = useTheme();
   const [flattenedReviews, setFlattenedReviews] = useState([]);
   const [likes, setLikes] = useState({}); // track likes per review
+  const now = useContext(TimeContext);
   
 
   useEffect(()=>{
@@ -51,8 +54,10 @@ function Posts() {
             key={review._id}
             className="col-12 col-md-6" // 1 per row on mobile, 2 per row on desktop
           >
-            <div className="card bg-dark text-white shadow-sm h-100 rounded-4">
+            
+            <div className="card bg-dark text-white shadow-sm h-100 rounded-4 position-relative">
               <div className="card-body d-flex flex-column gap-2">
+                <span className=" position-absolute top-0 end-0 p-3">{formatShortTimeAgo(review?.createdAt)}</span>
                 {/* Title */}
                 <h6 className="fw-bold">{review.title}</h6>
 

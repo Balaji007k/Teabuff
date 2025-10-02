@@ -24,6 +24,11 @@ function DashBoard({ Review, productsItem, category, Users }) {
             <Link to="/Admin/Categorys">Categorys {category?.length}</Link>
           </h1>
         </div>
+        <div className="Dashboard">
+          <h1>
+            <Link to="/Admin/Orders">Orders {category?.length}</Link>
+          </h1>
+        </div>
       </div>
     </div>
   );
