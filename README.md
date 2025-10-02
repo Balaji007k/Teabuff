@@ -26,12 +26,6 @@
 
 ---
 
-## Demo
-
-Add your demo link, screenshots, or GIFs here once available.
-
----
-
 ## Features
 
 * Product catalog with categories and filters
@@ -63,7 +57,7 @@ Add your demo link, screenshots, or GIFs here once available.
 
 ## Folder Structure
 
-Example (adjust to your project):
+Example :
 
 ```
 /teabuff
@@ -103,7 +97,7 @@ These instructions will get Teabuff running on your local machine for developmen
 Clone the repo:
 
 ```bash
-git clone <your-repo-url>
+git clone <https://github.com/Balaji007k/Teabuff.git>
 cd teabuff
 ```
 
