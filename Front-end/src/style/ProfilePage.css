@@ -1,3 +1,6 @@
-.Profile-page-main-container .mb-3{
-    width: 100%;
+.card{
+    background-color: var(--bg-color);
+}
+.card label{
+    color: inherit;
 }

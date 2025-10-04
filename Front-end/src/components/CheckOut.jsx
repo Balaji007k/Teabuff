@@ -7,10 +7,12 @@ import AlertMessage from "./AssetComponents/AlertMessage";
 import LoadingPage from "./AssetComponents/LoadingPage";
 import { useLocation } from "react-router-dom";
 import PlaceOrderDetails from "./PlaceOrderDetails";
+import { useTheme } from "../ThemeContext";
 
 export default function CheckOut({isAuthenticated,cart}){
     const small = useMediaQuery({maxWidth:600})
 
+    const {Theme} = useTheme();
     const Navigate = useNavigate();
     const Location = useLocation();
     const {id} = useParams();
@@ -106,7 +108,7 @@ export default function CheckOut({isAuthenticated,cart}){
     if(isAuthenticated?.userId&&cart?.items.length>0){return(
         <>
         {AlertMessageCheckOut&&AlertMessageCheckOut?.message?<AlertMessage message={AlertMessageCheckOut}/>:Loading&&<LoadingPage/>}
-        <div className={`checkout-Cart-page w-100 bg-white d-flex gap-2 ${!small?'flex-row-reverse':'flex-column'} `} style={{marginTop:!small&&'70px'}}>
+        <div className={`checkout-Cart-page w-100 d-flex gap-2 ${!small?'flex-row-reverse':'flex-column'} ${Theme?'text-white':'text-black'}`} style={{marginTop:!small&&'70px'}}>
         <div className=" overflow-y-scroll" style={{marginTop:small&&'70px',flex:'1 1 40%',height:'880px'}}><PlaceOrderDetails isAuthenticated={isAuthenticated} cart={Location.pathname==`/CheckOut/${Filtered?.productId}`?{items:[Filtered],ProductId:Filtered?.productId}:cart}/></div>
         <div className={` d-flex justify-content-center flex-grow-1`} style={{flex:'1 1 60%'}}>
                     <div className='CheckOut-Page d-flex flex-column gap-4 p-3' style={{ width:!small? '80%' : '100%'}}>

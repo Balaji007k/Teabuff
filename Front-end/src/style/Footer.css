@@ -6,17 +6,17 @@
 .footer-inner-box{
    width: 90%;
    z-index: 1;
-   background-color: var(--bOX-background-color);
+   box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.5);
    overflow: hidden;
 }
 .footer-inner-box a{
    cursor: pointer;
   text-decoration: none !important;
-  color: var(--color);
+  color: inherit;
 }
 .footer-content{
    flex-wrap: wrap;
-   color: var(--color);
+   color: inherit;
 }
 .footer-content .Footer-Details{
    width: 20%;
@@ -28,11 +28,9 @@
     background-color: rgb(81, 81, 90);
 }
 .footer input{
-   color: var(--color);
    outline: none;
    border: none;
    border-bottom: 1px solid var(--color);
-   background-color: var(--bOX-background-color);
 }
 .footer .head,.Mail{
    border: none;

@@ -13,7 +13,7 @@ import ProductCard from './AssetComponents/ProductCard';
 function CartDetails({ isAuthenticated, cart }) {
     const small = useMediaQuery({maxWidth:600});
     const Location = useLocation();
-    const { setUpdatedCart,PostSaveCart, AlertMessageTheme } = useTheme();
+    const { setUpdatedCart,PostSaveCart, AlertMessageTheme, Theme } = useTheme();
     const [AlertMessagePlaceOrder,setAlertMessage] = useState([]);
     const [Loading,setLoading] = useState(false);
 
@@ -104,7 +104,7 @@ function CartDetails({ isAuthenticated, cart }) {
   <div className='w-100 text-center fs-2'>No Cart Here</div>
 ) : (
   (cart?.items?.length > 0) && (
-    <div className='d-flex flex-wrap-reverse justify-content-between' style={{ color: 'var(--Background-white-text)' }}>
+    <div className='d-flex flex-wrap-reverse justify-content-between' style={{ color:Theme?'white':'black' }}>
       <div className="w-100 d-flex justify-content-center">
         <div className='Cart-Products w-100' style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(300px,1fr))', justifyItems: 'center' }}>
           {cart?.items.map((item) => (

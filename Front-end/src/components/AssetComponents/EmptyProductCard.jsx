@@ -1,6 +1,11 @@
+import { useTheme } from "../../ThemeContext"
+
 export default function EmptyProductCard() {
+
+    const { Theme } = useTheme();
+
     return (
-        <div className='product-item' style={{ width: '300px', flex: '0 0 auto' }}>
+        <div className={`product-item ${Theme?'bg-white text-black shadow border border-1 border-black':'bg-black text-white'}`} style={{ width: '300px', flex: '0 0 auto' }}>
             <img src="NAN" className='Shop-slid' alt="No Products" />
             <div className='d-flex flex-column w-100'>
                 <div className='d-flex justify-content-between align-items-center'>

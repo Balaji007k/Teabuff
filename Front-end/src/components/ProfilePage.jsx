@@ -3,10 +3,12 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import ApiService from "./Service/ApiService/product-api";
 import AlertMessage from './AssetComponents/AlertMessage';
 import "../style/ProfilePage.css"
+import { useTheme } from "../ThemeContext";
 
 export default function ProfilePage({ isAuthenticated }) {
   const [User, setUser] = useState(null);
 
+  const {Theme} = useTheme();
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [address, setAddress] = useState("");
@@ -114,9 +116,9 @@ const handleSubmit = async (e) => {
     <>
     {AlertMessageProfile&&AlertMessageProfile?.message&&<AlertMessage message={AlertMessageProfile}/>}
     <div className="Profile-page-main-container container-md mb-md-4" style={{ marginTop: "75px" }}>
-      <div className="row justify-content-center">
+      <div className={`row justify-content-center`}>
         <div className="col-md-8 col-lg-6">
-          <div className="card shadow-sm border-0">
+          <div className={`card ${Theme?'text-white':'text-black'}`}>
             <div className="card-body p-4">
               {/* Profile Header */}
               <div className="d-flex flex-column align-items-center mb-4">

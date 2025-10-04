@@ -26,7 +26,7 @@ import Orders from './Admin_page/Admin_Component/Orders';
 // import { fetchData } from './utils/fetchData';
 
 function App() {
-  const { isAuthenticated, cart, image, Review, AllReview, productsItem, category, AlertMessageTheme } = useTheme();
+  const { isAuthenticated, cart, image, Review, AllReview, productsItem, category, AlertMessageTheme, Theme } = useTheme();
   const userInput = useRef();
   const location = useLocation();
   const [AlertMessage,setAlertMessage] = useState(null);
@@ -52,6 +52,14 @@ function App() {
   const userinputFocus = () => {
     userInput.current?.focus();
   };
+
+  useEffect(() => {
+  document.documentElement.style.setProperty(
+    "--bg-color",
+    Theme ? "#000" : "#fff"
+  );
+}, [Theme]);
+
 
   const isAdminPage = location.pathname.startsWith('/Admin');
 

@@ -3,7 +3,7 @@ import { useLocation } from "react-router-dom";
 import { useTheme } from "../../ThemeContext";
 
 export default function ProductFilters({ Products, id, searchingProduct }) {
-  const { productsItem, category } = useTheme();
+  const { productsItem, category, Theme } = useTheme();
   const [selectedCategory, setSelectedCategory] = useState(0);
   const [sort, setSort] = useState("");
   const [searchItem, setSearchItem] = useState("");
@@ -95,13 +95,13 @@ export default function ProductFilters({ Products, id, searchingProduct }) {
     <div className="w-100 mb-md-4">
       <div className="Cart-head d-flex justify-content-between align-items-center px-5">
         {/* Category filter */}
-        <div className="Categories" style={{ width: "25%" }}>
+        <div className={`Categories ${Theme?'bg-white text-black':'bg-black text-white'}`} style={{ width: "25%" }}>
           <select
             value={selectedCategory}
-            className="text-white w-100 h-100"
+            className={`w-100 h-100 ${Theme?'bg-white text-black':'bg-black text-white'}`}
             onChange={(e) => handleCategorySelect(Number(e.target.value))}
           >
-            <optgroup className="bg-black text-white">
+            <optgroup className="">
               <option value={0} hidden>
                 Category
               </option>
@@ -118,7 +118,7 @@ export default function ProductFilters({ Products, id, searchingProduct }) {
         {/* Search filter */}
         <div>
           <div className="search justify-content-end">
-            <div className="top d-flex align-items-center w-auto">
+            <div className={`top d-flex align-items-center w-auto ${Theme?'bg-white text-black':'bg-black text-white'}`}>
               <input
                 type="search"
                 className="item search-tag"
@@ -139,13 +139,13 @@ export default function ProductFilters({ Products, id, searchingProduct }) {
         </div>
 
         {/* Sort filter */}
-        <div className="Categories" style={{ width: "20%" }}>
+        <div className={`Categories ${Theme?'bg-white text-black':'bg-black text-white'}`} style={{ width: "20%" }}>
           <select
-            className="w-100 h-100"
+            className={`w-100 h-100 ${Theme?'bg-white text-black':'bg-black text-white'}`}
             value={sort}
             onChange={(e) => handleSort(e.target.value)}
           >
-            <optgroup className="bg-black text-white">
+            <optgroup className="">
               <option value="" hidden>
                 Filter
               </option>

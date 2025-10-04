@@ -2,9 +2,11 @@ import { Link as ScrollLink } from "react-scroll";
 import { NavLink } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import { useEffect } from "react";
+import { useTheme } from '../ThemeContext';
 
 function Footer() {
 
+    const {Theme} = useTheme();
     const Location = useLocation();
 
     useEffect(()=>{
@@ -13,7 +15,7 @@ function Footer() {
 
     return (
         <footer className='footer d-flex flex-column justify-content-center align-items-center mt-4'>
-            <div className='footer-inner-box text-light rounded-4 mb-4'>
+            <div className={`footer-inner-box text-light rounded-4 mb-4 ${Theme?'bg-white text-black':'bg-black text-white'}`}>
                 <h1 className='FooterLogo mx-5 my-4 ps-2'>Teabuff</h1>
                 <div className='footer-content d-flex flex-wrap justify-content-between gap-5 mx-5 my-4 ps-2'>
                     <div className='Footer-Details d-flex flex-wrap justify-content-center align-items-start'>
@@ -50,10 +52,10 @@ function Footer() {
                             <h6>Facebook</h6>
                         </div>
                     </div>
-                    <div className='Footer-Details d-flex justify-content-center align-items-start'>
+                    <div className='Footer-Details d-flex justify-content-center align-items-start '>
                         <div className='w-100 d-flex flex-column justify-content-center align-items-start gap-3'>
                             <h5 className='head'>News Letter</h5>
-                            <input type='email' className=' border-white p-0' placeholder='Enter your email id' />
+                            <input type='email' className={`border-white p-0 text-black bg-body-secondary`} placeholder='Enter your email id' />
                             <h6 className='Mail'>teabuff@chennai.com</h6>
                             <h6>+911234567890</h6>
                         </div>

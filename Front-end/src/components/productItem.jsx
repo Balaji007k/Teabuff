@@ -17,7 +17,7 @@ import { useContext } from "react";
 
 function ProductItem({ isAuthenticated, Review, productsItem, cart, AlertMessageMain }) {
 
-  const { handleCart, PostUserLikedState, UserLikedState, UpdateProduct, UserProductReviews, fetchProductReviews, ProductAvgRating } = useTheme();
+  const { handleCart, PostUserLikedState, UserLikedState, UpdateProduct, UserProductReviews, fetchProductReviews, ProductAvgRating, Theme } = useTheme();
 
     const now = useContext(TimeContext);
 
@@ -52,6 +52,7 @@ function ProductItem({ isAuthenticated, Review, productsItem, cart, AlertMessage
   const [Rating, setRating] = useState(0);
   const [comment, setcomment] = useState('');
   const [Editcomment, setEditcomment] = useState(false);
+  const [AlreadyCommented, setAlreadyCommented] = useState(false);
   const Navigate = useNavigate();
   const [Heart, setHeart] = useState(false);
   const [Loading,setLoading] = useState(true);
@@ -128,6 +129,10 @@ function ProductItem({ isAuthenticated, Review, productsItem, cart, AlertMessage
       setSearchItem("");
     },[id])
 
+    useEffect(()=>{
+      setAlreadyCommented((UserProductReviews&&UserProductReviews?.User?.length>0)&&UserProductReviews?.User.some(user=>user.UserId===isAuthenticated.userId));
+    },[UserProductReviews])
+
     // , Review, cart, productsItem, id, Location.pathname
 
   useEffect(() => {
@@ -162,7 +167,7 @@ function ProductItem({ isAuthenticated, Review, productsItem, cart, AlertMessage
   if (isAuthenticated && selectedProduct) return (
     <>
     {AlertMessageMain&&AlertMessageMain.message&&<AlertMessage message={AlertMessageMain}/>}
-      <div className='Product-Page-cart d-flex flex-column align-items-center' style={{ marginTop: '75px', color: 'var(--Background-white-text)' }}>
+      <div className='Product-Page-cart d-flex flex-column align-items-center' style={{ marginTop: '75px',color:Theme?'white':'black' }}>
         <ProductFilters Products={Products} id={id} searchingProduct={setSearchItem}/>
 
         {(!items||items.length === 0)&&
@@ -272,7 +277,7 @@ function ProductItem({ isAuthenticated, Review, productsItem, cart, AlertMessage
 
                     </div>}
                     </div>
-                    <div className=' d-flex align-items-center gap-2 my-2'><button className=' rounded-circle bg-white d-flex justify-content-center align-items-center' onClick={() => { handleEditcomment(); setRating(0) }} style={{ width: '40px', height: '40px', border: '1px solid black', boxShadow: 'none' }}><span>+</span></button>Comments</div>
+                    <div className=' d-flex align-items-center gap-2 my-2'><button className=' rounded-circle bg-white d-flex justify-content-center align-items-center' onClick={() => { handleEditcomment(); setRating(0) }} style={{ width: '40px', height: '40px', border: '1px solid black', boxShadow: 'none' }}><span>{AlreadyCommented?(<i class="fa-solid fa-pen-to-square"></i>):(<i class="fa-solid fa-comment"></i>)}</span></button>Comments</div>
                     <div className=' d-flex flex-column overflow-hidden' style={{ height: !Editcomment && '0px' }}>
                       <div className='d-flex gap-2'>
                         Select Rating:
@@ -302,9 +307,9 @@ function ProductItem({ isAuthenticated, Review, productsItem, cart, AlertMessage
 
       {(!items||items.length === 0)&&
         <>
-          <div className='Extra-products-container' style={{ color: 'var(--Background-white-text)' }}>
+          <div className='Extra-products-container'>
             <div className='Extra-products' id='suggestItems'>
-              <h1 className=' text-center my-4'>You might also like</h1>
+              <h1 className={` text-center my-4 ${Theme?'text-white':'text-black'}`}>You might also like</h1>
               <div className='scroll-items py-3 gap-3' style={{ maxHeight: small ? '550px' : 'fit-content' }}>
                 {suggestedproducts && suggestedproducts.length > 0 ? (
                   <>

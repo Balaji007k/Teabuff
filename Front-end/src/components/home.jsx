@@ -7,11 +7,13 @@ import { Link as ScrollLink } from "react-scroll";
 import AlertMessage from './AssetComponents/AlertMessage';
 import { useEffect,useState } from 'react';
 import LoadingPage from './AssetComponents/LoadingPage';
+import { useTheme } from '../ThemeContext';
 
 
 function Home({ userInput, isAuthenticated, AccoutState, PopupMessage }) {
 
   const small = useMediaQuery({maxWidth:600});
+  const {Theme} = useTheme();
   const [Loading,setLoading] = useState(false);
 
 
@@ -27,17 +29,20 @@ function Home({ userInput, isAuthenticated, AccoutState, PopupMessage }) {
     };
   },[PopupMessage])
 
+  console.log(Theme)
+
   return (
     <>
     <div className="outerbox" id="Home">
       {PopupMessage&&PopupMessage?.message?<AlertMessage message={PopupMessage} AccoutState={AccoutState}/>:Loading&&<LoadingPage/>}
-      <div className={`inner-box ${small&&'pt-5'} py-4`}>
+      <div className={`inner-box ${small&&'pt-5'} py-4 ${Theme?'text-white':'text-black'}`}>
         <div className='inner-content d-flex justify-content-center'>
           <div className='inner-text'>
             <div className='bold-text'>
               {!small?<><h1 className='text' data-aos="fade-right" data-aos-once="true" data-aos-duration="800">Brewed to <br />Perfection, Sipped <br />with Tradition.</h1>
-              <p className='p' data-aos="fade-right" data-aos-once="true" data-aos-duration="1200">Experience the authentic taste of Indian chai, crafted with tradition and love.From every sip to every story, our tea brings warmth to your soul.</p></>:<><h1 className='text text-center fw-bolder'>Tradition in Every<br></br> Sip.</h1>
-              <p className='p text-center w-100'>Experience the authentic taste of Indian chai, crafted with tradition and love.From every sip to every story, our tea brings warmth to your soul.</p></>}
+              <p className='p' data-aos="fade-right" data-aos-once="true" data-aos-duration="1200">Experience the authentic taste of Indian chai, crafted with tradition and love.From every sip to every story, our tea brings warmth to your soul.</p></>
+                :<><h1 className='text text-center fw-bolder'>Tradition in Every<br></br> Sip.</h1>
+              <p className={`p text-center w-100`}>Experience the authentic taste of Indian chai, crafted with tradition and love.From every sip to every story, our tea brings warmth to your soul.</p></>}
             </div>
             <div className='inner-button'>
               {!small?<div className='btn-icon' data-aos="fade-right" data-aos-once="true" data-aos-duration="1600">
@@ -52,7 +57,7 @@ function Home({ userInput, isAuthenticated, AccoutState, PopupMessage }) {
                 </div>
               </div>:<div className='btn-icon'>
                 <ScrollLink to='Product_id' offset={-70}><button className='explore-button-Home'>Explore Now <i className="fa-solid fa-arrow-right ms-2"></i></button></ScrollLink></div>}
-              <div className='empty-box d-flex flex-column gap-2' data-aos="fade-right" data-aos-once="true" data-aos-duration="800">
+              <div className={`empty-box ${Theme?'bg-white text-black':'bg-black text-white'} d-flex flex-column gap-2`} >
                 <div>
                   <ReviewSlider />
                 </div>

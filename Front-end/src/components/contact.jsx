@@ -1,7 +1,9 @@
 import { useLocation } from "react-router-dom";
 import Footer from "./footer";
+import { useTheme } from '../ThemeContext';
 
 function Contact() {
+    const {Theme} = useTheme();
     const Location = useLocation();
     return (
         <>
@@ -14,9 +16,9 @@ function Contact() {
                     </div>
                     <div className='contact-content' data-aos="fade-left" data-aos-once="true" data-aos-duration="600">
                         <form className='d-flex flex-column justify-content-center'>
-                            <input type='text' className='input' placeholder='Username' required />
-                            <input type='email' className='input' placeholder='Email' required />
-                            <textarea rows={5} cols={5} placeholder='Message' className='input'></textarea>
+                            <input type='text' className={`input ${Theme?'bg-white text-black':'bg-black text-white'}`} placeholder='Username' required />
+                            <input type='email' className={`input ${Theme?'bg-white text-black':'bg-black text-white'}`} placeholder='Email' required />
+                            <textarea rows={5} cols={5} placeholder='Message' className={`input ${Theme?'bg-white text-black':'bg-black text-white'}`}></textarea>
                             <button type='submit' className='contact-btn-contact input d-flex justify-content-center align-items-center gap-2'>Send<span className="material-symbols-outlined">
                                 send
                             </span></button>

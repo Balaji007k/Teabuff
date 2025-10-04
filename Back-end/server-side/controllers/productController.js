@@ -254,7 +254,7 @@ exports.updateProduct = async (req, res) => {
         if (existingUser) {
           existingUser.ProductUserRating = ProductUserRating;
           existingUser.comment = comment;
-          existingUser.createdAt = new Date(); // <-- update timestamp on edit
+          // existingUser.createdAt = new Date(); // <-- update timestamp on edit
         } else {
           commentBlock.User.push(userComment);
         }

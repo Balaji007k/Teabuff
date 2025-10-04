@@ -6,8 +6,10 @@ import ProductCard from './AssetComponents/ProductCard';
 import EmptyProductCard from './AssetComponents/EmptyProductCard';
 import ViewMore from './AssetComponents/ViewMore';
 import OfferSlider from './AssetComponents/OfferSlider';
+import { useTheme } from '../ThemeContext';
 
 function Product({ isAuthenticated, productsItem, category, setHideNavbar }) {
+  const {Theme} = useTheme();
   const small = useMediaQuery({ maxWidth: 600 })
   const Location = useLocation();
   const [value, setValue] = useState(0);
@@ -84,15 +86,14 @@ function Product({ isAuthenticated, productsItem, category, setHideNavbar }) {
     <div className='Product d-flex justify-content-center' id="Product_id">
       <div className='product-inner-box'>
         <div className='search'>
-          <div className='product top home-search px-2'>
+          <div className={`product top home-search px-2 ${Theme?'bg-white text-black':'bg-black text-white'}`}>
             <select
               value={value}
-              className='item category'
+              className={`item category ${Theme?'bg-white text-black':'bg-black text-white'}`}
               onChange={(e) => handleCategorySelect(parseInt(e.target.value))}
               required
-              style={{ color: value === 0 ? 'grey' : 'var(--color)', backgroundColor: 'var(--bOX-background-color)' }}
             >
-              <optgroup style={{ color: 'var(--color)' }}>
+              <optgroup>
                 <option value={0} defaultValue>All</option>
                 {category.map((e) => (
                   <option key={e?.categoryId} value={e?.categoryId}>{e?.name}</option>
@@ -100,8 +101,8 @@ function Product({ isAuthenticated, productsItem, category, setHideNavbar }) {
               </optgroup>
             </select>
           </div>
-          <h1 className='menu-head fw-bolder'>Menu</h1>
-          <div className='top home-search d-flex align-items-center'>
+          <h1 className={`menu-head fw-bolder ${Theme?'text-white':'text-black'}`}>Menu</h1>
+          <div className={`top home-search d-flex align-items-center ${Theme?'bg-white text-black':'bg-black text-white'}`}>
             <input type='search' className='item search-tag' onKeyUp={() => handleSearch(SearchItem)} onChange={(e) => setSearchItem(e.target.value.trim().toLowerCase())} placeholder='search' />
             <button type='submit' className='search-i-product' onClick={() => handleSearch(SearchItem)}>
               <i className="fa-solid fa-magnifying-glass"></i>
@@ -110,7 +111,7 @@ function Product({ isAuthenticated, productsItem, category, setHideNavbar }) {
         </div>
 
         {SearchItem==""&&<>
-        <div className='Home-Products w-100 d-flex justify-content-between align-items-center'><h1 className=' m-0'>Popular</h1><span className="material-symbols-outlined d-md-none" onClick={()=>{Navigate('/Menu')}} >
+        <div className={`Home-Products w-100 d-flex justify-content-between align-items-center ${Theme?'text-white':'text-black'}`}><h1 className={`m-0 ${Theme?'text-white':'text-black'}`}>Popular</h1><span className="material-symbols-outlined d-md-none" onClick={()=>{Navigate('/Menu')}} >
               arrow_forward_ios
             </span></div>
         <div className='product content d-flex align-items-center'>
@@ -158,7 +159,7 @@ function Product({ isAuthenticated, productsItem, category, setHideNavbar }) {
         </div>
 
 <OfferSlider setHideNavbar={setHideNavbar}/>
-        <div className='Home-Products w-100 d-flex justify-content-between align-items-center'><h1 className=' m-0'>Fresh Tea</h1><span className="material-symbols-outlined d-md-none" onClick={()=>{Navigate('/Menu')}}>
+        <div className={`Home-Products w-100 d-flex justify-content-between align-items-center ${Theme?'text-white':'text-black'}`}><h1 className={`m-0 `}>Fresh Tea</h1><span className="material-symbols-outlined d-md-none" onClick={()=>{Navigate('/Menu')}}>
               arrow_forward_ios
             </span></div>
         <div id='Fresh_Tea' className='product content d-flex align-items-center'>
@@ -204,7 +205,7 @@ function Product({ isAuthenticated, productsItem, category, setHideNavbar }) {
         </div>
 
 <OfferSlider setHideNavbar={setHideNavbar}/>
-<div className='Home-Products w-100 d-flex justify-content-between align-items-center'><h1 className=' m-0'>Recommended</h1><span className="material-symbols-outlined d-md-none" onClick={()=>{Navigate('/Menu')}}>
+<div className={`Home-Products w-100 d-flex justify-content-between align-items-center ${Theme?'text-white':'text-black'}`}><h1 className={`m-0 ${Theme?'text-white':'text-black'}`}>Recommended</h1><span className="material-symbols-outlined d-md-none" onClick={()=>{Navigate('/Menu')}}>
               arrow_forward_ios
             </span></div>
         
@@ -254,7 +255,9 @@ function Product({ isAuthenticated, productsItem, category, setHideNavbar }) {
 
 
         {SearchItem!==""&&<>
-        <h1>Searching Item</h1>
+        <div className={`Home-Products w-100 d-flex justify-content-between align-items-center ${Theme?'text-white':'text-black'}`}><h1 className={`m-0 ${Theme?'text-white':'text-black'}`}>Searching Item</h1><span className="material-symbols-outlined d-md-none" onClick={()=>{Navigate('/Menu')}}>
+              arrow_forward_ios
+            </span></div>
         <div className='product content d-flex align-items-center'>
           <div className='Next left-scroll' onClick={popularPrv}>
             <span className="material-symbols-outlined">
@@ -302,7 +305,7 @@ function Product({ isAuthenticated, productsItem, category, setHideNavbar }) {
         }
 
 
-        <div className='product exp d-flex justify-content-around my-3'>
+        <div className={`product exp d-flex justify-content-around my-3 ${Theme?'bg-white text-black':'bg-black text-white'}`}>
           <div><AnimatedCounter endValue={3} label={'+'} /><span>Projects Completed</span></div>
           <div><AnimatedCounter endValue={6} label={'+'} /><span>Month Experience</span></div>
           <div><AnimatedCounter endValue={100} label={'%'} /><span>Client satisfaction</span></div>

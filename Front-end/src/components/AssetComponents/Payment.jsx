@@ -7,7 +7,7 @@ import LoadingPage from "./LoadingPage";
 import { useTheme } from "../../ThemeContext";
 
 export default function Payment() {
-  const {createOrder,isAuthenticated} = useTheme();
+  const {createOrder,isAuthenticated,Theme} = useTheme();
   const small = useMediaQuery({ maxWidth: 600 })
   const Navigate = useNavigate();
   const location = useLocation();
@@ -91,7 +91,7 @@ const orderData = {
     <>
     {AlertMessagePayment&&AlertMessagePayment?.message?<AlertMessage message={AlertMessagePayment} />:Loading&&<LoadingPage/>}
     <div className=" d-flex justify-content-center" style={{ marginTop: "75px" }}>
-      <div style={{ width: !small ? '75%' : '95%' }}>
+      <div className={`${Theme?'text-white':'text-black'}`} style={{ width: !small ? '75%' : '95%' }}>
         <h2 className="mb-5 px-2">ENTER YOUR PAYMENT INFORMATION</h2>
         <div className="checkout-container d-flex flex-column gap-3 px-2">
           <fieldset className="checkout-box">

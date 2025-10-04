@@ -3,7 +3,6 @@
     height: fit-content;
 }
 .service-inner-box{
-    background-color: var(--bOX-background-color);
     width: 95%;
     height: 100%;
     display: flex;
@@ -12,13 +11,13 @@
     padding: 0% 2%;
 }
 .service-inner-box h1{
-    color: var(--color);
+    color: inherit;
 }
 .inner-sevice-content{
     width: 100%;
 }
 .Service-card{
-    color: var(--color);
+    color: inherit;
 }
 .service-text{
    width: 30%;
@@ -31,7 +30,7 @@
    gap: 20px;
    padding: 20px;
    border-radius: 10px;
-   background-color: rgb(18, 18, 18);
+   box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.5);
    transition: all .3s;
 }
 .service-text i{

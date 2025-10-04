@@ -9,10 +9,10 @@ import { useTheme } from "../ThemeContext";
 function Header({ userinputFocus, isAuthenticated, cart, setAlertMessage, HideNav }) {
 
     const small = useMediaQuery({maxWidth:600});
-    const {OrderId} = useTheme();
+    const {OrderId,setTheme,Theme} = useTheme();
 
     const [BarVisible, setBarVisible] = useState(false);
-    const [Showprofile, setShowProfile] = useState(false);
+    //const [Showprofile, setShowProfile] = useState(false);
     const Location = useLocation();
     const match = Location.pathname.match(/^\/product\/([^/]+)/);
     const id = match ? match[1] : undefined;
@@ -40,11 +40,11 @@ useEffect(()=>{
 
     const HideBar = () => {
         setBarVisible(prev => !prev);
-        setShowProfile(false);
+        //setShowProfile(false);
     }
-    const Hideprofile = () => {
-        setShowProfile(prev=> !prev);
-    }
+    // const Hideprofile = () => {
+    //     setShowProfile(prev=> !prev);
+    // }
 
     const Logout = async () => {
         const LogoutConfirm = window.confirm('Are you sure you want to Logout')
@@ -84,7 +84,7 @@ useEffect(()=>{
                 !buttonRef.current.contains(event.target)
             ) {
                 setBarVisible(prev=>!prev);
-                setShowProfile(false);
+               // setShowProfile(false);
             }
         };
 
@@ -99,13 +99,13 @@ useEffect(()=>{
 
     return (
         <>
-            <div className='header' style={{ borderRadius: !small&&BarVisible ? '0px 0px 0px 20px' : '0px 0px 20px 20px' }}>
+            <div className={`header ${Theme?'bg-white text-black':'bg-black text-white'}`} style={{ borderRadius: !small&&BarVisible ? '0px 0px 0px 20px' : '0px 0px 20px 20px' }}>
                 <div className="logo name">
                     <h1 className=" fs-3 m-0">Teabuff</h1>
                 </div>
         <div className="right-Line position-fixed end-0 top-0"></div>
                 <nav ref={small?accountNavRef:null} className={`navbar ${small&&BarVisible?'show':'hide'}`}>
-                    {small&&<i className="fa-solid fa-xmark position-absolute top-0 end-0 p-4 fs-3" style={{cursor:'pointer'}} onClick={()=>setBarVisible(false)}></i>}
+                    {small&&<i className="fa-solid fa-xmark position-absolute top-0 end-0 p-4 fs-3 text-white" style={{cursor:'pointer'}} onClick={()=>setBarVisible(false)}></i>}
                     <ul className="nav-list p-0 m-0 overflow-x-hidden">
                         {small&&<div className="w-100 d-flex flex-column align-items-center">
                                     <div className="UserProfileImage">
@@ -128,6 +128,7 @@ useEffect(()=>{
                         <li><Link to={`/${isAuthenticated?.userName+"Cart"}/${isAuthenticated ? isAuthenticated?.userId : 'No_user'}`}><i className="fa-solid fa-cart-shopping">  {!CartLength?0:CartLength} </i></Link></li>
                         {small&&<><li><Link to={'/Login'}>Add Account</Link></li>
                         <li><Link to={`/MyOrders/${OrderId}`}>My Orders</Link></li>
+                        <li onClick={()=>setTheme(prev=>!prev)}>Theme {Theme?'Light':'Dark'}</li>
                         <li onClick={() => Logout()}><Link 
     to="/Logout" 
     onClick={(e) => {
@@ -168,12 +169,12 @@ useEffect(()=>{
                                 </div>
                             <div className=" w-100">
                                 {Location.pathname==='/'?<ScrollLink offset={-70} to="Home"><h3 className=' mt-1'><i className="fa-solid fa-house"></i>Home</h3></ScrollLink>:<Link to={"/"}><h3 className=' mt-1'><i className="fa-solid fa-house"></i>Home</h3></Link>}
-                                <h3 onClick={()=>Hideprofile()}><i className="fa-solid fa-user"></i>Profile</h3>
+                                {/* <h3 onClick={()=>Hideprofile()}><i className="fa-solid fa-user"></i>Profile</h3>
                                 <div className={`profile-details ${Showprofile?'show':'hide'} d-flex flex-column align-items-center`}>
                                     <input type="text" className="lobu rounded-0 m-0 bg-transparent" disabled placeholder="Name" value={isAuthenticated?.userName || "No user"}/>
                                     <input type="text" className="lobu rounded-0 m-0 bg-transparent" disabled placeholder="Email" value={isAuthenticated?.userEmail || ""}/>
                                     <input type="text" className="lobu rounded-0 m-0 bg-transparent" disabled placeholder="Password" value={'**********'}/>
-                                </div>
+                                </div> */}
                                 <h3><i className="fa-solid fa-gift"></i>Offers</h3>
                                 <Link to={'/WishList'}><h3><i className="fa-solid fa-heart"></i>WishList</h3></Link>
                                 {Location.pathname==='/'?<ScrollLink offset={-70} to="Contact_id"><h3><i className="fa-solid fa-phone"></i>Contact Us</h3></ScrollLink>:<Link to={'/Contact_Us'}><h3><i className="fa-solid fa-phone"></i>Contact Us</h3></Link>}
@@ -183,7 +184,7 @@ useEffect(()=>{
                             </div>
                             </div>
                             <div>
-                                <h3><i className="fa-solid fa-gear"></i>Settings</h3>
+                                <h3 onClick={()=>setTheme(prev=>!prev)}><i className="fa-solid fa-gear"></i>Theme {Theme?'Light':'Dark'}</h3>
                                 <h3 onClick={() => Logout()}><i className="fa-solid fa-right-from-bracket"></i>Logout</h3>
                             </div>
                         </ul>

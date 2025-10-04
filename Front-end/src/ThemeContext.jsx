@@ -7,6 +7,7 @@ const ThemeContext = createContext();
 
 //  reate the provider
 export const ThemeProvider = ({ children }) => {
+  const [Theme,setTheme] = useState(false);
     const [Review, setReview] = useState([]);
     const [AllReview, setAllReview] = useState([]);
     const [cart, setUpdatedCart] = useState(null);
@@ -236,6 +237,8 @@ const createOrder = async(orderData)=> {
 
 const contextValue = useMemo(() => {
   return {isAuthenticated,
+    Theme,
+    setTheme,
   AllReview,
   fetchAllReviews,
   Review,
@@ -258,6 +261,7 @@ const contextValue = useMemo(() => {
   OrderId}
 }, [
   isAuthenticated,
+  Theme,
   AllReview,
   Review,
   image,

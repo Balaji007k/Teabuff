@@ -5,7 +5,7 @@ import { useMediaQuery } from 'react-responsive';
 
 export default function ProductCard({ isAuthenticated, e, Navigate, LikedState, handleCancelItem, cart=false }) {
 
-  const { UserLikedState, PostUserLikedState, UpdatedProduct } = useTheme();
+  const { UserLikedState, PostUserLikedState, UpdatedProduct, Theme } = useTheme();
   const Location = useLocation();
   const [Heart, setHeart] = useState(false);
   const small = useMediaQuery({maxWidth:600});
@@ -20,7 +20,7 @@ export default function ProductCard({ isAuthenticated, e, Navigate, LikedState, 
 }, [UserLikedState, LikedState, e._id]);
 
         return (
-          <div key={e._id} className='product-item'>
+          <div key={e._id} className={`product-item ${Theme?'bg-white text-black shadow border border-1 border-black':'bg-black text-white'}`}>
             <img src={e.url||e.Product_Url} className='Shop-slid' alt={e.title} />
             <div className='d-flex flex-column w-100'>
               <div className={`product_name_price d-flex ${small&&cart?'flex-column align-items-start':'align-items-center'} justify-content-between`}>
