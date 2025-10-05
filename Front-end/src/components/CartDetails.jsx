@@ -126,7 +126,7 @@ function CartDetails({ isAuthenticated, cart }) {
                   <button className='quantity-btn-All' onClick={() => handleQuantityChange(item.productId, 1)}>+</button>
                 </span>
                 <div className='d-flex align-items-center fs-5 fw-bolder'>
-                  Total <h5>₹{((quantity[item.productId] ?? item.quantity) * (item.categoryId==1 ? item.itemPrice/2 : item.itemPrice)).toFixed(2)}</h5>
+                  Total - <h5 className='my-0'>  ₹{((quantity[item.productId] ?? item.quantity) * (item.categoryId==1 ? item.itemPrice/2 : item.itemPrice)).toFixed(2)}</h5>
                 </div>
               </div>
             </div>

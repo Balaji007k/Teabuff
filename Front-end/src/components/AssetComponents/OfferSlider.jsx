@@ -2,141 +2,79 @@ import React, { useEffect, useRef } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import { Link as ScrollLink } from "react-scroll";
 import { useNavigate } from "react-router-dom";
-import "../../style/embla-carousel.css"; // You can make your own css
+import "../../style/embla-carousel.css";
 
 const OfferSlider = ({ setHideNavbar }) => {
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true });
   const Navigate = useNavigate();
 
-  // Optional autoplay
+  // --- Autoplay ---
   const autoplayRef = useRef(null);
   useEffect(() => {
     if (!emblaApi) return;
 
     const autoplay = () => {
       autoplayRef.current = setInterval(() => {
-        if (emblaApi) emblaApi.scrollNext();
-      }, 3000);
+        emblaApi && emblaApi.scrollNext();
+      }, 4000);
     };
-
     autoplay();
+
     return () => clearInterval(autoplayRef.current);
   }, [emblaApi]);
 
   return (
-    <div className="my-5 mx-3 offer-slider-wrapper">
+    <div className="my-4 mx-3 offer-slider-wrapper">
       <div
-        className="shadow-lg rounded overflow-hidden position-relative p-2 p-md-4 embla"
+        className="shadow-lg rounded overflow-hidden position-relative embla"
         ref={emblaRef}
         onClick={() => setHideNavbar(false)}
       >
         <div className="embla__container">
           {/* Slide 1 */}
-          <div className="embla__slide bg-light">
-            <div className="d-flex flex-column flex-md-row align-items-center justify-content-between px-3 px-md-5 py-4">
-              {/* Text */}
-              <div
-                className="text-center text-md-start mb-4 mb-md-0"
-                style={{ maxWidth: "450px" }}
-              >
-                <img
-                  src="https://images.unsplash.com/photo-1576092768241-dec231879fc3?q=80&w=687&auto=format&fit=crop"
-                  alt="Logo"
-                  className="mb-3 img-fluid"
-                  style={{ maxHeight: "50px" }}
-                />
-                <h2 className="h4 fw-semibold text-dark">
-                  Exclusive{" "}
-                  <span className="text-danger fw-bold">Collection</span>
-                </h2>
-                <p className="text-muted mt-2 fs-6">
-                  Get the latest fashion at the best prices.
-                </p>
-                <button
-                  onClick={() => Navigate("/Menu")}
-                  className="btn btn-warning mt-3 px-4 py-2 shadow-sm"
-                >
-                  Shop Now
-                </button>
-              </div>
+          <div className="embla__slide bg-light position-relative">
+            <img
+              src="https://images.unsplash.com/photo-1576092768241-dec231879fc3?q=80&w=1920&auto=format&fit=crop"
+              alt="Collection Offer"
+              className="w-100 img-fluid offer-image"
+            />
 
-              {/* Images */}
-              <div className="d-flex justify-content-center gap-3">
-                <img
-                  src="https://images.unsplash.com/photo-1576092768241-dec231879fc3?q=80&w=687&auto=format&fit=crop"
-                  alt="Blue Dress"
-                  className="img-fluid rounded shadow"
-                  style={{
-                    maxWidth: "48%",
-                    maxHeight: "320px",
-                    objectFit: "cover",
-                  }}
-                />
-                <img
-                  src="https://images.unsplash.com/photo-1576092768241-dec231879fc3?q=80&w=687&auto=format&fit=crop"
-                  alt="Red Dress"
-                  className="img-fluid rounded shadow"
-                  style={{
-                    maxWidth: "48%",
-                    maxHeight: "320px",
-                    objectFit: "cover",
-                  }}
-                />
-              </div>
+            {/* Text Overlay */}
+            <div className="offer-overlay text-center text-dark">
+              <h2 className="offer-title">
+                Exclusive <span className="text-danger fw-bold">Collection</span>
+              </h2>
+              <p className="offer-subtext">
+                Get the latest fashion at the best prices.
+              </p>
+              <button
+                onClick={() => Navigate("/Menu")}
+                className="btn btn-warning mt-2 px-3 py-1 shadow-sm offer-button"
+              >
+                Shop Now
+              </button>
             </div>
           </div>
 
           {/* Slide 2 */}
-          <div
-            className="embla__slide"
-            style={{ background: "linear-gradient(to right, #fff, #f8d7da)" }}
-          >
-            <div className="d-flex flex-column flex-md-row align-items-center justify-content-between px-3 px-md-5 py-4">
-              {/* Text */}
-              <div
-                className="text-center text-md-start mb-4 mb-md-0"
-                style={{ maxWidth: "450px" }}
-              >
-                <img
-                  src="https://images.unsplash.com/photo-1576092768241-dec231879fc3?q=80&w=687&auto=format&fit=crop"
-                  alt="Logo"
-                  className="mb-3 img-fluid"
-                  style={{ maxHeight: "50px" }}
-                />
-                <h2 className="h4 fw-semibold text-dark">
-                  Summer <span className="text-danger fw-bold">Sale</span>
-                </h2>
-                <p className="text-muted mt-2 fs-6">50% off for All Tea.</p>
-                <button className="btn btn-warning mt-3 px-4 py-2 shadow-sm">
-                  <ScrollLink to="Fresh_Tea" offset={-145}>
-                    Shop Now
-                  </ScrollLink>
-                </button>
-              </div>
+          <div className="embla__slide position-relative">
+            <img
+              src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?q=80&w=1920&auto=format&fit=crop"
+              alt="Summer Sale"
+              className="w-100 img-fluid offer-image"
+            />
 
-              {/* Images */}
-              <div className="d-flex justify-content-center gap-3">
-                <img
-                  src="https://images.unsplash.com/photo-1576092768241-dec231879fc3?q=80&w=687&auto=format&fit=crop"
-                  alt="Green Outfit"
-                  className="img-fluid rounded shadow"
-                  style={{
-                    maxWidth: "48%",
-                    maxHeight: "320px",
-                    objectFit: "cover",
-                  }}
-                />
-                <img
-                  src="https://images.unsplash.com/photo-1576092768241-dec231879fc3?q=80&w=687&auto=format&fit=crop"
-                  alt="Yellow Outfit"
-                  className="img-fluid rounded shadow"
-                  style={{
-                    maxWidth: "48%",
-                    maxHeight: "320px",
-                    objectFit: "cover",
-                  }}
-                />
-              </div>
+            {/* Text Overlay */}
+            <div className="offer-overlay text-center text-dark">
+              <h2 className="offer-title">
+                Summer <span className="text-danger fw-bold">Sale</span>
+              </h2>
+              <p className="offer-subtext">50% off on all Tea!</p>
+              <button className="btn btn-warning mt-2 px-3 py-1 shadow-sm offer-button">
+                <ScrollLink to="Fresh_Tea" offset={-145} smooth>
+                  Shop Now
+                </ScrollLink>
+              </button>
             </div>
           </div>
         </div>
@@ -160,4 +98,3 @@ const OfferSlider = ({ setHideNavbar }) => {
 };
 
 export default OfferSlider;
-

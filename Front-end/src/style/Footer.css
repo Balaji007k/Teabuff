@@ -30,7 +30,7 @@
 .footer input{
    outline: none;
    border: none;
-   border-bottom: 1px solid var(--color);
+   background-color: transparent;
 }
 .footer .head,.Mail{
    border: none;

@@ -1,10 +1,74 @@
 .embla {
   overflow: hidden;
+  position: relative;
 }
+
 .embla__container {
   display: flex;
 }
+
 .embla__slide {
+  position: relative;
   flex: 0 0 100%;
   min-width: 0;
+}
+
+/* --- Image Styling --- */
+.offer-image {
+  height: 400px;
+  object-fit: cover;
+  width: 100%;
+  border-radius: 10px;
+  transition: height 0.3s ease;
+}
+
+/* --- Text Overlay --- */
+.offer-overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(255, 255, 255, 0.75);
+  padding: 15px 25px;
+  border-radius: 10px;
+  width: 90%;
+  max-width: 500px;
+}
+
+.offer-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.offer-subtext {
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.offer-button {
+  font-size: 0.9rem;
+}
+
+/* --- Responsive (Mobile < 768px) --- */
+@media (max-width: 768px) {
+  .offer-image {
+    height: 200px; /* Smaller height on mobile */
+  }
+
+  .offer-overlay {
+    padding: 10px 15px;
+  }
+
+  .offer-title {
+    font-size: 1rem;
+  }
+
+  .offer-subtext {
+    font-size: 0.8rem;
+  }
+
+  .offer-button {
+    font-size: 0.8rem;
+    padding: 4px 10px;
+  }
 }

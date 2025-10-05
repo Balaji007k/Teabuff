@@ -97,10 +97,12 @@
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   font-size: 20px;
+  margin: 5px 0px;
 }
 .display-product-text-price{
   width: min-content !important;
   font-size: 20px;
+  margin: 5px 0px;
 }
 
 .Next{
@@ -192,8 +194,9 @@
 @media (max-width: 600px) {
   .product-card-OrderNow-btn,
   .product-item button.text-center {
-    padding: 8px 20px;
-    font-size: 0.95rem;
+    padding: 5px 20px;
+    font-size: medium;
+    font-weight: 500;
   }
 }
 

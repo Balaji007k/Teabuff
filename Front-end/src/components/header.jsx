@@ -128,7 +128,9 @@ useEffect(()=>{
                         <li><Link to={`/${isAuthenticated?.userName+"Cart"}/${isAuthenticated ? isAuthenticated?.userId : 'No_user'}`}><i className="fa-solid fa-cart-shopping">  {!CartLength?0:CartLength} </i></Link></li>
                         {small&&<><li><Link to={'/Login'}>Add Account</Link></li>
                         <li><Link to={`/MyOrders/${OrderId}`}>My Orders</Link></li>
-                        <li onClick={()=>setTheme(prev=>!prev)}>Theme {Theme?'Light':'Dark'}</li>
+                        <li onClick={()=>setTheme(prev=>!prev)}><Link to={'/Menu'} onClick={(e) => {
+      e.preventDefault(); // prevent navigation
+    }}>Theme {Theme?'Light':'Dark'}</Link></li>
                         <li onClick={() => Logout()}><Link 
     to="/Logout" 
     onClick={(e) => {

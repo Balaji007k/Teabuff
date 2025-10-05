@@ -19,6 +19,14 @@
 .Service-card{
     color: inherit;
 }
+.service-inner-box.bg-white .service-text{
+    background-color: #000;
+    color: white;
+}
+.service-inner-box.bg-black .service-text{
+    background-color: #fff;
+    color: black;
+}
 .service-text{
    width: 30%;
    min-height: 300px;
@@ -30,7 +38,7 @@
    gap: 20px;
    padding: 20px;
    border-radius: 10px;
-   box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.5);
+   box-shadow: 0px 0px 5px 1px rgba(35, 34, 34, 0.5);
    transition: all .3s;
 }
 .service-text i{

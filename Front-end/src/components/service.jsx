@@ -13,9 +13,9 @@ const Service = () => {
         id="Service_id"
         style={{ marginTop: Location.pathname === '/Service' ? '75px' : null }}
       >
-        <div className={`service-inner-box row py-5 rounded-4 ${Theme?'bg-white text-black':'bg-black text-white'}`}>
+        <div className={`service-inner-box row py-5 rounded-4 ${Theme?'bg-black text-white':'bg-white text-black'}`}>
           <div className="inner-sevice-content h-100 d-flex justify-content-center flex-wrap">
-            <h1 className="mb-5">Services</h1>
+            <h1 className={`mb-5`}>Services</h1>
             <div className="Service-card d-flex justify-content-center align-items-center flex-wrap w-100 h-100 gap-5">
               
               <div className="service-text">

@@ -9,7 +9,7 @@ import PageNotFound from "./AssetComponents/PageNotFound";
 import AlertMessage from "./AssetComponents/AlertMessage";
 
 function Wishlist({ isAuthenticated }) {
-    const {UserLikedState,PostSaveCart,AlertMessageTheme} = useTheme();
+    const {UserLikedState,PostSaveCart,AlertMessageTheme,Theme} = useTheme();
     const Navigate = useNavigate();
     const small = useMediaQuery({ maxWidth:600 });
     const [LikedProducts,setLikedProducts] = useState();
@@ -34,7 +34,7 @@ function Wishlist({ isAuthenticated }) {
         <>
         {AlertMessageTheme&&AlertMessageTheme?.message&&<AlertMessage message={AlertMessageTheme}/>}
         <div className='Extra-products-container py-3 d-flex flex-column gap-5' style={{marginTop:'75px'}}>
-            <h1 className=" fw-bold text-center">Wishlist</h1>
+            <h1 className={`fw-bold text-center ${Theme?'text-white':'text-black'}`}>Wishlist</h1>
                 <div className='Extra-products'>
                  <div className="scroll-items" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(270px,1fr))', justifyItems: 'center', gap: '20px', maxHeight: small ? '100%' : 'auto' }}>
                 {LikedProducts?.length>0?LikedProducts.map(e=>(

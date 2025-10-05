@@ -110,8 +110,9 @@ function Product({ isAuthenticated, productsItem, category, setHideNavbar }) {
           </div>
         </div>
 
-        {SearchItem==""&&<>
-        <div className={`Home-Products w-100 d-flex justify-content-between align-items-center ${Theme?'text-white':'text-black'}`}><h1 className={`m-0 ${Theme?'text-white':'text-black'}`}>Popular</h1><span className="material-symbols-outlined d-md-none" onClick={()=>{Navigate('/Menu')}} >
+        {SearchItem==""&&
+        <div className={`${Theme?'text-white':'text-black'}`}>
+        <div className={`Home-Products w-100 d-flex justify-content-between align-items-center `}><h1 className={`m-0 `}>Popular</h1><span className="material-symbols-outlined d-md-none" onClick={()=>{Navigate('/Menu')}} >
               arrow_forward_ios
             </span></div>
         <div className='product content d-flex align-items-center'>
@@ -159,7 +160,7 @@ function Product({ isAuthenticated, productsItem, category, setHideNavbar }) {
         </div>
 
 <OfferSlider setHideNavbar={setHideNavbar}/>
-        <div className={`Home-Products w-100 d-flex justify-content-between align-items-center ${Theme?'text-white':'text-black'}`}><h1 className={`m-0 `}>Fresh Tea</h1><span className="material-symbols-outlined d-md-none" onClick={()=>{Navigate('/Menu')}}>
+        <div className={`Home-Products w-100 d-flex justify-content-between align-items-center`}><h1 className={`m-0 `}>Fresh Tea</h1><span className="material-symbols-outlined d-md-none" onClick={()=>{Navigate('/Menu')}}>
               arrow_forward_ios
             </span></div>
         <div id='Fresh_Tea' className='product content d-flex align-items-center'>
@@ -205,7 +206,7 @@ function Product({ isAuthenticated, productsItem, category, setHideNavbar }) {
         </div>
 
 <OfferSlider setHideNavbar={setHideNavbar}/>
-<div className={`Home-Products w-100 d-flex justify-content-between align-items-center ${Theme?'text-white':'text-black'}`}><h1 className={`m-0 ${Theme?'text-white':'text-black'}`}>Recommended</h1><span className="material-symbols-outlined d-md-none" onClick={()=>{Navigate('/Menu')}}>
+<div className={`Home-Products w-100 d-flex justify-content-between align-items-center`}><h1 className={`m-0`}>Recommended</h1><span className="material-symbols-outlined d-md-none" onClick={()=>{Navigate('/Menu')}}>
               arrow_forward_ios
             </span></div>
         
@@ -250,12 +251,13 @@ function Product({ isAuthenticated, productsItem, category, setHideNavbar }) {
             </span>
           </div>
         </div>
-        </>
+        </div>
         }
 
 
-        {SearchItem!==""&&<>
-        <div className={`Home-Products w-100 d-flex justify-content-between align-items-center ${Theme?'text-white':'text-black'}`}><h1 className={`m-0 ${Theme?'text-white':'text-black'}`}>Searching Item</h1><span className="material-symbols-outlined d-md-none" onClick={()=>{Navigate('/Menu')}}>
+        {SearchItem!==""&&
+        <div className={`${Theme?'text-white':'text-black'}`}>
+        <div className={`Home-Products w-100 d-flex justify-content-between align-items-center`}><h1 className={`m-0`}>Searching Item</h1><span className="material-symbols-outlined d-md-none" onClick={()=>{Navigate('/Menu')}}>
               arrow_forward_ios
             </span></div>
         <div className='product content d-flex align-items-center'>
@@ -301,7 +303,7 @@ function Product({ isAuthenticated, productsItem, category, setHideNavbar }) {
             </span>
           </div>
         </div>
-        </>
+        </div>
         }
 
 

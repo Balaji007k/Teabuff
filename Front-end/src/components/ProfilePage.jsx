@@ -138,7 +138,7 @@ const handleSubmit = async (e) => {
         />
                   <i className="fa-solid fa-pen-to-square p-2 fs-4 position-absolute"
                   onClick={handleIconClick}
-                    style={{ bottom: 0, right: 0, cursor: "pointer" }}></i>
+                    style={{ bottom: 0, right: 0, cursor: "pointer",color:'burlywood' }}></i>
                 </div>
                 <h4 className="mt-3 mb-0">{User?.username}</h4>
               </div>
