@@ -335,7 +335,7 @@ function ProductItem({ isAuthenticated, Review, productsItem, cart, AlertMessage
                {items.map((e) => (
                  e._id !== id ? (
                     <ProductCard key={e._id} isAuthenticated={isAuthenticated} e={e} Navigate={Navigate} />
-                   ) : <div key={e._id} className='product-item d-flex justify-content-center text-center'>Already Selected Item {selectedProduct?.title} {items.length === 1 && <b>Or No more Item Match Your search</b>}</div>
+                   ) : <div key={e._id} className={`product-item d-flex justify-content-center text-center ${Theme?'bg-white text-black shadow border border-1 border-black':'bg-black text-white'}`}>Already Selected Item {selectedProduct?.title} {items.length === 1 && <b>Or No more Item Match Your search</b>}</div>
                ))}
                           </div></div>
               :SearchItem!==""&&items?.length==0&&

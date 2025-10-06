@@ -77,7 +77,7 @@ export default function PlaceOrderDetails({ isAuthenticated, cart }) {
             type="text"
             placeholder="Gift or promo code"
           />
-          <button className="btn btn-outline-dark rounded-3">Apply</button>
+          <button className="btn btn-outline-dark rounded-3" style={{color:'inherit'}}>Apply</button>
         </div>
 
         {/* Summary Table */}

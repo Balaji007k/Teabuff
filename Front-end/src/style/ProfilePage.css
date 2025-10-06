@@ -4,3 +4,6 @@
 .card label{
     color: inherit;
 }
+.card form div{
+    width: 100%;
+}

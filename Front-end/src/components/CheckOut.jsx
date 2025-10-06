@@ -118,7 +118,7 @@ export default function CheckOut({isAuthenticated,cart}){
                                 <h2>Contact information</h2>
                             <input className=" bg-body-secondary" type='email' value={contactEmail} onChange={(e)=>setcontactEmail(e.target.value)} placeholder='Email' required disabled={contactEmail}/>
                             <span className=' d-flex align-items-center gap-2'>
-                                <input className='check-box' type='checkbox' /><label>Email me with news and offers</label>
+                                <input className='check-box' type='checkbox' /><label style={{color:'inherit'}}>Email me with news and offers</label>
                             </span>
                         </div>
 
@@ -139,11 +139,11 @@ export default function CheckOut({isAuthenticated,cart}){
                                 </div>
                                 <input type='tel' name="phone" value={phone} onChange={(e)=>setphone(e.target.value)} minLength={10} maxLength={10} pattern="[0-9]{10}" placeholder='Phone' required/>
                                 <span className=' d-flex align-items-center gap-2'>
-                                    <input className='check-box' checked={CheckoutReUse} onChange={()=>setCheckoutReUse(prev=>!prev)} type="checkbox" /><label>Save this information for next time</label>
+                                    <input className='check-box' checked={CheckoutReUse} onChange={()=>setCheckoutReUse(prev=>!prev)} type="checkbox" /><label style={{color:'inherit'}}>Save this information for next time</label>
                                 </span>
                             </div>
                             <div className=' d-flex justify-content-between align-items-center'>
-                                <span onClick={()=>Navigate(-1)} className=' text-info d-flex align-items-center' style={{cursor:'pointer'}}><span className="material-symbols-outlined">
+                                <span  onClick={()=>Navigate(-1)} className='d-flex align-items-center' style={{cursor:'pointer',color:'inherit'}}><span className="material-symbols-outlined">
                                     chevron_left
                                 </span>Return to cart</span><button type="submit" className={`confirm-order-btn ${small?'p-2':'p-3'} bg-success`}>Confirm Order</button>
                             </div>

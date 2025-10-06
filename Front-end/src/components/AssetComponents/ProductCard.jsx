@@ -22,8 +22,8 @@ export default function ProductCard({ isAuthenticated, e, Navigate, LikedState, 
         return (
           <div key={e._id} className={`product-item ${Theme?'bg-white text-black shadow border border-1 border-black':'bg-black text-white'}`}>
             <img src={e.url||e.Product_Url} className='Shop-slid' alt={e.title} />
-            <div className='d-flex flex-column w-100'>
-              <div className={`product_name_price d-flex ${small&&cart?'flex-column align-items-start':'align-items-center'} justify-content-between`}>
+            <div className='d-flex flex-column w-100 mt-1'>
+              <div className={`product_name_price d-flex ${small&&cart?'flex-column align-items-start gap-2':'align-items-center'} justify-content-between`}>
                 <h4 className='card-text'>{e.title||e.itemName}</h4>
                 <h4 className={`display-product-text-price d-flex ${small&&cart?'flex-row gap-1':'flex-column'}`}>{e.categoryId==1?<><del>₹{(e.price||e.itemPrice).toFixed(2)}</del>₹{(e.price/2||e.itemPrice/2).toFixed(2)}</>:<>₹{(e.price||e.itemPrice).toFixed(2)}</>}</h4>
               </div>

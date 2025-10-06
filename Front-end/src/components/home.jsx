@@ -66,7 +66,7 @@ function Home({ userInput, isAuthenticated, AccoutState, PopupMessage }) {
         
         <div className='inner-image'>
           {(Location.pathname === '/Login' || Location.pathname === '/Register') ? <Login userInput={userInput} AccoutState={AccoutState} setLoading={setLoading}/> :
-            !small?<img src="assets/Tea.jpeg" className='img' alt="Tea-Img" />:<img src="assets/Tea-Image.webp" className='img' alt="Coffee-Img" />
+            !small?<img src="assets/Tea.jpeg" className='img' alt="Tea-Img" />:<img src="assets/Home-Mobile-1.png" className='img' alt="Coffee-Img" />
           }
         </div>
       </div>

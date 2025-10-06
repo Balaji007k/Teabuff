@@ -82,9 +82,9 @@ function Product({ isAuthenticated, productsItem, category, setHideNavbar }) {
 
   return (
     <>
-    <OfferSlider setHideNavbar={setHideNavbar}/>
     <div className='Product d-flex justify-content-center' id="Product_id">
       <div className='product-inner-box'>
+        <OfferSlider setHideNavbar={setHideNavbar} OfferImage1={"assets/offer (1).jpg"} OfferImage2={"assets/offer (3).jpg"}/>
         <div className='search'>
           <div className={`product top home-search px-2 ${Theme?'bg-white text-black':'bg-black text-white'}`}>
             <select
@@ -159,7 +159,7 @@ function Product({ isAuthenticated, productsItem, category, setHideNavbar }) {
           </div>
         </div>
 
-<OfferSlider setHideNavbar={setHideNavbar}/>
+<OfferSlider setHideNavbar={setHideNavbar} OfferImage1={"assets/offer (2).jpg"} OfferImage2={"assets/offer (1).jpg"}/>
         <div className={`Home-Products w-100 d-flex justify-content-between align-items-center`}><h1 className={`m-0 `}>Fresh Tea</h1><span className="material-symbols-outlined d-md-none" onClick={()=>{Navigate('/Menu')}}>
               arrow_forward_ios
             </span></div>
@@ -205,7 +205,7 @@ function Product({ isAuthenticated, productsItem, category, setHideNavbar }) {
           </div>
         </div>
 
-<OfferSlider setHideNavbar={setHideNavbar}/>
+<OfferSlider setHideNavbar={setHideNavbar} OfferImage1={"assets/offer (3).jpg"} OfferImage2={"assets/offer (1).jpg"}/>
 <div className={`Home-Products w-100 d-flex justify-content-between align-items-center`}><h1 className={`m-0`}>Recommended</h1><span className="material-symbols-outlined d-md-none" onClick={()=>{Navigate('/Menu')}}>
               arrow_forward_ios
             </span></div>

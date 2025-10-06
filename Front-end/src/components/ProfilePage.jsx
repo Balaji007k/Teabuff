@@ -260,7 +260,7 @@ const handleSubmit = async (e) => {
   >
     ✏️
   </button> */}
-  <i class="fa-solid fa-pencil position-absolute p-2 border border-1 border-dark-subtle rounded-2" style={{ top: "48%", right: "10px", cursor:'pointer'}}
+  <i class="fa-solid fa-pencil text-black position-absolute p-2 border border-1 border-dark-subtle rounded-2" style={{ top: "48%", right: "10px", cursor:'pointer'}}
   onClick={() => setIsEditingPassword(!isEditingPassword)}></i>
 </div>
 

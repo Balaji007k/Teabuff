@@ -16,22 +16,22 @@
 /* --- Image Styling --- */
 .offer-image {
   height: 400px;
+  min-height: 400px;
   object-fit: cover;
   width: 100%;
-  border-radius: 10px;
   transition: height 0.3s ease;
 }
 
 /* --- Text Overlay --- */
 .offer-overlay {
   position: absolute;
-  top: 50%;
+  top: 87%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background: rgba(255, 255, 255, 0.75);
+  background: rgba(255, 255, 255, 0.50);
   padding: 15px 25px;
   border-radius: 10px;
-  width: 90%;
+  width: 50%;
   max-width: 500px;
 }
 
@@ -52,11 +52,13 @@
 /* --- Responsive (Mobile < 768px) --- */
 @media (max-width: 768px) {
   .offer-image {
-    height: 200px; /* Smaller height on mobile */
+    height: 200px;
+    min-height: 200px; /* Smaller height on mobile */
   }
 
   .offer-overlay {
-    padding: 10px 15px;
+    padding: 5px 15px;
+    background: rgba(255, 255, 255, 0);
   }
 
   .offer-title {
