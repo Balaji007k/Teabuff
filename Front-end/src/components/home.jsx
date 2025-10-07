@@ -33,13 +33,13 @@ function Home({ userInput, isAuthenticated, AccoutState, PopupMessage }) {
     <>
     <div className="outerbox" id="Home">
       {PopupMessage&&PopupMessage?.message?<AlertMessage message={PopupMessage} AccoutState={AccoutState}/>:Loading&&<LoadingPage/>}
-      <div className={`inner-box ${small&&'pt-5'} py-4 ${Theme?'text-white':'text-black'}`}>
+      <div className={`inner-box ${small&&'pt-5'} py-md-4 ${Theme?'text-white':'text-black'}`}>
         <div className='inner-content d-flex justify-content-center'>
           <div className='inner-text'>
             <div className='bold-text'>
               {!small?<><h1 className='text'>Brewed to <br />Perfection, Sipped <br />with Tradition.</h1>
               <p className='p'>Experience the authentic taste of Indian chai, crafted with tradition and love.From every sip to every story, our tea brings warmth to your soul.</p></>
-                :<><h1 className='text text-center fw-bolder'>Tradition in Every<br></br> Sip.</h1>
+                :<><span className='text d-block text-center fw-bolder'>Tradition in Every<br></br> Sip.</span>
               <p className={`p text-center w-100`}>Experience the authentic taste of Indian chai, crafted with tradition and love.From every sip to every story, our tea brings warmth to your soul.</p></>}
             </div>
             <div className='inner-button'>

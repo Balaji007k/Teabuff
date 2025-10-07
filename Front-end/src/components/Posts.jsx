@@ -2,14 +2,12 @@ import { useEffect, useState } from "react";
 import { useTheme } from "../ThemeContext";
 import "../style/Post.css"
 import ApiService from "./Service/ApiService/product-api";
-import { TimeContext,formatShortTimeAgo } from "../TimeContext";
-import { useContext } from "react";
+import { formatShortTimeAgo } from "../TimeContext";
 
 function Posts() {
   const { isAuthenticated,AllReview,fetchAllReviews } = useTheme();
   const [flattenedReviews, setFlattenedReviews] = useState([]);
   const [likes, setLikes] = useState({}); // track likes per review
-  const now = useContext(TimeContext);
   
 
   useEffect(()=>{

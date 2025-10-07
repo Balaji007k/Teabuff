@@ -128,7 +128,7 @@ useEffect(()=>{
                         <li><Link to={`/${isAuthenticated?.userName+"Cart"}/${isAuthenticated ? isAuthenticated?.userId : 'No_user'}`}><i className="fa-solid fa-cart-shopping">  {!CartLength?0:CartLength} </i></Link></li>
                         {small&&<><li><Link to={'/Login'}>Add Account</Link></li>
                         <li><Link to={`/MyOrders/${OrderId}`}>My Orders</Link></li>
-                        <li onClick={()=>setTheme(prev=>!prev)}><Link to={'/Menu'} onClick={(e) => {
+                        <li onClick={()=>setTheme(prev=>!prev)}><Link to={'/Theme'} onClick={(e) => {
       e.preventDefault(); // prevent navigation
     }}>Theme {Theme?'Light':'Dark'}</Link></li>
                         <li onClick={() => Logout()}><Link 
@@ -171,12 +171,6 @@ useEffect(()=>{
                                 </div>
                             <div className=" w-100">
                                 {Location.pathname==='/'?<ScrollLink offset={-70} to="Home"><h3 className=' mt-1'><i className="fa-solid fa-house"></i>Home</h3></ScrollLink>:<Link to={"/"}><h3 className=' mt-1'><i className="fa-solid fa-house"></i>Home</h3></Link>}
-                                {/* <h3 onClick={()=>Hideprofile()}><i className="fa-solid fa-user"></i>Profile</h3>
-                                <div className={`profile-details ${Showprofile?'show':'hide'} d-flex flex-column align-items-center`}>
-                                    <input type="text" className="lobu rounded-0 m-0 bg-transparent" disabled placeholder="Name" value={isAuthenticated?.userName || "No user"}/>
-                                    <input type="text" className="lobu rounded-0 m-0 bg-transparent" disabled placeholder="Email" value={isAuthenticated?.userEmail || ""}/>
-                                    <input type="text" className="lobu rounded-0 m-0 bg-transparent" disabled placeholder="Password" value={'**********'}/>
-                                </div> */}
                                 <h3><i className="fa-solid fa-gift"></i>Offers</h3>
                                 <Link to={'/WishList'}><h3><i className="fa-solid fa-heart"></i>WishList</h3></Link>
                                 {Location.pathname==='/'?<ScrollLink offset={-70} to="Contact_id"><h3><i className="fa-solid fa-phone"></i>Contact Us</h3></ScrollLink>:<Link to={'/Contact_Us'}><h3><i className="fa-solid fa-phone"></i>Contact Us</h3></Link>}

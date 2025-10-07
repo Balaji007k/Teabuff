@@ -143,7 +143,7 @@ export default function CheckOut({isAuthenticated,cart}){
                                 </span>
                             </div>
                             <div className=' d-flex justify-content-between align-items-center'>
-                                <span  onClick={()=>Navigate(-1)} className='d-flex align-items-center' style={{cursor:'pointer',color:'inherit'}}><span className="material-symbols-outlined">
+                                <span  onClick={()=>Navigate(`/${isAuthenticated?.userName+"Cart"}/${isAuthenticated ? isAuthenticated?.userId : 'No_user'}`)} className='d-flex align-items-center' style={{cursor:'pointer',color:'inherit'}}><span className="material-symbols-outlined">
                                     chevron_left
                                 </span>Return to cart</span><button type="submit" className={`confirm-order-btn ${small?'p-2':'p-3'} bg-success`}>Confirm Order</button>
                             </div>

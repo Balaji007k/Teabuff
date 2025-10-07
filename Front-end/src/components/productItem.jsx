@@ -12,14 +12,12 @@ import PageNotFound from './AssetComponents/PageNotFound';
 import AlertMessage from './AssetComponents/AlertMessage';
 import LoadingPage from './AssetComponents/LoadingPage';
 import ApiService from './Service/ApiService/product-api';
-import { TimeContext,formatShortTimeAgo } from "../TimeContext";
-import { useContext } from "react";
+import { formatShortTimeAgo } from "../TimeContext";
 
 function ProductItem({ isAuthenticated, Review, productsItem, cart, AlertMessageMain }) {
 
   const { handleCart, PostUserLikedState, UserLikedState, UpdateProduct, UserProductReviews, fetchProductReviews, ProductAvgRating, Theme } = useTheme();
 
-    const now = useContext(TimeContext);
 
   const reviews = UserProductReviews?.User || [];
   const ratingCounts = [0, 0, 0, 0, 0]; // index 0 = 1-star, ..., index 4 = 5-star
@@ -192,11 +190,11 @@ function ProductItem({ isAuthenticated, Review, productsItem, cart, AlertMessage
                         <span className='d-flex align-items-center gap-2 fs-4'>{Array.from({ length: 5 }, (_, i) => (
                         <i key={i} className="fa-solid fa-star fs-4" style={{ color: i + 1 <= ProductAvgRating ? 'gold' : 'grey' }}></i>
                       ))}<p>{Number(ProductAvgRating).toFixed(1)}</p></span>
-                      <p className=' fs-4'>( {UserProductReviews?.User?.length||0} Reviews )
+                      <p className=' fs-4'>( {UserProductReviews?.User?.length||0} {UserProductReviews?.User?.length>1?'Reviews':'Review'} )
                       </p>
                       </div>
                       <h2>{selectedProduct.categoryId==1?<>₹<del>{(selectedProduct.price).toFixed(2)}</del> ₹{(selectedProduct.price/2).toFixed(2)}</>:<>₹{(selectedProduct.price).toFixed(2)}</>}</h2>
-                      <div className="Categories bg-white w-100 h-auto py-1 d-inline-flex align-items-center gap-2"><i className="fa-solid fa-circle-exclamation"></i><p>Order in <span className=' fw-bold'>{new Date().toLocaleDateString()}</span> to get next day delivery <span className=' fw-bold'>{new Date(Date.now() + 1 * 24 * 60 * 60 * 1000).toLocaleDateString()}</span></p></div>
+                      <div className="Categories bg-white w-100 h-auto py-1 d-inline-flex align-items-center gap-2"><i className="fa-solid fa-circle-exclamation"></i><p>Get next day delivery <span className=' fw-bold'>{new Date(Date.now() + 1 * 24 * 60 * 60 * 1000).toLocaleDateString()}</span></p></div>
                       <span className=' w-100 fs-4 fw-bold w-75 d-flex justify-content-center align-items-center gap-3'>
                         <h3 className=' fw-bold'>Quantity:</h3>{quantity==0?<button className='quantity-btn-All bg-body-secondary'>-</button>:<button className='quantity-btn-All' onClick={() => setquantity(quantity - 1)}>-</button>}{quantity}<button className='quantity-btn-All' onClick={() => setquantity(quantity + 1)}>+</button>
                       </span>

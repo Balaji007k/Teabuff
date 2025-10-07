@@ -10,7 +10,7 @@ import AlertMessage from "./AssetComponents/AlertMessage";
 export default function OrderConfirmation() {
 
 
-  const {isAuthenticated} = useTheme();
+  const {isAuthenticated,Theme} = useTheme();
   const [MyOrders,setOrderDetails] = useState(null);
   const [Loading,setLoading] = useState(false);
   const Navigate = useNavigate();
@@ -43,8 +43,9 @@ useEffect(() => {
     getUserAllOrders(isAuthenticated.userId);
 }, [isAuthenticated]);
 
+
 useEffect(()=>{
-  if(MyOrders&&MyOrders.length)
+  if(MyOrders&&MyOrders.length>0)
   {
      setLoading(false);
   }
@@ -53,9 +54,9 @@ useEffect(()=>{
 
 
   return (
-      MyOrders&&MyOrders.length?MyOrders.slice().reverse().map((OrderDetails)=>(
-        <div key={OrderDetails?._id} className="container mb-5" style={{marginTop:'75px'}}>
-      <div className="card shadow border-0 p-4">
+      MyOrders&&MyOrders.length>0?MyOrders.slice().reverse().map((OrderDetails)=>(
+        <div key={OrderDetails?._id} className={`container mb-md-5`} style={{marginTop:'75px'}}>
+      <div className={`card shadow border-0 p-4 ${Theme?'bg-white text-black':'bg-black text-white'}`}>
         <h2 className="h5 fw-semibold mb-3">Ordered: <span className="text-secondary">{new Date(OrderDetails?.createdAt).toLocaleDateString("en-IN", { day: "2-digit", month: "2-digit", year: "numeric" })}
 </span></h2>
         {/* Header */}
@@ -83,20 +84,20 @@ useEffect(()=>{
   <div className="row mb-3 text-center text-md-start">
     {/* Order placed */}
     <div className="col-12 col-md-4 mb-3">
-      <p className="text-muted fw-medium mb-1">Order placed</p>
+      <p className="fw-medium mb-1">Order placed</p>
       <p className="text-success fw-semibold mb-1">
         Value shipping <br /> Arrives by {new Date(OrderDetails?.deliveryDate).toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" })}
       </p>
-      <p className="small text-muted mb-0">Order #{OrderDetails?.orderId}</p>
+      <p className="small mb-0">Order #{OrderDetails?.orderId}</p>
     </div>
 
     {/* Shipping address */}
     <div className="col-12 col-md-4 mb-3">
-      <p className="text-muted fw-medium mb-1">Shipping address</p>
+      <p className="fw-medium mb-1">Shipping address</p>
       <p className="fw-semibold mb-0">{OrderDetails?.customerName}</p>
       <p className="mb-0">{OrderDetails?.address}</p>
-      <p className="small text-muted">{OrderDetails?.email}</p>
-      <p className="small text-muted">{OrderDetails?.contact?(`+${OrderDetails?.contact}`):""}</p>
+      <p className="small >{OrderDetails?.email}</p>
+      <p className="small >{OrderDetails?.contact?(`+${OrderDetails?.contact}`):""}</p>
     </div>
 
     {/* Progress */}
@@ -109,7 +110,7 @@ useEffect(()=>{
         </div>
         <span className="small">Order placed</span>
       </div>
-      <p className="small text-muted mt-1">
+      <p className="small mt-1">
         Processing → Shipped → Delivered
       </p>
     </div>
@@ -126,7 +127,7 @@ useEffect(()=>{
       />
       <div className="flex-grow-1 text-center text-md-start">
         <p className="fw-medium mb-1">{product.name}</p>
-        <p className="small text-muted mb-0">
+        <p className="small mb-0">
           Value shipping: Arrives by {new Date(OrderDetails?.deliveryDate).toLocaleDateString()}
         </p>
       </div>
@@ -138,7 +139,7 @@ useEffect(()=>{
 
 
         {/* Order Summary / Payment / Billing */}
-        <div className="row g-4 mb-4">
+        <div className="row g-4 mb-md-4">
           {/* Order Summary */}
           <div className="col-md-4">
             <h2 className="h6 fw-semibold mb-2">Order summary</h2>
@@ -179,8 +180,8 @@ useEffect(()=>{
             <h2 className="h6 fw-semibold mb-2">Billing address</h2>
             <p className="fw-semibold mb-0">{OrderDetails?.customerName}</p>
             <p className="mb-0">{OrderDetails?.address}</p>
-            <p className="small text-muted">{OrderDetails?.email}</p>
-            <p className="small text-muted">{OrderDetails?.contact?(`+${OrderDetails?.contact}`):""}</p>
+            <p className="small >{OrderDetails?.email}</p>
+            <p className="small >{OrderDetails?.contact?(`+${OrderDetails?.contact}`):""}</p>
           </div>
         </div>
 
@@ -189,13 +190,13 @@ useEffect(()=>{
           <p className="text-danger fw-bold fs-5 mb-1">
             Get $10 Cash Back & 10% cash back
           </p>
-          <p className="text-muted small mb-2">
+          <p className="small mb-2">
             on your next Walmart purchase!
           </p>
           <button className="btn btn-success px-4 py-2">
             Click Here
           </button>
-          <p className="text-muted small mt-2">
+          <p className="small mt-2">
             Courtesy of ShopSmarter.com
           </p>
         </div> */}

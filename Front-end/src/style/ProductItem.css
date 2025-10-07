@@ -19,6 +19,7 @@
     outline: none;
     color: #000;
     box-shadow: 0px 0px 1px 1px grey;
+    border: 1px solid dimgrey;
     padding: 0px 10px;
     overflow: hidden;
 }
@@ -43,6 +44,8 @@
     height: 100%;
     display: flex;
     justify-content: center;
+    border: 1px solid dimgrey;
+    border-radius: 15px;
 }
 .Buttom-img{
     width: 100%;
@@ -58,7 +61,7 @@
     width: 30%;
     border-radius: 15px;
     margin-bottom: 15px;
-    border: 1px solid white;
+    border: 1px solid dimgrey;
     cursor: pointer;
     transition: all .3s;
 }
@@ -71,7 +74,6 @@
     position: absolute;
     top: 0;
     left: 0;
-    border-radius: 15px;
 }
 .details-product{
     min-width: 350px;
@@ -119,9 +121,10 @@
 .div{
     color: #000;
     background-color: white;
-    box-shadow: 0px 0px 1px 1px grey;
-    border-radius: 10px;
+    border-radius: 15px;
     padding: 10px;
+    border: 1px solid dimgrey;
+    box-shadow: 0px 0px 1px 1px rgb(171, 169, 169);
 }
 .cart-description{
     transition: all 1s;
@@ -150,10 +153,11 @@
 .User{
     color: #000;
     background-color: white;
-    box-shadow: 0px 0px 1px 1px rgb(171, 169, 169);
     min-height: 250px;
     border-radius: 15px;
     padding: 10px;
+    border: 1px solid dimgrey;
+    box-shadow: 0px 0px 1px 1px rgb(171, 169, 169);
 }
 .Comment-box{
     height: 175px;

@@ -2,15 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { useTheme } from '../../ThemeContext';
 import { useNavigate } from 'react-router-dom';
 import ApiService from '../Service/ApiService/product-api';
-import { TimeContext,formatShortTimeAgo } from "../../../src/TimeContext";
-import { useContext } from "react";
+import { formatShortTimeAgo } from "../../../src/TimeContext";
 
 const ReviewSlider = () => {
   const { isAuthenticated,AllReview } = useTheme(); // Review = [ { title, comments: [ { User: [reviewers...] } ] } ]
   const Navigate = useNavigate();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [flattenedReviews, setFlattenedReviews] = useState([]);
-    const now = useContext(TimeContext);
 
   // Utility to shuffle array
 const shuffleArray = (array) => {
