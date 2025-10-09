@@ -48,4 +48,32 @@ const sendOtpMail = async (to, otp) => {
   }
 };
 
-module.exports = { sendOrderConfirmation, sendOtpMail };
+// 📩 Contact form message mail
+const sendContactMessage = async (name, email, subject, message) => {
+  try {
+    const msg = {
+      to: process.env.EMAIL_USER, // You (store owner) will receive the message
+      from: `"Teabuff Contact" <${process.env.EMAIL_USER}>`, // Must be verified sender in SendGrid
+      subject: `📬 New Message from ${name} - ${subject}`,
+      text: `
+You received a new message from your website contact form:
+
+👤 Name: ${name}
+📧 Email: ${email}
+📄 Subject: ${subject}
+💬 Message:
+${message}
+      `,
+      replyTo: email, // So you can reply directly to the sender
+    };
+
+    const response = await sgMail.send(msg);
+    console.log("Contact message sent:", response[0].statusCode);
+    return true;
+  } catch (err) {
+    console.error("Error sending contact message:", err);
+    return false;
+  }
+};
+
+module.exports = { sendOrderConfirmation, sendOtpMail, sendContactMessage };

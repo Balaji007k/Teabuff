@@ -4,7 +4,7 @@ const { getOrderConfirmation, getUserOrders, getAllorders, createOrderConfirmati
 
 router.route('/orders/:userId/:orderId').get(getOrderConfirmation);
 router.route('/orders/:userId').get(getUserOrders);
-router.route('/orders').get(getAllorders);
+router.route('/AllOrders').get(getAllorders);
 router.route('/orders').post(createOrderConfirmation);
 router.route('/orders/:userId').delete(deleteUserOrders);
 

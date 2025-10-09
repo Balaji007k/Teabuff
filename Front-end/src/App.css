@@ -633,7 +633,7 @@ video{
 }
 .main{
     flex-direction: column;
-    gap: 0px !important;
+    gap: 10px !important;
 }
 .contact-content{
     width: 100% !important;
@@ -655,6 +655,7 @@ form{
 }
 .input{
     width: 85% !important;
+    padding: 10px 15px !important;
 }
 .contact-image{
     height: 100% !important;

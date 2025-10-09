@@ -185,7 +185,7 @@ function ProductItem({ isAuthenticated, Review, productsItem, cart, AlertMessage
                 <div className='Product details-product'>
                   <div className='details-holder p-3'>
                     <div className=' d-flex flex-column gap-3'>
-                      <h1>{selectedProduct.title}</h1>
+                      <h1 className=' my-1'>{selectedProduct.title}</h1>
                       <div className=' d-flex align-items-center flex-wrap gap-2'>
                         <span className='d-flex align-items-center gap-2 fs-4'>{Array.from({ length: 5 }, (_, i) => (
                         <i key={i} className="fa-solid fa-star fs-4" style={{ color: i + 1 <= ProductAvgRating ? 'gold' : 'grey' }}></i>

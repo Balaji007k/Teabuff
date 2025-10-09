@@ -28,7 +28,7 @@ export default function CheckOut({isAuthenticated,cart}){
       const [CheckoutReUse,setCheckoutReUse] = useState(false);
       const [UserCheckOutData,setUserCheckOutData] = useState(null);
       const [AlertMessageCheckOut,setAlertMessage] = useState([]);
-      const [Loading,setLoading] = useState(false);
+      const [Loading,setLoading] = useState(true);
       const [Filtered,setFiltered] = useState(null);
 
       useEffect(()=>{
@@ -39,7 +39,6 @@ export default function CheckOut({isAuthenticated,cart}){
 
 
       const fetchCheckOut = async () => {
-        setLoading(true);
         const { Result, Error } = await ApiService.fetchData(`/Checkouts/${isAuthenticated.userId}`);
         // console.log(Result)
         if (Result?.UserCheckOut) {

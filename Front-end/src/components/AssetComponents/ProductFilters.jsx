@@ -32,35 +32,37 @@ export default function ProductFilters({ Products, id, searchingProduct }) {
     }
   };
 
-    const handleSort = (value) => {
-    const source = filteredCategory?.length > 0 ? filteredCategory : productsItem;
+  const handleSort = (value) => {
+  const source = filteredCategory?.length > 0 ? filteredCategory : productsItem;
 
-    if (value === 'BestSelling') {
-      const Sorted = [...source].filter(product => Number(product.rating) >= 4.7);
-      Products(Sorted);
-    } else if (value === 'LowToHigh') {
-      const Sorted = [...source].sort((a, b) => a.price - b.price);
-      Products(Sorted);
-    } else if (value === 'HighToLow') {
-      const Sorted = [...source].sort((a, b) => b.price - a.price);
-      Products(Sorted);
-    } else if (value === 'New') {
-    const Sorted = [...source].sort(
-      (a, b) => new Date(b.createdAt) - new Date(a.createdAt) // newest first
-    );
-    Products(Sorted);
+  let Sorted = [];
+
+  if (value === 'BestSelling') {
+    Sorted = [...source].filter(product => Number(product.rating) >= 4.7);
+  } else if (value === 'LowToHigh') {
+    Sorted = [...source].sort((a, b) => a.price - b.price);
+  } else if (value === 'HighToLow') {
+    Sorted = [...source].sort((a, b) => b.price - a.price);
+  } else if (value === 'New') {
+    Sorted = [...source].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+  } else if (value === 'HighRating') {
+    Sorted = [...source].filter(product => Number(product.rating) >= 4 && Number(product.rating) <= 5);
+  } else if (value === 'LowRating') {
+    Sorted = [...source].filter(product => Number(product.rating) >= 1 && Number(product.rating) < 4);
   } else if (value === 'Cancel') {
-      setSort(false);
-        if (Location.pathname==='/Menu')Products(source);
-        else{
-          if(filteredCategory?.length > 0) return Products(source);
-          else return Products([]);
-        }
-        return;
-      }
+    setSort(false);
+    if (Location.pathname === '/Menu') Products(source);
+    else {
+      if (filteredCategory?.length > 0) return Products(source);
+      else return Products([]);
+    }
+    return;
+  }
 
-    setSort(value);
-  };
+  Products(Sorted);
+  setSort(value);
+};
+
 
 
   // 🔹 Search filter
@@ -141,21 +143,22 @@ export default function ProductFilters({ Products, id, searchingProduct }) {
         {/* Sort filter */}
         <div className={`Categories ${Theme?'bg-white text-black':'bg-black text-white'}`} style={{ width: "20%" }}>
           <select
-            className={`w-100 h-100 ${Theme?'bg-white text-black':'bg-black text-white'}`}
-            value={sort}
-            onChange={(e) => handleSort(e.target.value)}
-          >
-            <optgroup className="">
-              <option value="" hidden>
-                Filter
-              </option>
-              <option value="BestSelling">Bestselling</option>
-              <option value="LowToHigh">Low to High</option>
-              <option value="HighToLow">High to Low</option>
-              <option value="New">New Product</option>
-              <option value="Cancel">Cancel</option>
-            </optgroup>
-          </select>
+  className={`w-100 h-100 ${Theme ? 'bg-white text-black' : 'bg-black text-white'}`}
+  value={sort}
+  onChange={(e) => handleSort(e.target.value)}
+>
+  <optgroup>
+    <option value="" hidden>Filter</option>
+    <option value="BestSelling">Bestselling</option>
+    <option value="LowToHigh">Low to High</option>
+    <option value="HighToLow">High to Low</option>
+    <option value="New">New Product</option>
+    <option value="HighRating">Rating 4–5</option>
+    <option value="LowRating">Rating 1–3</option>
+    <option value="Cancel">Cancel</option>
+  </optgroup>
+</select>
+
         </div>
 
         {/* Placeholder for future dropdown */}

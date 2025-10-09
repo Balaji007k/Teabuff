@@ -12,6 +12,8 @@ const carts = require('./routes/cart')
 const shops = require('./routes/shops')
 const CheckOut = require('./routes/CheckOut')
 const OrderConfirmation = require('./routes/OrderConfirmation')
+const ContactMail = require('./routes/Contact.js')
+const Admin = require('./Admin/AdminController.js')
 const cors = require('cors')
 const {requireAuth} = require('./controllers/middleware/authMiddleware')
 const { name } = require('nodeman/lib/mustache')
@@ -76,6 +78,8 @@ app.use(shops);
 app.use(carts);
 app.use(CheckOut);
 app.use(OrderConfirmation);
+app.use(ContactMail);
+app.use(Admin);
 
 
 

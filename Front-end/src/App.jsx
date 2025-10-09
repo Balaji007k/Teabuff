@@ -22,6 +22,7 @@ import Payment from './components/AssetComponents/Payment';
 import OrderConfirmation from './components/OrderConfirmation';
 import ProfilePage from './components/ProfilePage';
 import Orders from './Admin_page/Admin_Component/Orders';
+import AdminLogin from './Admin_page/AdminLogin';
 
 // import { fetchData } from './utils/fetchData';
 
@@ -31,13 +32,6 @@ function App() {
   const location = useLocation();
   const [AlertMessage,setAlertMessage] = useState(null);
   const [HideNavbar,setHideNavbar] = useState(true);
-
-
-  // useEffect(() => {
-  //   fetchData("/products").then((data) => {
-  //     console.log("testing Data",data.data || []); // fallback to empty array
-  //   });
-  // }, []);
 
   useEffect(() => {
     if (location.pathname === '/Login') {
@@ -71,13 +65,13 @@ function App() {
           isAuthenticated={isAuthenticated}
           setAlertMessage={setAlertMessage}
           cart={cart}
-          HideNav={HideNavbar}
+          HideNav={setHideNavbar}
         />
       )}
       <Routes>
         <Route
           path="/"
-          element={<Main setHideNavbar={setHideNavbar} AlertMessageMain={AlertMessage}/>}
+          element={<Main HideNavbar={HideNavbar} AlertMessageMain={AlertMessage}/>}
         />
         <Route
           path="/Login"
@@ -108,6 +102,8 @@ function App() {
           element={<CartDetails cart={cart} isAuthenticated={isAuthenticated} />}
         />
         <Route path='/WishList' element={<Wishlist isAuthenticated={isAuthenticated}/>} />
+        <Route path='/AdminLogin' element={<AdminLogin/>}
+        />
         <Route path="/Admin" element={<Admin AllReview={AllReview} productsItem={productsItem} category={category}/>}>
           <Route
             path="UserDetails"

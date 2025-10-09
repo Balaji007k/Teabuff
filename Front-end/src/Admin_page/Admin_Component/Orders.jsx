@@ -1,13 +1,3 @@
-// import { useOutletContext } from "react-router-dom"
-
-// export default function Orders(){
-//     const {Orders} = useOutletContext();
-//     console.log(Orders)
-//     return(
-//         <div>HI</div>
-//     )
-// }
-
 import { useOutletContext } from "react-router-dom";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid, PieChart, Pie, Cell, Legend } from "recharts";
 
@@ -18,42 +8,40 @@ export default function Orders() {
   return <div>No orders found</div>;
 }
 
+// Flatten all OrderDetails first
+const allOrderDetails = Orders.flatMap(order => order.OrderDetails || []);
 
-  // --- Example Data Transformations ---
-  // 1. Sales by Date (Total Revenue per Delivery Date)
-  const salesByDate = Orders.map(order => ({
-    date: new Date(order.deliveryDate).toLocaleDateString(),
-    total: order.total,
-  }));
+// 1️ Sales by Date
+const salesByDate = allOrderDetails.map(order => ({
+  date: new Date(order.deliveryDate).toLocaleDateString(),
+  total: order.total,
+}));
 
-  // 2. Product Quantity Aggregation
-  const productQty = {};
-Orders.forEach(order => {
-  if (Array.isArray(order.products)) {   // ✅ only loop if products exist
+// 2️ Product Quantity Aggregation
+const productQty = {};
+allOrderDetails.forEach(order => {
+  if (Array.isArray(order.products)) {
     order.products.forEach(p => {
       if (!productQty[p.name]) productQty[p.name] = 0;
       productQty[p.name] += p.qty;
     });
   }
 });
+const productData = Object.keys(productQty).map(name => ({
+  name,
+  qty: productQty[name],
+}));
 
-
-  const productData = Object.keys(productQty).map(name => ({
-    name,
-    qty: productQty[name],
-  }));
-
-  // 3. Payment Types Breakdown
-  const paymentData = {};
-  Orders.forEach(order => {
-    if (!paymentData[order.paymentType]) paymentData[order.paymentType] = 0;
-    paymentData[order.paymentType] += order.total;
-  });
-
-  const paymentChart = Object.keys(paymentData).map(type => ({
-    name: type,
-    value: paymentData[type],
-  }));
+// 3 Payment Types Breakdown
+const paymentData = {};
+allOrderDetails.forEach(order => {
+  if (!paymentData[order.paymentType]) paymentData[order.paymentType] = 0;
+  paymentData[order.paymentType] += order.total;
+});
+const paymentChart = Object.keys(paymentData).map(type => ({
+  name: type,
+  value: paymentData[type],
+}));
 
   // --- Colors for Pie chart ---
   const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];

@@ -29,8 +29,8 @@ function Header({ userinputFocus, isAuthenticated, cart, setAlertMessage, HideNa
     };
 
 useEffect(()=>{
-    if(!HideNav){setBarVisible(false);}
-},[HideNav])
+    HideNav(BarVisible);
+},[BarVisible])
 
 
 useEffect(()=>{

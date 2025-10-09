@@ -15,7 +15,7 @@ import Home from '../components/home';
 import { useTheme } from '../ThemeContext';
 import { useEffect, useState } from 'react';
 
-function Main({ userInput, AccountSet, createdAccount, AlertMessageMain, setHideNavbar }) {
+function Main({ userInput, AccountSet, createdAccount, AlertMessageMain, HideNavbar }) {
   const { isAuthenticated, Review, image, productsItem, category } = useTheme();
   const [AlertMessage,setAlertMessage] = useState([]);
 
@@ -26,7 +26,7 @@ function Main({ userInput, AccountSet, createdAccount, AlertMessageMain, setHide
   return (
     <div className="App">
       <Home userInput={userInput} Review={Review} isAuthenticated={isAuthenticated} AccountSet={AccountSet} createdAccount={createdAccount} AccoutState={setAlertMessage} PopupMessage={AlertMessage}/>
-      <Product setHideNavbar={setHideNavbar} productsItem={productsItem} category={category} isAuthenticated={isAuthenticated} />
+      <Product HideNavbar={HideNavbar} productsItem={productsItem} category={category} isAuthenticated={isAuthenticated} />
       {/* <About image={image} /> */}
       <Service />
       <Contact />

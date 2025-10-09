@@ -133,7 +133,7 @@ exports.getUserOrders = async (req, res) => {
 
 exports.getAllorders = async(req,res) => {
   try {
-    const Orders = await OrderConfirmationModel.find({});
+    const Orders = await OrderConfirmationModel.find();
     if(Orders) {res.status(200).json({message:"Successfully fetched",Orders:Orders});}
     else{res.status(404).json({message:"No Orders found"})}
   } catch (error) {
