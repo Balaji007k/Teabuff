@@ -43,6 +43,7 @@ function ProductItem({ isAuthenticated, Review, productsItem, cart, AlertMessage
   const { id } = useParams(); // get id from URL
   const [quantity, setquantity] = useState(0);
   const [selectedProduct, setSelectedProduct] = useState(null);
+  const [selectedProductStock, setSelectedProductStock] = useState(0);
   const [selectedProductReview, setselectedProductReview] = useState([]);
   const [suggestedproducts, setSuggestedProducts] = useState([]);
   const [items, setProducts] = useState(null);
@@ -56,6 +57,7 @@ function ProductItem({ isAuthenticated, Review, productsItem, cart, AlertMessage
   const [Loading,setLoading] = useState(true);
   const [SearchItem, setSearchItem] = useState("");
   const [AdditionalImages,setAdditionalImages] = useState(true);
+  const [AlertMessageproductItem,setAlertMessage] = useState(null);
 
   const ShowBar = () => {
     setShow(prev => !prev)
@@ -79,9 +81,15 @@ function ProductItem({ isAuthenticated, Review, productsItem, cart, AlertMessage
   };
 
   const PlaceOrder=(productId, itemPrice, quantity, itemName, categoryId, userId, Description, Product_Url, Rating, likes, placeOrder)=>{
+    setLoading(true);
+    if(selectedProductStock<=quantity){
+      setLoading(false);
+      return setAlertMessage({message:'Out of Stock',state:false})}
+    else{
     const Relocate = handleCart(productId, itemPrice, quantity, itemName, categoryId, userId, Description, Product_Url, Rating, likes, placeOrder);
     if (Relocate) Navigate(`/CheckOut/${productId}`);
     else Navigate(`/CheckOut`);
+    }
   };
 
   useEffect(()=>{
@@ -123,6 +131,16 @@ function ProductItem({ isAuthenticated, Review, productsItem, cart, AlertMessage
         }
     };
 
+    const fetchProductStock = async () => {
+        const { Result, Error } = await ApiService.fetchData(`/productStock/${id}`);
+        if(Result){
+          setSelectedProductStock(Result?.productStock?.Stock);
+        }
+        else{
+          console.log(Error);
+        }
+      }
+
     useEffect(()=>{
       setSearchItem("");
     },[id])
@@ -131,12 +149,11 @@ function ProductItem({ isAuthenticated, Review, productsItem, cart, AlertMessage
       setAlreadyCommented((UserProductReviews&&UserProductReviews?.User?.length>0)&&UserProductReviews?.User.some(user=>user.UserId===isAuthenticated.userId));
     },[UserProductReviews])
 
-    // , Review, cart, productsItem, id, Location.pathname
-
   useEffect(() => {
     if(id&&isAuthenticated) setAdditionalImages(true);
     if (isAuthenticated) {
       fetchProduct();
+      fetchProductStock();
     };
     
   }, [isAuthenticated,id,productsItem]);
@@ -149,6 +166,14 @@ function ProductItem({ isAuthenticated, Review, productsItem, cart, AlertMessage
   useEffect(() => {
   if (quantity < 0) setquantity(0);
 }, [quantity]);
+
+useEffect(()=>{
+  if(AlertMessageproductItem&&AlertMessageproductItem?.message){
+    setTimeout(()=>{
+      setAlertMessage(null);
+    },1500);
+  };
+},[AlertMessageproductItem]);
 
 
   if (!isAuthenticated) {
@@ -164,9 +189,26 @@ function ProductItem({ isAuthenticated, Review, productsItem, cart, AlertMessage
 
   if (isAuthenticated && selectedProduct) return (
     <>
-    {AlertMessageMain&&AlertMessageMain.message&&<AlertMessage message={AlertMessageMain}/>}
+    {((AlertMessageMain&&AlertMessageMain.message)||(AlertMessageproductItem&&AlertMessageproductItem.message))&&<AlertMessage message={AlertMessageproductItem||AlertMessageMain}/>}
       <div className='Product-Page-cart d-flex flex-column align-items-center' style={{ marginTop: '75px',color:Theme?'white':'black' }}>
         <ProductFilters Products={Products} id={id} searchingProduct={setSearchItem}/>
+
+        {/* CASE: Filters/search applied → No results */}
+{items && items.length === 0 && (
+  <div className='w-100 p-2'>
+    <div
+      className='scroll-items py-3 gap-3 mt-4'
+      style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fill,minmax(270px,1fr))',
+        justifyItems: 'center',
+        maxHeight: small ? '550px' : 'fit-content',
+      }}
+    >
+      <EmptyProductCard />
+    </div>
+  </div>
+)}
 
         {(!items||items.length === 0)&&
           <>
@@ -185,7 +227,7 @@ function ProductItem({ isAuthenticated, Review, productsItem, cart, AlertMessage
                 <div className='Product details-product'>
                   <div className='details-holder p-3'>
                     <div className=' d-flex flex-column gap-3'>
-                      <h1 className=' my-1'>{selectedProduct.title}</h1>
+                      <div><h1 className=' my-1'>{selectedProduct.title} <span className='fs-4'>{selectedProductStock>0?<span className=' text-success text-nowrap'>{`Stock left: ${selectedProductStock}`}</span>:<span className=' text-danger text-nowrap'>Out of Stock</span>}</span></h1></div>
                       <div className=' d-flex align-items-center flex-wrap gap-2'>
                         <span className='d-flex align-items-center gap-2 fs-4'>{Array.from({ length: 5 }, (_, i) => (
                         <i key={i} className="fa-solid fa-star fs-4" style={{ color: i + 1 <= ProductAvgRating ? 'gold' : 'grey' }}></i>
@@ -196,10 +238,10 @@ function ProductItem({ isAuthenticated, Review, productsItem, cart, AlertMessage
                       <h2>{selectedProduct.categoryId==1?<>₹<del>{(selectedProduct.price).toFixed(2)}</del> ₹{(selectedProduct.price/2).toFixed(2)}</>:<>₹{(selectedProduct.price).toFixed(2)}</>}</h2>
                       <div className="Categories bg-white w-100 h-auto py-1 d-inline-flex align-items-center gap-2"><i className="fa-solid fa-circle-exclamation"></i><p>Get next day delivery <span className=' fw-bold'>{new Date(Date.now() + 1 * 24 * 60 * 60 * 1000).toLocaleDateString()}</span></p></div>
                       <span className=' w-100 fs-4 fw-bold w-75 d-flex justify-content-center align-items-center gap-3'>
-                        <h3 className=' fw-bold'>Quantity:</h3>{quantity==0?<button className='quantity-btn-All bg-body-secondary'>-</button>:<button className='quantity-btn-All' onClick={() => setquantity(quantity - 1)}>-</button>}{quantity}<button className='quantity-btn-All' onClick={() => setquantity(quantity + 1)}>+</button>
+                        <h3 className=' fw-bold'>Quantity:</h3>{quantity==0?<button className='quantity-btn-All bg-body-secondary'>-</button>:<button className='quantity-btn-All' onClick={() => setquantity(quantity - 1)}>-</button>}{quantity}{quantity<selectedProductStock?<button className='quantity-btn-All' onClick={() => setquantity(quantity + 1)}>+</button>:<button className='quantity-btn-All bg-body-secondary'>+</button>}
                       </span>
                       <div className=' w-100 d-flex align-items-center justify-content-between gap-2'>
-                        <button className={`Add-cart-btn-productItem ${!small&&'w-50'} flex-grow-1 py-2`} onClick={() => { handleCart(selectedProduct._id, selectedProduct.price, quantity, selectedProduct.title, selectedProduct.categoryId, isAuthenticated.userId, selectedProduct.description, selectedProduct.url, selectedProduct.rating, Heart, false) ;setLoading(true)}}>Add to Cart {!small&&<i className="fa-solid fa-cart-shopping ms-2"></i>}</button>{(cart?.items.length>0 || quantity!==0)&&<button className={`Add-cart-btn-productItem ${!small&&'w-50'} py-2`} onClick={() => {PlaceOrder(selectedProduct._id, selectedProduct.price, quantity, selectedProduct.title, selectedProduct.categoryId, isAuthenticated.userId, selectedProduct.description, selectedProduct.url, selectedProduct.rating, Heart, true);setLoading(true)}}>Buy Now {!small&&<i class="fa-solid fa-truck ms-2"></i>}</button>}
+                        <button className={`Add-cart-btn-productItem ${!small&&'w-50'} flex-grow-1 py-2`} onClick={() => { if(selectedProductStock>=quantity){handleCart(selectedProduct._id, selectedProduct.price, quantity, selectedProduct.title, selectedProduct.categoryId, isAuthenticated.userId, selectedProduct.description, selectedProduct.url, selectedProduct.rating, Heart, false);setLoading(true)}else{return setAlertMessage({message:'Out of Stock',state:false})}}}>Add to Cart {!small&&<i className="fa-solid fa-cart-shopping ms-2"></i>}</button>{(cart?.items.length>0 || quantity!==0)&&<button className={`Add-cart-btn-productItem ${!small&&'w-50'} py-2`} onClick={() => { PlaceOrder(selectedProduct._id, selectedProduct.price, quantity, selectedProduct.title, selectedProduct.categoryId, isAuthenticated.userId, selectedProduct.description, selectedProduct.url, selectedProduct.rating, Heart, true);}}>Buy Now {!small&&<i className="fa-solid fa-truck ms-2"></i>}</button>}
                         {/* <span className={`material-symbols-outlined Product-icons heart ${Heart ? 'text-danger' : 'text-black'}`} onClick={() => PostUserLikedState(isAuthenticated.userId, selectedProduct._id, selectedProduct.title, selectedProduct.price, selectedProduct.description, selectedProduct.url, selectedProduct.categoryId, selectedProduct.rating, selectedProduct.ingredients, selectedProduct.features, selectedProduct.purchaseLink, !Heart && true, selectedProduct.comments)}>
                           favorite
                         </span> */}
@@ -275,7 +317,7 @@ function ProductItem({ isAuthenticated, Review, productsItem, cart, AlertMessage
 
                     </div>}
                     </div>
-                    <div className=' d-flex align-items-center gap-2 my-2'><button className=' rounded-circle bg-white d-flex justify-content-center align-items-center' onClick={() => { handleEditcomment(); setRating(0) }} style={{ width: '40px', height: '40px', border: '1px solid black', boxShadow: 'none' }}><span>{AlreadyCommented?(<i class="fa-solid fa-pen-to-square"></i>):(<i class="fa-solid fa-comment"></i>)}</span></button>Comments</div>
+                    <div className=' d-flex align-items-center gap-2 my-2'><button className=' rounded-circle bg-white d-flex justify-content-center align-items-center' onClick={() => { handleEditcomment(); setRating(0) }} style={{ width: '40px', height: '40px', border: '1px solid black', boxShadow: 'none' }}><span>{AlreadyCommented?(<i className="fa-solid fa-pen-to-square"></i>):(<i className="fa-solid fa-comment"></i>)}</span></button>Comments</div>
                     <div className=' d-flex flex-column overflow-hidden' style={{ height: !Editcomment && '0px' }}>
                       <div className='d-flex gap-2'>
                         Select Rating:
@@ -298,49 +340,80 @@ function ProductItem({ isAuthenticated, Review, productsItem, cart, AlertMessage
               </div>
 
             </div>
+            {/* CASE 1: No items (initial or cleared) → Show “You might also like” */}
+  <div className='Extra-products-container w-100'>
+    <div className='Extra-products' id='suggestItems'>
+      <h1 className={`text-center my-4 ${Theme ? 'text-white' : 'text-black'}`}>
+        You might also like
+      </h1>
+      <div
+        className='scroll-items py-3 gap-3'
+        style={{ maxHeight: small ? '550px' : 'fit-content' }}
+      >
+        {suggestedproducts && suggestedproducts.length > 0 && (
+          <>
+            {suggestedproducts.map(
+              (e) =>
+                id !== e._id && (
+                  <ProductCard
+                    key={e._id}
+                    isAuthenticated={isAuthenticated}
+                    e={e}
+                    Navigate={Navigate}
+                  />
+                )
+            )}
+            <ViewMore />
+          </>
+        )}
+      </div>
+    </div>
+  </div>
+
           </>}
 
 
       </div>
 
-      {(!items||items.length === 0)&&
-        <>
-          <div className='Extra-products-container'>
-            <div className='Extra-products' id='suggestItems'>
-              <h1 className={` text-center my-4 ${Theme?'text-white':'text-black'}`}>You might also like</h1>
-              <div className='scroll-items py-3 gap-3' style={{ maxHeight: small ? '550px' : 'fit-content' }}>
-                {suggestedproducts && suggestedproducts.length > 0 ? (
-                  <>
-                    {suggestedproducts.map((e) => (
-                      id !== e._id && (
-                        <ProductCard key={e._id} isAuthenticated={isAuthenticated} e={e} Navigate={Navigate} />
-                      )
-                    ))}
-                    <ViewMore />
-                  </>
-                ) : (
-                  <EmptyProductCard />
-                )}
-
-              </div>
-            </div>
-
+{/* CASE 2️⃣: Filters/search applied → Results found */}
+{items && items.length > 0 && (
+  <div className='w-100 p-2'>
+    <div
+      className='scroll-items py-3 gap-3 mt-4'
+      style={{
+        justifyContent: small && 'center',
+        flexWrap: small && 'wrap',
+      }}
+    >
+      {items.map((e) =>
+        e._id !== id ? (
+          <ProductCard
+            key={e._id}
+            isAuthenticated={isAuthenticated}
+            e={e}
+            Navigate={Navigate}
+          />
+        ) : (
+          <div
+            key={e._id}
+            className={`product-item d-flex justify-content-center text-center ${
+              Theme
+                ? 'bg-white text-black shadow border border-1 border-black'
+                : 'bg-black text-white'
+            }`}
+          >
+            Already Selected Item {selectedProduct?.title}{' '}
+            {items.length === 1 && (
+              <b>Or No more items match your search</b>
+            )}
           </div>
-        </>}
-          
-            {items&&items.length > 0 ?
-            <div className=' w-100 p-2'><div className='scroll-items py-3 gap-3 mt-4' style={{ justifyContent:small&&'center',flexWrap:small&&'wrap'}}>
-               {items.map((e) => (
-                 e._id !== id ? (
-                    <ProductCard key={e._id} isAuthenticated={isAuthenticated} e={e} Navigate={Navigate} />
-                   ) : <div key={e._id} className={`product-item d-flex justify-content-center text-center ${Theme?'bg-white text-black shadow border border-1 border-black':'bg-black text-white'}`}>Already Selected Item {selectedProduct?.title} {items.length === 1 && <b>Or No more Item Match Your search</b>}</div>
-               ))}
-                          </div></div>
-              :SearchItem!==""&&items?.length==0&&
-                <div className=' w-100 p-2'><div className='scroll-items py-3 gap-3 mt-4' style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(270px,1fr))', justifyItems: 'center', maxHeight: small ? '550px' : 'fit-content' }}>
-                  <EmptyProductCard />
-                  </div></div>
-            }
+        )
+      )}
+    </div>
+  </div>
+)}
+
+
       <Footer />
     </>
   );

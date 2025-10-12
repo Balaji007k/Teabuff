@@ -1,32 +1,37 @@
 import { Link } from 'react-router-dom';
 
-function DashBoard({ Review, productsItem, category, Users }) {
+function DashBoard({ Review, productsItem, productStocks, category, Users, Orders }) {
   return (
     <div className="main-Admin-dashboard">
       <div className="dashboard-grid">
         <div className="Dashboard">
           <h1>
-            <Link to="/Admin/UserDetails">Users {Users?.length}</Link>
+            <Link to="/Admin/UserDetails">Users {Users}</Link>
           </h1>
         </div>
         <div className="Dashboard">
           <h1>
-            <Link to="/Admin/Products">Products {productsItem?.length}</Link>
+            <Link to="/Admin/Products">Products {productsItem}</Link>
           </h1>
         </div>
         <div className="Dashboard">
           <h1>
-            <Link to="/Admin/Reviews">Reviews {Review?.length}</Link>
+            <Link to="/Admin/ProductStocks">ProductStocks {productStocks}</Link>
           </h1>
         </div>
         <div className="Dashboard">
           <h1>
-            <Link to="/Admin/Categorys">Categorys {category?.length}</Link>
+            <Link to="/Admin/Reviews">Reviews {Review}</Link>
           </h1>
         </div>
         <div className="Dashboard">
           <h1>
-            <Link to="/Admin/Orders">Orders {category?.length}</Link>
+            <Link to="/Admin/Categorys">Categorys {category}</Link>
+          </h1>
+        </div>
+        <div className="Dashboard">
+          <h1>
+            <Link to="/Admin/Orders">Orders {Orders}</Link>
           </h1>
         </div>
       </div>

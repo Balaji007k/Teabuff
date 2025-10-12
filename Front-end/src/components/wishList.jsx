@@ -36,7 +36,7 @@ function Wishlist({ isAuthenticated }) {
         <div className='Extra-products-container py-3 d-flex flex-column gap-5' style={{marginTop:'75px'}}>
             <h1 className={`fw-bold text-center ${Theme?'text-white':'text-black'}`}>Wishlist</h1>
                 <div className='Extra-products'>
-                 <div className="scroll-items" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(270px,1fr))', justifyItems: 'center', gap: '20px', maxHeight: small ? '100%' : 'auto' }}>
+                 <div className="scroll-items" style={{ justifyContent: small && 'space-around', flexWrap: small && 'wrap' }}>
                 {LikedProducts?.length>0?LikedProducts.map(e=>(
                    <ProductCard key={e._id} isAuthenticated={isAuthenticated} LikedState={UserLikedState} Navigate={Navigate} e={e} />
                 )) : (

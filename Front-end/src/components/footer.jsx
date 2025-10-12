@@ -16,7 +16,7 @@ function Footer() {
     return (
         <footer className='footer d-flex flex-column justify-content-center align-items-center mt-4'>
             <div className={`footer-inner-box text-light rounded-4 mb-4 ${Theme?'bg-white text-black':'bg-black text-white'}`}>
-                <h1 className='FooterLogo mx-5 my-4 ps-2'>Teabuff</h1>
+                <div className=" d-flex justify-content-between align-items-center mx-md-5 my-md-4 p-2"><h1 className='FooterLogo'>Teabuff</h1><i className="fa-solid fa-up-long fs-4 p-2" style={{cursor:'pointer'}} onClick={()=>{window.scrollTo(0,0,)}}></i></div>
                 <div className='footer-content d-flex flex-wrap justify-content-between gap-5 mx-5 my-4 ps-2'>
                     <div className='Footer-Details d-flex flex-wrap justify-content-center align-items-start'>
                         <div className='w-100 d-flex justify-content-start'>

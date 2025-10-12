@@ -125,6 +125,17 @@ const prouctSchema = new mongoose.Schema({
 // Create a model from the schema
 const productsModel = mongoose.model('products', prouctSchema);
 
+const ProductStockSchema = mongoose.Schema({
+  ProductId:{type:String,required:true},
+  productName:{type:String},
+  Stock:{type:Number,required:true,default:0, min:0},
+  updatedOrders: [{ orderId: String }],
+  createdAt:{type:Date,default:Date.now}
+})
+
+// Define the schema for each product stock
+const productStockModel = mongoose.model('productStock',ProductStockSchema)
+
 // Define the schema for each review
 const UserLikedState = new mongoose.Schema({
   ProductId:{type:String,required:true},
@@ -202,6 +213,7 @@ const OrderSchemaDetails = new mongoose.Schema({
   // Array of products
   products: [
     {
+      productId:{type:String,required:true},
       categoryId: { type: Number, required: true },
       name: { type: String, required: true },
       image: { type: String, required: true },
@@ -234,4 +246,4 @@ const OrderSchema = new mongoose.Schema({
 
 const OrderConfirmationModel = mongoose.model("Order", OrderSchema);
 
-module.exports = {usersModel, userCartModel, reviewsModel, categoryModel, productsModel, shopModel, UserStateModel, CheckOutModel, OrderConfirmationModel };
+module.exports = {usersModel, userCartModel, reviewsModel, categoryModel, productsModel, productStockModel, shopModel, UserStateModel, CheckOutModel, OrderConfirmationModel };

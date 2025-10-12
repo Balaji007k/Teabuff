@@ -4,19 +4,19 @@ const mongoose = require('mongoose')
 const cookieParser = require('cookie-parser')
 const env = require('dotenv')
 const path = require('path')
-const users = require('./routes/users')
-const reviews = require('./routes/reviews')
-const products = require('./routes/products')
-const categorys = require('./routes/categorys')
-const carts = require('./routes/cart')
-const shops = require('./routes/shops')
-const CheckOut = require('./routes/CheckOut')
-const OrderConfirmation = require('./routes/OrderConfirmation')
+const users = require('./routes/users.js')
+const reviews = require('./routes/reviews.js')
+const products = require('./routes/products.js')
+const productStock = require('./routes/productStock.js')
+const categorys = require('./routes/categorys.js')
+const carts = require('./routes/cart.js')
+const shops = require('./routes/shops.js')
+const CheckOut = require('./routes/CheckOut.js')
+const OrderConfirmation = require('./routes/OrderConfirmation.js')
 const ContactMail = require('./routes/Contact.js')
 const Admin = require('./Admin/AdminController.js')
 const cors = require('cors')
-const {requireAuth} = require('./controllers/middleware/authMiddleware')
-const { name } = require('nodeman/lib/mustache')
+const {requireAuth} = require('./controllers/middleware/authMiddleware.js')
 const importProductsRoute  = require('./routes/productImport.js')
 env.config({path: path.join(__dirname,'config.env')})
 
@@ -72,6 +72,7 @@ app.use("/api", userRoutes);
 
 app.use(users);
 app.use(products);
+app.use(productStock);
 app.use(categorys);
 app.use(reviews);
 app.use(shops);

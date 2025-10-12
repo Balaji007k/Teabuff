@@ -15,11 +15,18 @@ function CartDetails({ isAuthenticated, cart }) {
     const Location = useLocation();
     const { setUpdatedCart,PostSaveCart, AlertMessageTheme, Theme } = useTheme();
     const [AlertMessagePlaceOrder,setAlertMessage] = useState([]);
-    const [Loading,setLoading] = useState(false);
+    const [Loading,setLoading] = useState(true);
+    const [ProductStock, setProductStock] = useState([]);
 
     const [quantity, setquantity] = useState({}); // track quantity by productId
     const Navigate = useNavigate();
     const [Order, setOrder] = useState(false);
+
+    const fetchProductStock = async () => {
+            const { Result, Error } = await ApiService.fetchData('/allreviews');
+            if (!Error) setAllReview(Result?.reviews);
+            else console.error(Error);
+        };
 
     const handleCancelItem = async (productId) => {
         setLoading(true);
@@ -71,6 +78,7 @@ function CartDetails({ isAuthenticated, cart }) {
                 initialQuantities[item.productId] = item.quantity;
             });
             setquantity(initialQuantities);
+            setLoading(false);
         }
     }, [cart]);
 

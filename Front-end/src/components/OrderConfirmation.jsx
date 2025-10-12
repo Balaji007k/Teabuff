@@ -11,25 +11,69 @@ export default function OrderConfirmation() {
 
 
   const {isAuthenticated,Theme} = useTheme();
-  const [MyOrders,setOrderDetails] = useState(null);
+  //const [MyOrders,setOrderDetails] = useState(null);
   const [Loading,setLoading] = useState(false);
   const Navigate = useNavigate();
-  const [AlertMessageMyOrders,setAlertMessage] = useState([]);
-  //const { id } = useParams();
+  const [AlertMessageMyOrders,setAlertMessage] = useState(null);
+const [MyOrders, setOrderDetails] = useState([]);
 
-  // Get order by ID (GET)
-const getUserAllOrders = async(Id)=> {
-  setLoading(true);
-  const { Result, Error } = await ApiService.fetchData(`/orders/${Id}`);
-  setOrderDetails(Result);
-  if(!Result){
-    //console.log(Error);
+// ✅ Fetch user orders
+const getUserAllOrders = async (Id) => {
+  try {
+    setLoading(true);
+    const { Result, Error } = await ApiService.fetchData(`/orders/${Id}`);
+
+    if (!Result || Result.length === 0) {
+      setAlertMessage({ message: Error || "No orders found", state: false });
+      setTimeout(() => Navigate('/'), 1500);
+      setLoading(false);
+      return;
+    }
+
+    // ✅ Save all orders in state
+    setOrderDetails(Result);
+
+    // ✅ Get the last (most recent) order
+    const latestOrder = Result[Result.length - 1];
+    //console.log("Latest Order:", latestOrder);
+
+    // ✅ Extract product stock update data
+    const stockUpdateData = latestOrder.products.map((p) => ({
+      _id: p.productId,   // ProductId for backend
+      qty: p.qty    // Quantity ordered
+    }));
+
+    // ✅ Save in state
+    //setProductStock(stockUpdateData);
+
+    // ✅ Send stock update request to backend
+    await updateProductStockAfterOrder(latestOrder?.orderId,stockUpdateData);
+
+  } catch (err) {
+    console.error("Error fetching orders:", err);
+    setAlertMessage({ message: "Failed to fetch orders", state: false });
+  } finally {
     setLoading(false);
-    setAlertMessage({message:Error,state:false})
-    setTimeout(()=>{
-      Navigate('/');
-    },1500);
-}}
+  }
+};
+
+// ✅ Function to update product stock on backend
+const updateProductStockAfterOrder = async (orderId,products) => {
+  try {
+    const { Result, Error } = await ApiService.fetchData("/ProductStock/update-after-order","PATCH",{orderId,products});
+
+    if (Error) {
+      console.error("Stock update failed:", Error);
+      setAlertMessage({ message: "Stock update failed", state: false });
+    } else {
+      //console.log("✅ Stock updated successfully:", Result);
+      setAlertMessage({ message: "Stock updated successfully", state: true });
+    }
+  } catch (err) {
+    console.error("Error calling stock update API:", err);
+  }
+};
+
 
 // Get order by ID (GET)
 // const getSingleUserOrder = async()=> {
@@ -96,8 +140,8 @@ useEffect(()=>{
       <p className="fw-medium mb-1">Shipping address</p>
       <p className="fw-semibold mb-0">{OrderDetails?.customerName}</p>
       <p className="mb-0">{OrderDetails?.address}</p>
-      <p className="small >{OrderDetails?.email}</p>
-      <p className="small >{OrderDetails?.contact?(`+${OrderDetails?.contact}`):""}</p>
+      <p className="small">{OrderDetails?.email}</p>
+      <p className="small">{OrderDetails?.contact?(`+${OrderDetails?.contact}`):""}</p>
     </div>
 
     {/* Progress */}
@@ -180,8 +224,8 @@ useEffect(()=>{
             <h2 className="h6 fw-semibold mb-2">Billing address</h2>
             <p className="fw-semibold mb-0">{OrderDetails?.customerName}</p>
             <p className="mb-0">{OrderDetails?.address}</p>
-            <p className="small >{OrderDetails?.email}</p>
-            <p className="small >{OrderDetails?.contact?(`+${OrderDetails?.contact}`):""}</p>
+            <p className="small">{OrderDetails?.email}</p>
+            <p className="small">{OrderDetails?.contact?(`+${OrderDetails?.contact}`):""}</p>
           </div>
         </div>
 

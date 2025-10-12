@@ -18,7 +18,7 @@ class ApiService {
     // If params is FormData → don’t stringify & don’t set Content-Type
     if (params instanceof FormData) {
       options.body = params;
-    } else if (params && (method === "POST" || method === "PUT")) {
+    } else if (params && (method === "POST" || method === "PATCH" || method === "PUT")) {
       options.headers["Content-Type"] = "application/json";
       options.body = JSON.stringify(params);
     }

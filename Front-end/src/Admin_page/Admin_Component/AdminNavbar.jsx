@@ -15,6 +15,9 @@ function AdminNavbar() {
           <Link to="/Admin/Products" className="nav-link">Products</Link>
         </li>
         <li className="nav-item">
+          <Link to="/Admin/ProductStocks" className="nav-link">ProductStocks</Link>
+        </li>
+        <li className="nav-item">
           <Link to="/Admin/Reviews" className="nav-link">Reviews</Link>
         </li>
         <li className="nav-item">

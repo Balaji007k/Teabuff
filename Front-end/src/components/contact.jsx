@@ -69,7 +69,8 @@ function Contact() {
               <form className='d-flex flex-column justify-content-center' onSubmit={handleSubmit}>
                 <input type='text' name='username' value={formData.username} onChange={handleChange} className={`input ${Theme ? 'bg-white text-black' : 'bg-black text-white'}`} placeholder='Your name' required />
                 <input type='email' name='email' value={formData.email} onChange={handleChange} className={`input ${Theme ? 'bg-white text-black' : 'bg-black text-white'}`} placeholder='Your@email.com' required />
-                <input type='text' name='subject' value={formData.subject} onChange={handleChange} className={`input ${Theme ? 'bg-white text-black' : 'bg-black text-white'}`} placeholder='Subject' required />
+                {/* <input type='text' name='subject' value={formData.subject} onChange={handleChange} className={`input ${Theme ? 'bg-white text-black' : 'bg-black text-white'}`} placeholder='Subject' required /> */}
+                <textarea name='subject' rows={1} value={formData.subject} onChange={handleChange} placeholder='Subject' className={`input ${Theme ? 'bg-white text-black' : 'bg-black text-white'}`} required></textarea>
                 <textarea name='message' rows={5} value={formData.message} onChange={handleChange} placeholder='Message...' className={`input ${Theme ? 'bg-white text-black' : 'bg-black text-white'}`} required></textarea>
                 <button type='submit' className='contact-btn-contact input d-flex justify-content-center align-items-center gap-2' disabled={loading}>
                   {loading ? "Sending..." : <>Send<span className="material-symbols-outlined">send</span></>}

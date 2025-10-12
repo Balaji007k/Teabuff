@@ -655,7 +655,8 @@ form{
 }
 .input{
     width: 85% !important;
-    padding: 10px 15px !important;
+    padding: 15px 20px !important;
+    font-size: medium !important;
 }
 .contact-image{
     height: 100% !important;

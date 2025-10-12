@@ -23,6 +23,7 @@ import OrderConfirmation from './components/OrderConfirmation';
 import ProfilePage from './components/ProfilePage';
 import Orders from './Admin_page/Admin_Component/Orders';
 import AdminLogin from './Admin_page/AdminLogin';
+import ProductStocks from './Admin_page/Admin_Component/ProductStocks';
 
 // import { fetchData } from './utils/fetchData';
 
@@ -112,6 +113,10 @@ function App() {
           <Route
             path="Products"
             element={<Products productsItem={productsItem} />}
+          />
+          <Route
+            path="ProductStocks"
+            element={<ProductStocks ProductStocks={productsItem} />}
           />
           <Route
             path="Reviews"

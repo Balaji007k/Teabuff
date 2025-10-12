@@ -61,6 +61,7 @@ const orderData = {
     address: CheckOutData?.address || "Unknown Address",
     email: CheckOutData?.contactEmail || "noemail@example.com",
     products: (cart?.items || []).map(item => ({
+      productId:item?.productId,
       categoryId: item?.categoryId || 0,
       name: item?.itemName || "Unknown Item",
       image: item?.Product_Url || "",

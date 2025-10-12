@@ -1,15 +1,11 @@
 import { useEffect, useState } from "react";
 import ApiService from "../../components/Service/ApiService/product-api";
-import { useTheme } from "../../ThemeContext";
 
 function Products({ productsItem }) {
   const [SearchedProduct, setSearchedProduct] = useState([]);
   const [Search, setSearch] = useState("");
   const [Edit, setEdit] = useState(null);
   const [AddState, setAddState] = useState(false);
-
-
-  //test
    const [file, setFile] = useState(null);
   const [products, setProducts] = useState([]);
   const [message, setMessage] = useState("");
@@ -41,9 +37,6 @@ function Products({ productsItem }) {
     setMessage("Error: " + err.message);
   }
 };
-
-//test
-
 
   // Form states
   const [form, setForm] = useState({

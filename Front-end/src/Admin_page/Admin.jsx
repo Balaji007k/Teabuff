@@ -10,6 +10,7 @@ import { Outlet } from 'react-router-dom';
 function Admin({ AllReview, productsItem, category }) {
   const [Users, setUser] = useState([]);
   const [Orders, setOrders] = useState([]);
+  const [productStocks, setProductStocks] = useState([]);
   const Location = useLocation();
 
   const AdminAccess = localStorage.getItem("adminToken");
@@ -34,9 +35,19 @@ function Admin({ AllReview, productsItem, category }) {
     }
   };
 
+  const fetchProductStocks = async () => {
+    const { Result, Error } = await ApiService.fetchData('/productStocks');
+    if (Result) {
+      setProductStocks(Result?.productStocks);
+    } else {
+      console.error("Unexpected data format:", Error);
+    }
+  };
+
   useEffect(() => {
     fetchUsers();
     fetchOrders();
+    fetchProductStocks();
   }, []);
 
   // 🔹 Conditional rendering for admin access
@@ -53,13 +64,15 @@ function Admin({ AllReview, productsItem, category }) {
       <AdminNavbar />
       {Location.pathname === '/Admin' && (
         <DashBoard
-          Users={Users}
-          AllReview={AllReview}
-          productsItem={productsItem}
-          category={category}
+          Users={Users?.length}
+          Review={AllReview?.length}
+          productsItem={productsItem?.length}
+          productStocks={productStocks?.length}
+          category={category?.length}
+          Orders={Orders?.length}
         />
       )}
-      <Outlet context={{ Users, Orders }} />
+      <Outlet context={{ Users, Orders, productStocks }} />
     </div>
   );
 }
