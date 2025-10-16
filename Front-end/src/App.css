@@ -531,7 +531,8 @@ video{
 }
 .scroll-items {
   width: 100%;
-  display: flex !important;
+  /* display: flex !important; */
+  grid-template-columns: repeat(auto-fill,minmax(150px,1fr)) !important;
   gap: 0px !important;
   min-height: 200px;
   overflow-y: hidden;

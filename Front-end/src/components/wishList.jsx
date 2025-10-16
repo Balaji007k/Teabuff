@@ -33,10 +33,10 @@ function Wishlist({ isAuthenticated }) {
     return(
         <>
         {AlertMessageTheme&&AlertMessageTheme?.message&&<AlertMessage message={AlertMessageTheme}/>}
-        <div className='Extra-products-container py-3 d-flex flex-column gap-5' style={{marginTop:'75px'}}>
+        <div className='Extra-products-container py-3 d-flex flex-column gap-4' style={{marginTop:'75px',marginBottom:'75px'}}>
             <h1 className={`fw-bold text-center ${Theme?'text-white':'text-black'}`}>Wishlist</h1>
                 <div className='Extra-products'>
-                 <div className="scroll-items" style={{ justifyContent: small && 'space-around', flexWrap: small && 'wrap' }}>
+                 <div className="scroll-items d-grid" style={{ justifyContent: small && 'space-around', flexWrap: small && 'wrap' }}>
                 {LikedProducts?.length>0?LikedProducts.map(e=>(
                    <ProductCard key={e._id} isAuthenticated={isAuthenticated} LikedState={UserLikedState} Navigate={Navigate} e={e} />
                 )) : (
@@ -44,9 +44,8 @@ function Wishlist({ isAuthenticated }) {
                 )}
             </div>
             </div>
-            {(LikedProducts&&LikedProducts?.length>0)&&<center><button className="Save-cart-btn-CartDetails" onClick={()=>PostSaveCart(LikedProducts,null)}>Move to Cart</button></center>}
             </div>
-            <Footer/>
+            {(LikedProducts&&LikedProducts?.length>0)&&<div className="w-100 d-flex justify-content-center bg-white py-2 position-fixed bottom-0 z-2"><button className="Save-cart-btn-CartDetails" onClick={()=>PostSaveCart(LikedProducts,null)}>Move to Cart</button></div>}
             </>
     )
 }

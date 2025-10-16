@@ -347,7 +347,7 @@ useEffect(()=>{
         You might also like
       </h1>
       <div
-        className='scroll-items py-3 gap-3'
+        className='scroll-items d-flex d-md-grid py-3 gap-3'
         style={{ maxHeight: small ? '550px' : 'fit-content' }}
       >
         {suggestedproducts && suggestedproducts.length > 0 && (
@@ -379,7 +379,7 @@ useEffect(()=>{
 {items && items.length > 0 && (
   <div className='w-100 p-2'>
     <div
-      className='scroll-items py-3 gap-3 mt-4'
+      className='scroll-items d-grid py-3 gap-3 mt-4'
       style={{
         justifyContent: small && 'center',
         flexWrap: small && 'wrap',

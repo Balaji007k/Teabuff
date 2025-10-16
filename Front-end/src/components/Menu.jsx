@@ -95,7 +95,7 @@ function Menu({ isAuthenticated }) {
 
                 <div className='Extra-products-container py-3'>
                     <div className='Extra-products'>
-                        <div className="scroll-items"
+                        <div className="scroll-items d-grid"
                              style={{ justifyContent: small && 'space-around', flexWrap: small && 'wrap' }}>
 
                             {/* Conditional rendering */}

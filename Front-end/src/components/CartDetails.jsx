@@ -145,7 +145,7 @@ function CartDetails({ isAuthenticated, cart }) {
   )
 )}
 
-            {(cart?.items?.length ?? 0) > 0 && (<div className={`w-100 ${Location.pathname==='/CheckOut'||Location.pathname===`/CheckOut/${cart?.ProductId}`?'d-none':'d-block'} ${small&&'position-fixed bottom-0 py-2 bg-white'} d-flex justify-content-center gap-4`}>
+            {(cart?.items?.length ?? 0) > 0 && (<div className={`w-100 ${Location.pathname==='/CheckOut'||Location.pathname===`/CheckOut/${cart?.ProductId}`?'d-none':'d-block'} ${'position-fixed bottom-0 py-2 bg-white'} d-flex justify-content-center gap-4`}>
                     {!Order && <><button className={`Save-cart-btn-CartDetails ${small&&'rounded-5'}`} onClick={() => {PostSaveCart(cart,quantity);setLoading(true)}}>Save Cart</button><button className={`Save-cart-btn-CartDetails ${small&&'rounded-5'}`} onClick={() => {OrderHandler();setLoading(true);Navigate('/CheckOut')}}>Place Order</button></>}
                 </div>
                 )}
