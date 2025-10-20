@@ -289,7 +289,7 @@ export default function ProductFilters({ Products, id, searchingProduct }) {
       <div className="Cart-head d-flex justify-content-between align-items-center px-5">
         {/* Category filter */}
         <div
-          className={`Categories ${Theme ? "bg-white text-black" : "bg-black text-white"}`}
+          className={`Categories border-0 ${Theme ? "bg-white text-black" : "bg-black text-white"}`}
           style={{ width: "25%" }}
         >
           <select
@@ -343,7 +343,7 @@ export default function ProductFilters({ Products, id, searchingProduct }) {
 
         {/* Sort filter */}
         <div
-          className={`Categories ${Theme ? "bg-white text-black" : "bg-black text-white"}`}
+          className={`Categories border-0 ${Theme ? "bg-white text-black" : "bg-black text-white"}`}
           style={{ width: "20%" }}
         >
           <select

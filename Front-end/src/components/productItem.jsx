@@ -82,7 +82,7 @@ function ProductItem({ isAuthenticated, Review, productsItem, cart, AlertMessage
 
   const PlaceOrder=(productId, itemPrice, quantity, itemName, categoryId, userId, Description, Product_Url, Rating, likes, placeOrder)=>{
     setLoading(true);
-    if(selectedProductStock<=quantity){
+    if(selectedProductStock<quantity){
       setLoading(false);
       return setAlertMessage({message:'Out of Stock',state:false})}
     else{
@@ -165,7 +165,8 @@ function ProductItem({ isAuthenticated, Review, productsItem, cart, AlertMessage
 
   useEffect(() => {
   if (quantity < 0) setquantity(0);
-}, [quantity]);
+  if (quantity>selectedProductStock) setquantity(selectedProductStock);
+}, [quantity,selectedProductStock]);
 
 useEffect(()=>{
   if(AlertMessageproductItem&&AlertMessageproductItem?.message){
@@ -238,7 +239,7 @@ useEffect(()=>{
                       <h2>{selectedProduct.categoryId==1?<>₹<del>{(selectedProduct.price).toFixed(2)}</del> ₹{(selectedProduct.price/2).toFixed(2)}</>:<>₹{(selectedProduct.price).toFixed(2)}</>}</h2>
                       <div className="Categories bg-white w-100 h-auto py-1 d-inline-flex align-items-center gap-2"><i className="fa-solid fa-circle-exclamation"></i><p>Get next day delivery <span className=' fw-bold'>{new Date(Date.now() + 1 * 24 * 60 * 60 * 1000).toLocaleDateString()}</span></p></div>
                       <span className=' w-100 fs-4 fw-bold w-75 d-flex justify-content-center align-items-center gap-3'>
-                        <h3 className=' fw-bold'>Quantity:</h3>{quantity==0?<button className='quantity-btn-All bg-body-secondary'>-</button>:<button className='quantity-btn-All' onClick={() => setquantity(quantity - 1)}>-</button>}{quantity}{quantity<selectedProductStock?<button className='quantity-btn-All' onClick={() => setquantity(quantity + 1)}>+</button>:<button className='quantity-btn-All bg-body-secondary'>+</button>}
+                        <h3 className=' fw-bold'>Quantity:</h3>{quantity==0||selectedProductStock==0?<button className='quantity-btn-All bg-body-secondary'>-</button>:<button className='quantity-btn-All' onClick={() => setquantity(quantity - 1)}>-</button>}{selectedProductStock!==0?quantity:0}{quantity<selectedProductStock?<button className='quantity-btn-All' onClick={() => setquantity(quantity + 1)}>+</button>:<button className='quantity-btn-All bg-body-secondary'>+</button>}
                       </span>
                       <div className=' w-100 d-flex align-items-center justify-content-between gap-2'>
                         <button className={`Add-cart-btn-productItem ${!small&&'w-50'} flex-grow-1 py-2`} onClick={() => { if(selectedProductStock>=quantity){handleCart(selectedProduct._id, selectedProduct.price, quantity, selectedProduct.title, selectedProduct.categoryId, isAuthenticated.userId, selectedProduct.description, selectedProduct.url, selectedProduct.rating, Heart, false);setLoading(true)}else{return setAlertMessage({message:'Out of Stock',state:false})}}}>Add to Cart {!small&&<i className="fa-solid fa-cart-shopping ms-2"></i>}</button>{(cart?.items.length>0 || quantity!==0)&&<button className={`Add-cart-btn-productItem ${!small&&'w-50'} py-2`} onClick={() => { PlaceOrder(selectedProduct._id, selectedProduct.price, quantity, selectedProduct.title, selectedProduct.categoryId, isAuthenticated.userId, selectedProduct.description, selectedProduct.url, selectedProduct.rating, Heart, true);}}>Buy Now {!small&&<i className="fa-solid fa-truck ms-2"></i>}</button>}

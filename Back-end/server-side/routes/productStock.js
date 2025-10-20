@@ -1,9 +1,10 @@
 const express = require('express')
 const router = express.Router();
-const { getAllProductStock,getSingleProductStock,createSingleProductStock,createMultipleProductsStock,updateProductStock,updateStockAfterOrder,updateSingleProductStockById,deleteSingleProductStock,deleteAllProductStock } = require('../controllers/ProductStockController')
+const { getAllProductStock,getSingleProductStock,getCartProductStock,createSingleProductStock,createMultipleProductsStock,updateProductStock,updateStockAfterOrder,updateSingleProductStockById,deleteSingleProductStock,deleteAllProductStock } = require('../controllers/ProductStockController')
 
 router.route('/productStocks').get(getAllProductStock);
 router.route('/productStock/:id').get(getSingleProductStock);
+router.route('/productStocks').post(getCartProductStock);
 router.route('/productStock').post(createSingleProductStock);
 router.route('/productStocks').post(createMultipleProductsStock);
 router.route('/productStock/:id').put(updateSingleProductStockById);

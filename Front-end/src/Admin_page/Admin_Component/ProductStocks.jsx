@@ -61,7 +61,8 @@ export default function ProductStocks() {
     const filtered = stocks.filter(
       (item) =>
         item.ProductId.toLowerCase().includes(value.toLowerCase()) ||
-        item.productName.toLowerCase().includes(value.toLowerCase())
+        item.productName.toLowerCase().includes(value.toLowerCase()) ||
+        item.Stock == value
     );
     setFilteredStocks(filtered);
   };
@@ -126,7 +127,7 @@ export default function ProductStocks() {
         <input
           type="text"
           className="form-control"
-          placeholder="🔎 Search Product ID or Name"
+          placeholder="🔎 Search Product ID or Name or Stock"
           value={search}
           onChange={(e) => handleSearch(e.target.value)}
         />

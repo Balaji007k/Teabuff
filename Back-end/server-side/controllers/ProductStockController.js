@@ -12,6 +12,43 @@ exports.getAllProductStock = async(req,res)=>{
 }
 }
 
+exports.getCartProductStock = async (req, res) => {
+  try {
+    const productIds = Array.isArray(req.body?.productIds) ? req.body.productIds : [];
+
+    // 🛑 If no productIds are provided, don't fetch all
+    if (productIds.length === 0) {
+      return res.status(400).json({
+        success: false,
+        message: "No product IDs provided",
+        productStocks: []
+      });
+    }
+
+    // ✅ Fetch only matching products, return only ProductId & Stock
+    const productStocks = await productStockModel.find({
+      ProductId: { $in: productIds }
+    }).select("ProductId Stock -_id");
+
+    return res.status(200).json({
+      success: true,
+      total: productStocks.length,
+      productStocks
+    });
+  } catch (error) {
+    console.error("Error fetching product stocks:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Error fetching product stocks",
+      error: error.message
+    });
+  }
+};
+
+
+
+
+
 exports.getSingleProductStock = async(req,res)=>{
     try{
     const productStock = await productStockModel.findOne({ProductId:req.params.id});

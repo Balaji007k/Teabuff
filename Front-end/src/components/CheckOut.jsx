@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { useNavigate,useParams } from "react-router-dom"
 import { useMediaQuery } from "react-responsive";
 import ApiService from '../components/Service/ApiService/product-api';
@@ -30,6 +30,7 @@ export default function CheckOut({isAuthenticated,cart}){
       const [AlertMessageCheckOut,setAlertMessage] = useState([]);
       const [Loading,setLoading] = useState(true);
       const [Filtered,setFiltered] = useState(null);
+      const [updatedCart,setupdatedCart] = useState(null);
 
       useEffect(()=>{
         setFiltered(cart?.items.find((product)=>
@@ -37,16 +38,18 @@ export default function CheckOut({isAuthenticated,cart}){
         ));
       },[cart])
 
+      useEffect(()=>{
+        if((UserCheckOutData&&updatedCart)||updatedCart) setLoading(false);
+      },[updatedCart,UserCheckOutData]);
+
 
       const fetchCheckOut = async () => {
         const { Result, Error } = await ApiService.fetchData(`/Checkouts/${isAuthenticated.userId}`);
         // console.log(Result)
         if (Result?.UserCheckOut) {
-            setLoading(false);
             setUserCheckOutData(Result?.UserCheckOut.ShippingDetails[0]);
         }
         else {
-            setLoading(false);
             console.error(`${'No UserCheckOut Data:' +Error}`);
         }
     };
@@ -54,7 +57,7 @@ export default function CheckOut({isAuthenticated,cart}){
       const PostCheckOut = async(e) => {
         e.preventDefault();
         setLoading(true);
-        const NewCheckut = {
+        const NewCheckout = {
             contactEmail,
       firstname,
       lastname,
@@ -66,14 +69,13 @@ export default function CheckOut({isAuthenticated,cart}){
       phone:Number(phone),
       CheckoutReUse
         };
-        const { Result, Error } = await ApiService.fetchData(`/NewCheckout/${isAuthenticated.userId}`,"POST",NewCheckut);
+        const { Result, Error } = await ApiService.fetchData(`/NewCheckout/${isAuthenticated.userId}`,"POST",NewCheckout);
         if (Result){
             setLoading(false);
             setAlertMessage({message:Result.message,state:true});
             setTimeout(()=>{
                 setAlertMessage(null);
-                Navigate('/Payment', { state: { cart: Location.pathname === `/CheckOut/${Filtered?.productId}` ? { items: [Filtered] } : cart,  NewCheckut  } });
-               // Navigate('/Payment', { state: { Location.pathname==`/CheckOut/${Filtered?.productId}`?{items:[Filtered]}:cart,NewCheckut } });
+                Navigate('/Payment', { state: { cart: Location.pathname === `/CheckOut/${Filtered?.productId}` ? { items: [Filtered] } : updatedCart,  NewCheckout  } });
             },1500);
         }
         else{
@@ -81,8 +83,14 @@ export default function CheckOut({isAuthenticated,cart}){
         }
     };
 
+    const singleItemCart = useMemo(() => {
+  if (!Filtered) return null;
+  return { items: [Filtered], ProductId: Filtered?.productId };
+}, [Filtered,cart]);
+
+
     useEffect(()=>{
-        window.scrollTo(0,0)
+        window.scrollTo(0,0);
         fetchCheckOut();
     },[])
 
@@ -108,7 +116,9 @@ export default function CheckOut({isAuthenticated,cart}){
         <>
         {AlertMessageCheckOut&&AlertMessageCheckOut?.message?<AlertMessage message={AlertMessageCheckOut}/>:Loading&&<LoadingPage/>}
         <div className={`checkout-Cart-page w-100 d-flex gap-2 ${!small?'flex-row-reverse':'flex-column'} ${Theme?'text-white':'text-black'}`} style={{marginTop:!small&&'70px'}}>
-        <div className=" overflow-y-scroll" style={{marginTop:small&&'70px',flex:'1 1 40%',height:'880px'}}><PlaceOrderDetails isAuthenticated={isAuthenticated} cart={Location.pathname==`/CheckOut/${Filtered?.productId}`?{items:[Filtered],ProductId:Filtered?.productId}:cart}/></div>
+        <div className=" overflow-y-scroll" style={{marginTop:small&&'70px',flex:'1 1 40%',height:'880px'}}>
+            <PlaceOrderDetails isAuthenticated={isAuthenticated} setupdatedCart={setupdatedCart} cart={Location.pathname==`/CheckOut/${Filtered?.productId}`&&singleItemCart?singleItemCart:cart}/>
+        </div>
         <div className={` d-flex justify-content-center flex-grow-1`} style={{flex:'1 1 60%'}}>
                     <div className='CheckOut-Page d-flex flex-column gap-4 p-3' style={{ width:!small? '80%' : '100%'}}>
                         <h2 className=" fw-bold">CheckOut</h2>
@@ -144,7 +154,7 @@ export default function CheckOut({isAuthenticated,cart}){
                             <div className=' d-flex justify-content-between align-items-center'>
                                 <span  onClick={()=>Navigate(`/${isAuthenticated?.userName+"Cart"}/${isAuthenticated ? isAuthenticated?.userId : 'No_user'}`)} className='d-flex align-items-center' style={{cursor:'pointer',color:'inherit'}}><span className="material-symbols-outlined">
                                     chevron_left
-                                </span>Return to cart</span><button type="submit" className={`confirm-order-btn ${small?'p-2':'p-3'} bg-success`}>Confirm Order</button>
+                                </span>Return to cart</span><button type="submit" disabled={(updatedCart?.items.length==1&&updatedCart?.items[0].itemPrice==0)} className={`confirm-order-btn ${small?'p-2':'p-3'} bg-success`}>Confirm Order</button>
                             </div>
                         </div>
                         </form>

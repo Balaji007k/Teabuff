@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useLocation,Link } from "react-router-dom";
 import Footer from "./footer";
 
@@ -11,6 +11,10 @@ function About({image}) {
     const filteredImage = image.filter(item => item._id === id)
     setFilteredItem(filteredImage[0]);
   }
+
+  useEffect(()=>{
+    window.scrollTo(0,0);
+  },[filteredItem])
 
   return (
     <>

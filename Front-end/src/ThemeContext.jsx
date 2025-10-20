@@ -187,8 +187,6 @@ else{
         setAlertMessage({ message: "Login failed: " + Error, state: false });
         return ;
       }
-    //   console.log("demo",newCart)
-    //   console.log("theme",Result)
       setAlertMessage({ message: "Cart successfully added", state: true });
         setUpdatedCart(Result?.cart || Result?.usercart);
     })
