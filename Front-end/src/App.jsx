@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import Main from './mainComponent/main';
 import Header from './components/header';
@@ -33,6 +33,7 @@ function App() {
   const location = useLocation();
   const [AlertMessage,setAlertMessage] = useState(null);
   const [HideNavbar,setHideNavbar] = useState(true);
+  const [ProfileImage,setProfileImage] = useState(null);
 
   useEffect(() => {
     if (location.pathname === '/Login') {
@@ -44,9 +45,9 @@ function App() {
     setAlertMessage(AlertMessageTheme);
   },[AlertMessageTheme])
 
-  const userinputFocus = () => {
+  const userinputFocus = useCallback(() => {
     userInput.current?.focus();
-  };
+  },[]);
 
   useEffect(() => {
   document.documentElement.style.setProperty(
@@ -67,6 +68,7 @@ function App() {
           setAlertMessage={setAlertMessage}
           cart={cart}
           HideNav={setHideNavbar}
+          ProfileImage={ProfileImage}
         />
       )}
       <Routes>
@@ -84,7 +86,7 @@ function App() {
         />
         <Route 
           path={`/Profile/${isAuthenticated?.userId}`}
-          element={<ProfilePage isAuthenticated={isAuthenticated}/>}
+          element={<ProfilePage isAuthenticated={isAuthenticated} setProfileImage={setProfileImage}/>}
         />
         <Route
           path="/Menu"

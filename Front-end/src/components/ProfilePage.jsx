@@ -1,11 +1,11 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import ApiService from "./Service/ApiService/product-api";
 import AlertMessage from './AssetComponents/AlertMessage';
 import "../style/ProfilePage.css"
 import { useTheme } from "../ThemeContext";
 
-export default function ProfilePage({ isAuthenticated }) {
+export default function ProfilePage({ isAuthenticated,setProfileImage }) {
   const [User, setUser] = useState(null);
 
   const {Theme} = useTheme();
@@ -20,16 +20,16 @@ export default function ProfilePage({ isAuthenticated }) {
 
   // add states
 const [isEditingPassword, setIsEditingPassword] = useState(false);
-//tset
 
 
   const Backend = `/users/update/${isAuthenticated.userId}`;
 
-  const fetchUserProfile = async () => {
+  const fetchUserProfile = useCallback(async () => {
     const { Result, Error } = await ApiService.fetchData(`/user/${isAuthenticated.userId}`);
     if (Result?.user) {
       setUser(Result.user);
       setPreview(`${ApiService.Backend+Result.user?.profileImage}`);
+      setProfileImage(`${ApiService.Backend+Result.user?.profileImage}`);
       setcontact(Result.user?.phoneNumber || "");
 
       const username = (Result.user.username || "").trim();
@@ -38,18 +38,18 @@ const [isEditingPassword, setIsEditingPassword] = useState(false);
       setLastName(parts[1] || "");
       setAddress(Result.user.address || "");
     }
-  };
+  },[isAuthenticated?.userId]);
 
   useEffect(() => {
     fetchUserProfile();
     window.scrollTo(0,0);
-  }, []);
+  }, [fetchUserProfile]);
 
    const fileInputRef = useRef(null);
   
-    const handleIconClick = () => {
+    const handleIconClick = useCallback(() => {
       fileInputRef.current.click(); // open file dialog
-    };
+    },[]);
 
 
 const handleSubmit = async (e) => {
@@ -94,6 +94,7 @@ const handleSubmit = async (e) => {
         if (Result?.profileImage) {
           // backend URL replaces temporary preview
           setPreview(`${ApiService.Backend+Result?.profileImage}`);
+          setProfileImage(`${ApiService.Backend+Result?.profileImage}`);
         } else {
           console.error("Upload failed:", Error);
         }

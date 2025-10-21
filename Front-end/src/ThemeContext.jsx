@@ -131,18 +131,62 @@ export const ThemeProvider = ({ children }) => {
         }
     };
 
-    const UpdateProduct = async (Id,UserId,userImage,username,ProductUserRating,comment) => {
-        if(comment!==''){
-        const NewComment = {UserId,userImage,username,ProductUserRating,comment}
-        const { Result, Error } = await ApiService.fetchData(`/product/${Id}`,"PUT",NewComment);
-        if (Result){
-            setUserProductReviews(Result.updatedProduct.comments[0]);
-            setProductAvgRating(Result.avgRating);
-            setUpdatedProduct(Result.updatedProduct);
-        }
-        else console.log(Error);
+    // const UpdateProduct = async (Id,UserId,userImage,username,ProductUserRating,comment) => {
+    //     if(comment!==''){
+    //     const NewComment = {UserId,userImage,username,ProductUserRating,comment}
+    //     const { Result, Error } = await ApiService.fetchData(`/product/${Id}`,"PUT",NewComment);
+    //     if (Result){
+    //         setUserProductReviews(Result.updatedProduct.comments[0]);
+    //         setProductAvgRating(Result.avgRating);
+    //         setUpdatedProduct(Result.updatedProduct);
+    //     }
+    //     else console.log(Error);
+    // }
+    // };
+
+    const UpdateProduct = async (Id, UserId, userImage, username, ProductUserRating, comment) => {
+  if (comment !== '') {
+    const NewComment = { UserId, userImage, username, ProductUserRating, comment };
+
+    try {
+      const { Result, Error } = await ApiService.fetchData(`/product/${Id}`, "PUT", NewComment);
+
+      if (Result) {
+        // Update local states
+        setUserProductReviews(Result.updatedProduct.comments[0]);
+        setProductAvgRating(Result.avgRating);
+        setUpdatedProduct(Result.updatedProduct);
+
+        // Update AllReview state
+        const newReview = {
+          Comments: Result.updatedProduct.comments[0],
+          avgRating: Result.avgRating
+        };
+
+        setAllReview(prevReviews => {
+          return prevReviews.map(product => {
+            // If this is the same product
+            if (product.comments.some(c => c.ProductId === Id)) {
+              const updatedComments = product.comments.map(commentItem => 
+                commentItem.ProductId === Id ? { ...commentItem, ...newReview.Comments } : commentItem
+              );
+              return { ...product, comments: updatedComments };
+            } else {
+              // If this product has no comments yet, append the new comment
+              return product;
+            }
+          });
+        });
+
+      } else {
+        console.log(Error);
+      }
+    } catch (err) {
+      console.error(err);
     }
-    };
+  }
+};
+
 
     const fetchCategories = async () => {
         const { Result, Error } = await ApiService.fetchData('/category');
@@ -238,7 +282,6 @@ const contextValue = useMemo(() => {
     Theme,
     setTheme,
   AllReview,
-  fetchAllReviews,
   Review,
   image,
   productsItem,

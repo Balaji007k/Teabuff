@@ -1,12 +1,12 @@
 import { useMediaQuery } from "react-responsive";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useMemo, useCallback } from "react";
 import { NavLink as Link, useNavigate } from "react-router-dom";
 import { useLocation } from 'react-router-dom';
 import { Link as ScrollLink } from "react-scroll";
 import ApiService from "./Service/ApiService/product-api";
 import { useTheme } from "../ThemeContext";
 
-function Header({ userinputFocus, isAuthenticated, cart, setAlertMessage, HideNav }) {
+function Header({ userinputFocus, isAuthenticated, cart, setAlertMessage, HideNav, ProfileImage }) {
 
     const small = useMediaQuery({maxWidth:600});
     const {OrderId,setTheme,Theme} = useTheme();
@@ -28,20 +28,23 @@ function Header({ userinputFocus, isAuthenticated, cart, setAlertMessage, HideNa
         }
     };
 
+    const ProfilePhoto = useMemo(()=>{
+        return ProfileImage;
+    },[ProfileImage])
+
 useEffect(()=>{
     HideNav(BarVisible);
 },[BarVisible])
 
-
 useEffect(()=>{
-    if (isAuthenticated) fetchProfileImage();
+    fetchProfileImage();
 },[]);
 
 
-    const HideBar = () => {
+    const HideBar = useCallback(() => {
         setBarVisible(prev => !prev);
         //setShowProfile(false);
-    }
+    },[]);
     // const Hideprofile = () => {
     //     setShowProfile(prev=> !prev);
     // }
@@ -109,7 +112,7 @@ useEffect(()=>{
                     <ul className="nav-list p-0 m-0 overflow-x-hidden">
                         {small&&<div className="w-100 d-flex flex-column align-items-center">
                                     <div className="UserProfileImage">
-                                <img src={preview} alt="Profile" height={'125px'} width={'125px'} className=" rounded-circle bg-black" 
+                                <img src={ProfilePhoto || preview} alt="Profile" height={'125px'} width={'125px'} className=" rounded-circle bg-black" 
                                 onClick={()=>{Navigate(`/Profile/${isAuthenticated?.userId}`)}}
                                 onError={(e) => {
     e.currentTarget.onerror = null; // avoid infinite loop
@@ -153,7 +156,7 @@ useEffect(()=>{
                                 <div className="w-100 d-flex flex-column align-items-center my-4">
                                     <div className="UserProfileImage">
                                 <img
-  src={preview}
+  src={ProfilePhoto || preview}
   alt="Profile"
   height="125px"
   width="125px"

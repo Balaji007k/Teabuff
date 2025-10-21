@@ -12,7 +12,7 @@ export default function Payment() {
   const Navigate = useNavigate();
   const location = useLocation();
   const cart = location.state?.cart;
-  const CheckOutData = location.state?.NewCheckut;
+  const CheckOutData = location.state?.NewCheckout;
   const [email, setEmail] = useState("");
   const [cardHolder, setCardHolder] = useState("");
   const [cardNumber, setCardNumber] = useState("");

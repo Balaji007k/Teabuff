@@ -5,7 +5,7 @@ import ApiService from '../Service/ApiService/product-api';
 import { formatShortTimeAgo } from "../../../src/TimeContext";
 
 const ReviewSlider = () => {
-  const { isAuthenticated,AllReview } = useTheme(); // Review = [ { title, comments: [ { User: [reviewers...] } ] } ]
+  const { isAuthenticated,AllReview } = useTheme(); 
   const Navigate = useNavigate();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [flattenedReviews, setFlattenedReviews] = useState([]);

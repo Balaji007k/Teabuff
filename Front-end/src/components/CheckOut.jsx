@@ -154,7 +154,7 @@ export default function CheckOut({isAuthenticated,cart}){
                             <div className=' d-flex justify-content-between align-items-center'>
                                 <span  onClick={()=>Navigate(`/${isAuthenticated?.userName+"Cart"}/${isAuthenticated ? isAuthenticated?.userId : 'No_user'}`)} className='d-flex align-items-center' style={{cursor:'pointer',color:'inherit'}}><span className="material-symbols-outlined">
                                     chevron_left
-                                </span>Return to cart</span><button type="submit" disabled={(updatedCart?.items.length==1&&updatedCart?.items[0].itemPrice==0)} className={`confirm-order-btn ${small?'p-2':'p-3'} bg-success`}>Confirm Order</button>
+                                </span>Return to cart</span><button type="submit" disabled={(updatedCart?.items.length==0)} className={`confirm-order-btn ${small?'p-2':'p-3'} bg-success`}>Confirm Order</button>
                             </div>
                         </div>
                         </form>

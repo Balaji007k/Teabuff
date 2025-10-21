@@ -8,46 +8,81 @@ export default function PlaceOrderDetails({ isAuthenticated, setupdatedCart, car
   const { Theme } = useTheme();
   //const [CartItems, setCartItems] = useState(null);
   const [ProductStocks, setProductStocks] = useState([]);
+  const [outOfStockItems, setOutOfStockItems] = useState([]);
+
+  // const fetchProductStock = async () => {
+  //   const Id = cart?.items.map(product => product.productId);
+  //   const { Result, Error } = await ApiService.fetchData('/productStocks', "POST", { productIds: Id });
+  //   console.log(Result?.productStocks);
+  //   if (Result) {
+  //     setProductStocks(Result?.productStocks);
+  //   } else {
+  //     console.error("Unexpected data format:", Error);
+  //   }
+  // };
+
 
   const fetchProductStock = async () => {
-    const Id = cart?.items.map(product => product.productId);
-    const { Result, Error } = await ApiService.fetchData('/productStocks', "POST", { productIds: Id });
-    if (Result) {
-      setProductStocks(Result?.productStocks);
-    } else {
-      console.error("Unexpected data format:", Error);
-    }
-  };
+  const Id = cart?.items.map(product => product.productId);
+  const { Result, Error } = await ApiService.fetchData('/productStocks', "POST", { productIds: Id });
+
+  if (Result && Array.isArray(Result.productStocks)) {
+    setProductStocks(Result.productStocks);
+
+    // Separate out-of-stock products
+    const outOfStock = Result.productStocks.filter(stock => stock.Stock <= 0);
+    setOutOfStockItems(outOfStock);
+  } else {
+    setProductStocks([]);
+    setOutOfStockItems([]);
+    console.error("Unexpected data format:", Error);
+  }
+};
+
 
   // Sync stock info with cart items
   
   const CartItems = useMemo(() => {
-  if (!cart || !ProductStocks || ProductStocks.length === 0) return null;
+  if (!cart || !ProductStocks.length) return null;
 
   return cart.items.map(item => {
     const stockData = ProductStocks.find(stock => stock.ProductId === item.productId);
 
-    // Out of stock or not found in ProductStocks
     if (!stockData || stockData.Stock <= 0) {
       return { ...item, quantity: 0, itemPrice: 0, outOfStock: true };
     }
 
-    // Reduce quantity to available stock if needed
     if (item.quantity > stockData.Stock) {
       return { ...item, quantity: stockData.Stock, outOfStock: false };
     }
 
-    // Available as requested
     return { ...item, outOfStock: false };
   });
 }, [cart, ProductStocks]);
 
-  
-  useEffect(() => {
-    if (!cart) return;
-    if (CartItems) setupdatedCart({ ...cart, items: CartItems });
 
-  }, [CartItems]);
+  
+  // useEffect(() => {
+  //   if (!cart) return;
+  //   if (CartItems) setupdatedCart({ ...cart, items: CartItems });
+
+  // }, [CartItems]);
+
+ useEffect(() => {
+  if (!cart || !CartItems) return;
+
+  // Separate in-stock and out-of-stock items
+  const inStockItems = CartItems.filter(item => !item.outOfStock);
+  const outOfStock = CartItems.filter(item => item.outOfStock);
+
+  // Update cart only with in-stock items
+  setupdatedCart({ ...cart, items: inStockItems });
+
+  // Keep out-of-stock items separately
+  setOutOfStockItems(outOfStock);
+
+}, [CartItems]);
+
 
   useEffect(()=>{
     fetchProductStock();
