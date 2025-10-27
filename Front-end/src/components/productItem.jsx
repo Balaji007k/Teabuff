@@ -108,11 +108,12 @@ function ProductItem({ isAuthenticated, Review, productsItem, cart, AlertMessage
   }, [UserLikedState, id]);
 
   const fetchProduct = async () => {
-        const { Result, Error } = await ApiService.fetchData(`/product/${id}`);
-        if(!Error||Error) {
+    try {
+      const { Result, Error } = await ApiService.fetchData(`/product/${id}`);
+        setSelectedProduct(Result?.product);
+        if((selectedProduct)||(Error)) {
           setLoading(false);
         }
-        setSelectedProduct(Result?.product);
         if (Result&&productsItem&&productsItem.length) {
           setLoading(false);
           const Filtered = Review.filter(reviews => reviews.review.toLowerCase().replace(/\s+/g, '').includes(Result?.product?.title.toLowerCase().replace(/\s+/g, '')))
@@ -129,6 +130,9 @@ function ProductItem({ isAuthenticated, Review, productsItem, cart, AlertMessage
             setquantity(0);
           }
         }
+    } catch (error) {
+      console.log(error);
+    }
     };
 
     const fetchProductStock = async () => {
@@ -142,6 +146,7 @@ function ProductItem({ isAuthenticated, Review, productsItem, cart, AlertMessage
       }
 
     useEffect(()=>{
+      setLoading(true);
       setSearchItem("");
     },[id])
 
@@ -184,13 +189,13 @@ useEffect(()=>{
     return <PageNotFound Message={"Product"} />
   };
 
-  if (Loading) return <LoadingPage/>
+  //if (Loading) return <LoadingPage/>
 
-  if (!selectedProduct) return <div className='Cart-holder fs-5 fw-bolder text-center'>No product Found.</div>;
+  if (!selectedProduct&&!Loading) return <div className='Cart-holder fs-5 fw-bolder text-center'>No product Found.</div>;
 
-  if (isAuthenticated && selectedProduct) return (
+  if (isAuthenticated) return (
     <>
-    {((AlertMessageMain&&AlertMessageMain.message)||(AlertMessageproductItem&&AlertMessageproductItem.message))&&<AlertMessage message={AlertMessageproductItem||AlertMessageMain}/>}
+    {Loading?<LoadingPage/>:((AlertMessageMain&&AlertMessageMain.message)||(AlertMessageproductItem&&AlertMessageproductItem.message))&&<AlertMessage message={AlertMessageproductItem||AlertMessageMain}/>}
       <div className='Product-Page-cart d-flex flex-column align-items-center' style={{ marginTop: '75px',color:Theme?'white':'black' }}>
         <ProductFilters Products={Products} id={id} searchingProduct={setSearchItem}/>
 
@@ -211,7 +216,7 @@ useEffect(()=>{
   </div>
 )}
 
-        {(!items||items.length === 0)&&
+        {(!items||items.length === 0)&&selectedProduct&&
           <>
             <div className='w-100 my-4 d-flex flex-column align-items-center px-3'>
               <div className='Product-container d-flex justify-content-center gap-3' style={{ width: '95%' }}>
@@ -376,7 +381,7 @@ useEffect(()=>{
 
       </div>
 
-{/* CASE 2️⃣: Filters/search applied → Results found */}
+{/* CASE 2️: Filters/search applied → Results found */}
 {items && items.length > 0 && (
   <div className='w-100 p-2'>
     <div

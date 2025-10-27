@@ -3,14 +3,13 @@
   height: fit-content;
   margin-top: 50px;
   align-items: center;
-  overflow-x: hidden;
-  overflow-y: scroll;
+  overflow: hidden;
 }
 .inner-box{
   display: flex;
   justify-content: center;
   align-items: flex-end;
-  gap: 2vw;
+  /* gap: 2vw; */
   width: 100%;
   height: 95vh;
   padding: 0px 6vw;
@@ -33,8 +32,9 @@
   min-width: 300px;
   display: flex;
   flex-grow: 1;
-  justify-content: flex-end;
-  align-items: flex-end;
+  justify-content: center;
+  align-items: center;
+  overflow: visible;
 }
 .inner-text{
   width: 100%;
@@ -79,6 +79,7 @@
   min-width: 260px;
   border-radius: 25px;
   box-shadow: 0px 0px 10px 1px rgba(0, 0, 0, 0.5);
+  cursor: pointer;
   overflow: hidden;
 }
 .review{
@@ -104,11 +105,13 @@
   z-index: 99;
 }
 .img{
-  width: 90%;
-  height: 100%;
+  width: 100%;
+  height: auto;
   min-height: 450px;
   max-height: 650px;
   min-width: 300px;
-  border-radius: 25px;
-  box-shadow: 0px 0px 5px 1px rgba(99, 94, 94, 0.5);
+  transform: scale(1.6);
+  z-index: -1;
+  /* border-radius: 25px;
+  box-shadow: 0px 0px 5px 1px rgba(99, 94, 94, 0.5); */
 }

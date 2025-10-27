@@ -189,7 +189,7 @@ overflow-x: hidden;
 @keyframes l1 {to{transform: rotate(.5turn)}}
 
 button:hover{
-  box-shadow: 1px 1px 5px #CACA12;
+  box-shadow: 1px 1px 5px #6a6a65;
 }
 
 Link,a{

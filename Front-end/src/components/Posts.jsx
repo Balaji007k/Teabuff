@@ -7,7 +7,7 @@ import { formatShortTimeAgo } from "../TimeContext";
 function Posts() {
   const { isAuthenticated,AllReview } = useTheme();
   const [flattenedReviews, setFlattenedReviews] = useState([]);
-  const [likes, setLikes] = useState({}); // track likes per review
+  //const [likes, setLikes] = useState({}); // track likes per review
   
 
   useEffect(()=>{
@@ -87,7 +87,7 @@ function Posts() {
                 <p className="ps-1 mb-1">{review.comment}</p>
 
                 {/* Actions */}
-                <div className="d-flex justify-content-start gap-5 pt-2">
+                {/* <div className="d-flex justify-content-start gap-5 pt-2">
                   <div
                     className="d-flex align-items-center gap-1"
                     style={{ cursor: "pointer" }}
@@ -96,15 +96,15 @@ function Posts() {
                     <i className="fa-solid fa-heart"></i>
                     <span>{likes[review._id] || 0}</span>
                   </div>
-                  {/* <div className="d-flex align-items-center gap-1">
+                  <div className="d-flex align-items-center gap-1">
                     <i className="fa-solid fa-comment"></i>
                     <span>Reply</span>
-                  </div> */}
+                  </div>
                   <div className="d-flex align-items-center gap-1">
                     <i className="fa-solid fa-share-nodes"></i>
                     <span>Share</span>
                   </div>
-                </div>
+                </div> */}
               </div>
             </div>
           </div>

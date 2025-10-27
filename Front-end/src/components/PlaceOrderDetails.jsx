@@ -83,7 +83,6 @@ export default function PlaceOrderDetails({ isAuthenticated, setupdatedCart, car
 
 }, [CartItems]);
 
-
   useEffect(()=>{
     fetchProductStock();
   },[])
