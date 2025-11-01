@@ -11,7 +11,7 @@ export default function Payment() {
   const small = useMediaQuery({ maxWidth: 600 })
   const Navigate = useNavigate();
   const location = useLocation();
-  const cart = location.state?.cart;
+  const cart = location.state?.updatedCart;
   const CheckOutData = location.state?.NewCheckout;
   const [email, setEmail] = useState("");
   const [cardHolder, setCardHolder] = useState("");
@@ -60,18 +60,17 @@ const orderData = {
     customerName: `${(CheckOutData?.firstname+" "+CheckOutData?.lastname) || "Guest"}`,
     address: CheckOutData?.address || "Unknown Address",
     email: CheckOutData?.contactEmail || "noemail@example.com",
-    products: (cart?.items || []).map(item => ({
+    products: (cart?.products || []).map(item => ({
       productId:item?.productId,
-      categoryId: item?.categoryId || 0,
       name: item?.itemName || "Unknown Item",
       image: item?.Product_Url || "",
       qty: item?.quantity || 0,
       price: item?.itemPrice || 0,
     })),
-    subtotal: (cart?.items || []).reduce((acc, item) => acc + ((item.categoryId==1?item?.itemPrice/2:item?.itemPrice) || 0) * (item?.quantity || 0), 0),
+    subtotal: (cart?.products || []).reduce((acc, item) => acc + ((item?.itemPrice) || 0) * (item?.quantity || 0), 0),
     shipping: 10,
-    tax: ((cart?.items || []).reduce((acc, item) => acc + ((item.categoryId==1?item?.itemPrice/2:item?.itemPrice) || 0) * (item?.quantity || 0), 0)) * 0.18,
-    total: ((cart?.items || []).reduce((acc, item) => acc + ((item.categoryId==1?item?.itemPrice/2:item?.itemPrice) || 0) * (item?.quantity || 0), 0)) + 10 + (((cart?.items || []).reduce((acc, item) => acc + ((item.categoryId==1?item?.itemPrice/2:item?.itemPrice) || 0) * (item?.quantity || 0), 0)) * 0.18),
+    tax: ((cart?.products || []).reduce((acc, item) => acc + ((item?.itemPrice) || 0) * (item?.quantity || 0), 0)) * 0.18,
+    total: ((cart?.products || []).reduce((acc, item) => acc + ((item?.itemPrice) || 0) * (item?.quantity || 0), 0)) + 10 + (((cart?.products || []).reduce((acc, item) => acc + ((item?.itemPrice) || 0) * (item?.quantity || 0), 0)) * 0.18),
     paymentType: "Visa",
     cardEnding: `**** **** **** ${cardNumber.slice(-4)}`,
     contact:`+91${CheckOutData?.phone}`,

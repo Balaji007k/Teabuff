@@ -16,7 +16,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 
-const { getUsers, getSingleUser, getSingleUserProfileImage, CheckEmail, createUsers, updateProfileImage, verifyUser, sendOTP, verifyOTP, updateUser, LogoutUser, deleteUser, GetUserSate, GetSingleUserSate, CreateUserState } = require('../controllers/usersController');
+const { getUsers, getSingleUser, getSingleUserProfileImage, CheckEmail, createUsers, updateProfileImage, verifyUser, sendOTP, verifyOTP, updateUser, LogoutUser, deleteUser, GetAllUserState, GetAllSingleUserStates, GetSingleUserProductState, CreateOrUpdateUserState } = require('../controllers/usersController');
 
 router.route('/users').get(getUsers);
 router.route('/user/:id').get(getSingleUser);
@@ -31,8 +31,9 @@ router.route('/users/update/:id').put(updateUser);
 router.route('/Logout/:id').post(LogoutUser);
 router.route('/user/delete/:id').delete(deleteUser);
 
-router.route('/users/State').get(GetUserSate);
-router.route('/users/State/:id').get(GetSingleUserSate);
-router.route('/users/State/:id').post(CreateUserState);
+router.route('/users/State').get(GetAllUserState);
+router.route('/user/State/:id').get(GetAllSingleUserStates);
+router.route('/user/State/:id/product').get(GetSingleUserProductState);
+router.route('/users/State/:id').post(CreateOrUpdateUserState);
 
 module.exports = router;

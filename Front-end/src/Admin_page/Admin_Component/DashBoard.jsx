@@ -26,7 +26,7 @@ function DashBoard({ Review, productsItem, productStocks, category, Users, Order
         </div>
         <div className="Dashboard">
           <h1>
-            <Link to="/Admin/Categorys">Categorys {category}</Link>
+            <Link to="/Admin/Categorys">Categories/Offers {category}</Link>
           </h1>
         </div>
         <div className="Dashboard">

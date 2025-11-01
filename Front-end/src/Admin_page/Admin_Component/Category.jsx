@@ -4,23 +4,44 @@ import "../assets_Admin/AdminPages.css";
 
 function Category({ category }) {
   const [editingId, setEditingId] = useState(null);
-  const [formData, setFormData] = useState({ categoryId: "", name: "" });
+  const [formData, setFormData] = useState({
+    categoryId: "",
+    name: "",
+    offer: 0,
+  });
   const [categories, setCategories] = useState([]);
-  const [newCategory, setNewCategory] = useState({ categoryId: "", name: "" });
+  const [newCategory, setNewCategory] = useState({
+    categoryId: "",
+    name: "",
+    offer: "",
+  });
 
-  // Handle edit click
+  // 🟢 Handle edit click
   const handleEditClick = (cat) => {
     setEditingId(cat._id);
-    setFormData({ categoryId: cat.categoryId, name: cat.name });
+    setFormData({
+      categoryId: cat.categoryId,
+      name: cat.name,
+      offer: cat.offer || 0,
+    });
   };
 
-  // Handle input change (for editing)
+  // 🟠 Handle input change (for editing)
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    // setFormData((prev) => ({
+    //   ...prev,
+    //   [name]: name === "offer" ? Number(value) : value,
+    // }));
+    setFormData((prev) => ({
+  ...prev,
+  [name]: name === "offer"
+    ? (value === "" ? "" : Number(value))
+    : value,
+}));
   };
 
-  // Save updated category
+  // 🟣 Save updated category
   const handleSave = async (id) => {
     const { Result, Error } = await ApiService.fetchData(
       `/category/${id}`,
@@ -40,7 +61,7 @@ function Category({ category }) {
     }
   };
 
-  // Delete category
+  // 🔴 Delete category
   const handleDelete = async (id) => {
     if (!window.confirm("Are you sure you want to delete this category?")) return;
 
@@ -53,26 +74,54 @@ function Category({ category }) {
     }
   };
 
-  // Add category
-  const handleAdd = async () => {
-    if (!newCategory.categoryId || !newCategory.name) {
-      alert("Please fill in both fields!");
-      return;
-    }
+  // 🟡 Add new category
+  // const handleAdd = async () => {
+  //   if (!newCategory.categoryId || !newCategory.name) {
+  //     alert("Please fill in all fields!");
+  //     return;
+  //   }
 
-    const { Result, Error } = await ApiService.fetchData(
-      "/category",
-      "POST",
-      newCategory
-    );
+  //   const { Result, Error } = await ApiService.fetchData(
+  //     "/category",
+  //     "POST",
+  //     newCategory
+  //   );
 
-    if (!Error && Result?.category) {
-      setCategories((prev) => [...prev, Result.category]);
-      setNewCategory({ categoryId: "", name: "" }); // reset form
-    } else {
-      alert("Add failed: " + Error);
-    }
+  //   if (!Error && Result?.category) {
+  //     setCategories((prev) => [...prev, Result.category]);
+  //     setNewCategory({ categoryId: "", name: "", offer: 0 }); // reset form
+  //   } else {
+  //     alert("Add failed: " + Error);
+  //   }
+  // };
+
+  // 🟡 Add new category
+const handleAdd = async () => {
+  if (!newCategory.categoryId || !newCategory.name) {
+    alert("Please fill in all fields!");
+    return;
+  }
+
+  // ✅ Fix: allow empty offer field (convert "" to 0)
+  const payload = {
+    ...newCategory,
+    offer: newCategory.offer === "" ? 0 : newCategory.offer,
   };
+
+  const { Result, Error } = await ApiService.fetchData(
+    "/category",
+    "POST",
+    payload
+  );
+
+  if (!Error && Result?.category) {
+    setCategories((prev) => [...prev, Result.category]);
+    setNewCategory({ categoryId: "", name: "", offer: 0 }); // reset form
+  } else {
+    alert("Add failed: " + Error);
+  }
+};
+
 
   useEffect(() => {
     setCategories(category || []);
@@ -81,14 +130,17 @@ function Category({ category }) {
   return (
     <div className="Admin_page p-3">
       {/* 🔹 Add new category form */}
-      <div className="mb-3 d-flex gap-2">
+      <div className="mb-3 d-flex gap-2 flex-wrap">
         <input
           type="text"
           placeholder="Category ID"
           className="form-control"
           value={newCategory.categoryId}
           onChange={(e) =>
-            setNewCategory((prev) => ({ ...prev, categoryId: e.target.value }))
+            setNewCategory((prev) => ({
+              ...prev,
+              categoryId: e.target.value,
+            }))
           }
         />
         <input
@@ -99,6 +151,25 @@ function Category({ category }) {
           onChange={(e) =>
             setNewCategory((prev) => ({ ...prev, name: e.target.value }))
           }
+        />
+        <input
+          type="number"
+          placeholder="Offer (%)"
+          className="form-control"
+          value={newCategory.offer}
+          // onChange={(e) =>
+          //   setNewCategory((prev) => ({
+          //     ...prev,
+          //     offer: Number(e.target.value),
+          //   }))
+          // }
+          onChange={(e) =>
+  setNewCategory((prev) => ({
+    ...prev,
+    offer: e.target.value === "" ? "" : Number(e.target.value),
+  }))
+}
+
         />
         <button className="btn btn-primary" onClick={handleAdd}>
           Add Category
@@ -112,6 +183,7 @@ function Category({ category }) {
             <tr>
               <th>Category ID</th>
               <th>Name</th>
+              <th>Offer (%)</th>
               <th>Action</th>
             </tr>
           </thead>
@@ -119,6 +191,7 @@ function Category({ category }) {
             {categories &&
               categories.map((categoryItem) => (
                 <tr key={categoryItem._id}>
+                  {/* Category ID */}
                   <td>
                     {editingId === categoryItem._id ? (
                       <input
@@ -137,6 +210,8 @@ function Category({ category }) {
                       />
                     )}
                   </td>
+
+                  {/* Category Name */}
                   <td>
                     {editingId === categoryItem._id ? (
                       <input
@@ -155,6 +230,28 @@ function Category({ category }) {
                       />
                     )}
                   </td>
+
+                  {/* Offer */}
+                  <td>
+                    {editingId === categoryItem._id ? (
+                      <input
+                        type="number"
+                        name="offer"
+                        value={formData.offer}
+                        onChange={handleChange}
+                        className="form-control text-center"
+                      />
+                    ) : (
+                      <input
+                        type="text"
+                        disabled
+                        value={`${categoryItem.offer || 0}%`}
+                        className="form-control text-center"
+                      />
+                    )}
+                  </td>
+
+                  {/* Action Buttons */}
                   <td>
                     <div className="d-flex justify-content-center gap-2">
                       {editingId === categoryItem._id ? (

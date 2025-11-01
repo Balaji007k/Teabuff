@@ -80,10 +80,21 @@ const shopModel = mongoose.model('shop', shopSchema);
 const categorySchema = new mongoose.Schema({
       categoryId: { type: Number, required: true, unique:true},
       name: { type: String, required: true },
+      offer: {type: Number,default:0}
 });
 
 // Create a model from the schema
 const categoryModel = mongoose.model('category', categorySchema);
+
+// // Create the model for the offers
+// const offerSchema = new mongoose.Schema({
+//       categoryId: { type: Number, required: true, unique:true},
+//       name: { type: String, required: true },
+//       offer: {type: Number,default:0}
+// });
+
+// // Create a model from the schema
+// const offerModel = mongoose.model('offer', offerSchema);
 
 const ProductReviewsSchema = mongoose.Schema({
   UserId:{type:String,required:true},
@@ -136,18 +147,18 @@ const ProductStockSchema = mongoose.Schema({
 // Define the schema for each product stock
 const productStockModel = mongoose.model('productStock',ProductStockSchema)
 
-// Define the schema for each review
+// Define the schema for each UserLikedState
 const UserLikedState = new mongoose.Schema({
   ProductId:{type:String,required:true},
-  title: { type: String, required: true },
-  price: { type: Number, required: true },
-  description: { type: String, required: true },
-  url: { type: String, required: true },
-  categoryId: { type: Number, required: true },
-  rating: { type: String, default:0, required: true },
-  ingredients: { type: String, required: true },
-  features: { type: String, required: true },
-  purchaseLink: { type: String, required: true },
+  // title: { type: String, required: true },
+  // price: { type: Number, required: true },
+  // description: { type: String, required: true },
+  // url: { type: String, required: true },
+  // categoryId: { type: Number, required: true },
+  // rating: { type: String, default:0, required: true },
+  // ingredients: { type: String, required: true },
+  // features: { type: String, required: true },
+  // purchaseLink: { type: String, required: true },
   likedState:{type:Boolean, default:false,required:true},
 });
 

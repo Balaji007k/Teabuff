@@ -194,8 +194,10 @@
 @media (max-width: 600px) {
   .product-card-OrderNow-btn,
   .product-item button.text-center {
-    padding: 5px 20px;
-    font-size: medium;
+    padding: 5px !important;
+    margin: 0px !important;
+    font-size: medium !important;
+    gap: 0px !important;
     font-weight: 500;
   }
 }

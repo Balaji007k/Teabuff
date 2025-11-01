@@ -13,13 +13,21 @@ import ProductCard from './AssetComponents/ProductCard';
 function CartDetails({ isAuthenticated, cart }) {
     const small = useMediaQuery({maxWidth:600});
     const Location = useLocation();
-    const { setUpdatedCart,PostSaveCart, AlertMessageTheme, Theme } = useTheme();
+    const { category,setUpdatedCart,PostSaveCart, AlertMessageTheme, Theme } = useTheme();
     const [AlertMessagePlaceOrder,setAlertMessage] = useState([]);
     const [Loading,setLoading] = useState(true);
 
     const [quantity, setquantity] = useState({}); // track quantity by productId
     const Navigate = useNavigate();
     const [Order, setOrder] = useState(false);
+
+    const getDiscountedPrice = (product) => {
+  const matchedCategory = category.find(c => c.categoryId === Number(product.categoryId));
+  const offerPercent = matchedCategory?.offer || 0;
+  const price = Number(product.itemPrice) || 0;
+  return price - (price * offerPercent / 100);
+};
+
 
     const handleCancelItem = async (productId) => {
         setLoading(true);
@@ -42,13 +50,55 @@ function CartDetails({ isAuthenticated, cart }) {
         }
     };
 
+    // const OrderHandler = () => {
+    //     if (cart.items.length <= 0) {
+    //          setAlertMessage({message:"No items in Cart",state:false});
+    //     }
+    //     PostSaveCart(cart,quantity);
+    //     setOrder(true);
+    //     Navigate('/CheckOut');
+    // };
+
     const OrderHandler = () => {
-        if (cart.items.length <= 0) {
-             setAlertMessage({message:"No items in Cart",state:false});
-        }
-        PostSaveCart(cart,quantity);
+  if (!cart || cart.items.length <= 0) {
+    setAlertMessage({ message: "No items in Cart", state: false });
+    return;
+  }
+
+  PostSaveCart(cart,quantity);
         setOrder(true);
+
+  // 🧮 Prepare product list with offer price + totals
+  const orderProducts = cart.items.map(item => {
+    const matchedCategory = category?.find(c => c.categoryId === Number(item.categoryId));
+    const offerPercent = matchedCategory?.offer || 0;
+    const offerPrice = Number(item.itemPrice) - (Number(item.itemPrice) * offerPercent / 100);
+    const qty = quantity[item.productId] ?? item.quantity;
+    const total = offerPrice * qty;
+
+    return {
+      productId: item.productId || item._id,
+      itemName: item.itemName,
+      Product_Url: item.Product_Url,
+      itemPrice: offerPrice.toFixed(2),
+      quantity: qty,
+      total: total.toFixed(2),
     };
+  });
+
+  // 💰 Calculate subtotal
+  const subTotal = orderProducts.reduce((sum, item) => sum + Number(item.total), 0).toFixed(2);
+
+  // 🧾 Prepare final order payload
+  const orderPayload = {
+    userId: isAuthenticated.userId,
+    products: orderProducts,
+    subTotal,
+  };
+
+  // 🧭 Navigate to checkout and send the order data
+  Navigate('/CheckOut', { state: orderPayload });
+};
 
     useEffect(()=>{
         if(AlertMessageTheme&&AlertMessageTheme.message) setLoading(false);
@@ -113,7 +163,7 @@ function CartDetails({ isAuthenticated, cart }) {
               <ProductCard 
                 key={item._id} 
                 isAuthenticated={isAuthenticated} 
-                e={item} 
+                product={item} 
                 Navigate={Navigate} 
                 cart={true} 
                 handleCancelItem={handleCancelItem}
@@ -127,7 +177,9 @@ function CartDetails({ isAuthenticated, cart }) {
                   <button className='quantity-btn-All' onClick={() => handleQuantityChange(item.productId, 1)}>+</button>
                 </span>
                 <div className='d-flex align-items-center fs-5 fw-bolder'>
-                  Total - <h5 className='my-0'>  ₹{((quantity[item.productId] ?? item.quantity) * (item.categoryId==1 ? item.itemPrice/2 : item.itemPrice)).toFixed(2)}</h5>
+                  Total - <h5 className='my-0'>
+  ₹{((quantity[item.productId] ?? item.quantity) * getDiscountedPrice(item)).toFixed(2)}
+</h5>
                 </div>
               </div>
             </div>
@@ -138,8 +190,8 @@ function CartDetails({ isAuthenticated, cart }) {
   )
 )}
 
-            {(cart?.items?.length ?? 0) > 0 && (<div className={`w-100 ${Location.pathname==='/CheckOut'||Location.pathname===`/CheckOut/${cart?.ProductId}`?'d-none':'d-block'} ${'position-fixed bottom-0 py-2 bg-white'} d-flex justify-content-center gap-4`}>
-                    {!Order && <><button className={`Save-cart-btn-CartDetails ${small&&'rounded-5'}`} onClick={() => {PostSaveCart(cart,quantity);setLoading(true)}}>Save Cart</button><button className={`Save-cart-btn-CartDetails ${small&&'rounded-5'}`} onClick={() => {OrderHandler();setLoading(true);Navigate('/CheckOut')}}>Place Order</button></>}
+            {(cart?.items?.length ?? 0) > 0 && (<div className={`w-100 position-fixed bottom-0 py-2 bg-white d-flex justify-content-center gap-4`}>
+                    {!Order && <><button className={`Save-cart-btn-CartDetails ${small&&'rounded-5'}`} onClick={() => {PostSaveCart(cart,quantity);setLoading(true)}}>Save Cart</button><button className={`Save-cart-btn-CartDetails ${small&&'rounded-5'}`} onClick={() => {OrderHandler();setLoading(true);}}>Place Order</button></>}
                 </div>
                 )}
         </div>

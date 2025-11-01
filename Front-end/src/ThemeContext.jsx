@@ -19,6 +19,7 @@ export const ThemeProvider = ({ children }) => {
     const [ProductAvgRating, setProductAvgRating] = useState(0);
     const [isLoading, setIsLoading] = useState(true);
     const [UserLikedState, setUserLikedState] = useState(null);
+    const [Heart,setCurrentProductState] = useState(null);
     const [UpdatedProduct, setUpdatedProduct] = useState(null);
     const [AlertMessageTheme,setAlertMessage] = useState(null);
     const [OrderId,setOrderId] = useState(null);
@@ -92,18 +93,19 @@ export const ThemeProvider = ({ children }) => {
         };
 
     const fetchUserLikedState = async (UserId) => {
-        const { Result, Error } = await ApiService.fetchData(`/users/State/${UserId}`);
+        const { Result, Error } = await ApiService.fetchData(`/user/State/${UserId}`);
         if (Result){
             setUserLikedState(Result?.UserState);
         }
         else console.log(Error);
     };
 
-    const PostUserLikedState = async (UserId,ProductId,title, price, description, url, categoryId, rating, ingredients, features, purchaseLink,likedState) => {
-        const NewUserState = {ProductId,title, price, description, url, categoryId, rating, ingredients, features, purchaseLink,likedState};
+    const PostUserLikedState = async (UserId,ProductId,likedState) => {
+        const NewUserState = {ProductId,likedState};
         const { Result, Error } = await ApiService.fetchData(`/users/State/${UserId}`,"POST",NewUserState);
         if (Result){
-            setUserLikedState(Result.NewState?.UserState);
+            setUserLikedState(Result.allStates||Result.newUser);
+            setCurrentProductState(Result.productState?.likedState);
         }
         else console.log(Error);
     };
@@ -190,7 +192,7 @@ export const ThemeProvider = ({ children }) => {
 
     const fetchCategories = async () => {
         const { Result, Error } = await ApiService.fetchData('/category');
-        if (!Error) setCategory(Result?.categorys);
+        if (!Error) setCategory(Result?.categories);
         else console.error(Error);
     };
 
@@ -291,6 +293,8 @@ const contextValue = useMemo(() => {
   setUpdatedCart,
   PostSaveCart,
   PostUserLikedState,
+  Heart,
+  setCurrentProductState,
   UserLikedState,
   UpdateProduct,
   UserProductReviews,

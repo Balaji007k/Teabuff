@@ -22,7 +22,7 @@ function Header({ userinputFocus, isAuthenticated, cart, setAlertMessage, HideNa
     const Navigate = useNavigate();
 
     const fetchProfileImage = async () => {
-        const { Result, Error } = await ApiService.fetchData(`/userProfileImage/${isAuthenticated.userId}`);
+        const { Result, Error } = await ApiService.fetchData(`/userProfileImage/${isAuthenticated?.userId}`);
         if (Result?.profileImage) {
             setPreview(`${ApiService.Backend+Result?.profileImage}`);
         }

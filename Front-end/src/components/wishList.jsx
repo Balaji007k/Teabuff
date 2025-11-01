@@ -38,7 +38,7 @@ function Wishlist({ isAuthenticated }) {
                 <div className='Extra-products'>
                  <div className="scroll-items d-grid" style={{ justifyContent: small && 'space-around', flexWrap: small && 'wrap' }}>
                 {LikedProducts?.length>0?LikedProducts.map(e=>(
-                   <ProductCard key={e._id} isAuthenticated={isAuthenticated} LikedState={UserLikedState} Navigate={Navigate} e={e} />
+                   <ProductCard key={e._id} isAuthenticated={isAuthenticated} LikedState={UserLikedState} Navigate={Navigate} product={e} />
                 )) : (
                     <EmptyProductCard/>
                 )}

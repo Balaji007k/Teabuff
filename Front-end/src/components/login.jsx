@@ -20,7 +20,7 @@ function Login({ userInput, AccoutState, setLoading }) {
   const [emailVerify, setEmailVerify] = useState(false);
   const [emailChange, setEmailChange] = useState(true);
 
-// ✅ Step 1: Check email domain
+// Step 1: Check email domain
 const checkEmailDomain = async () => {
   const { Result, Error } = await ApiService.fetchData("/login/CheckEmail", "POST", { email });
   if (Error) {
@@ -37,7 +37,7 @@ const checkEmailDomain = async () => {
   }
 };
 
-// ✅ Step 2: Send OTP
+// Step 2: Send OTP
 const sendOTP = async () => {
   const { Result, Error } = await ApiService.fetchData("/login/sendOTP", "POST", { email });
   if (Error || !Result.success) {
@@ -51,7 +51,7 @@ const sendOTP = async () => {
 
 const tempEmail = useRef("");
 
-// ✅ Step 3: Verify OTP
+// Step 3: Verify OTP
 const verifyOTP = async () => {
   const { Result, Error } = await ApiService.fetchData("/login/verifyOTP", "POST", { email, otp });
   console.log(Result)
@@ -62,7 +62,7 @@ const verifyOTP = async () => {
     setStep(3);
     setEmailVerify(true);
     setEmailChange(false);
-    tempEmail.current = Result?.email; // ✅ store in ref
+    tempEmail.current = Result?.email; // store in ref
     console.log(tempEmail.current);
     AccoutState({ message: "Email verified, now you can register", state: true });
   }

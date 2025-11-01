@@ -139,7 +139,7 @@ function Product({ isAuthenticated, productsItem, category, HideNavbar }) {
                 <>
                   {items.map((e) => (
                     e.rating >= 4.5 && (
-                     <ProductCard key={e._id} isAuthenticated={isAuthenticated} e={e} Navigate={Navigate}/>
+                     <ProductCard key={e._id} isAuthenticated={isAuthenticated} product={e} Navigate={Navigate}/>
                     )
                   ))}
                   <ViewMore/>
@@ -187,7 +187,7 @@ function Product({ isAuthenticated, productsItem, category, HideNavbar }) {
                 <>
                   {items.map((e) => (
                     e.categoryId === 1 && (
-                      <ProductCard key={e._id} isAuthenticated={isAuthenticated} e={e} Navigate={Navigate}/>
+                      <ProductCard key={e._id} isAuthenticated={isAuthenticated} product={e} Navigate={Navigate}/>
                     )
                   ))}
                   <ViewMore/>
@@ -234,7 +234,7 @@ function Product({ isAuthenticated, productsItem, category, HideNavbar }) {
                 <>
                   {items.map((e) => (
                     e.categoryId !== 1 && e.rating >=2.5 && (
-                      <ProductCard key={e._id} isAuthenticated={isAuthenticated} e={e} Navigate={Navigate}/>
+                      <ProductCard key={e._id} isAuthenticated={isAuthenticated} product={e} Navigate={Navigate}/>
                     )
                   ))}
                   <ViewMore/>
@@ -284,7 +284,7 @@ function Product({ isAuthenticated, productsItem, category, HideNavbar }) {
                 <>
                   {items.map((e) => (
                     (
-                     <ProductCard key={e._id} isAuthenticated={isAuthenticated} e={e} Navigate={Navigate}/>
+                     <ProductCard key={e._id} isAuthenticated={isAuthenticated} product={e} Navigate={Navigate}/>
                     )
                   ))}
                   <ViewMore/>

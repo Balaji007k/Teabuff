@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useParams, useNavigate, useLocation, Link } from 'react-router-dom';
 import '../style/ProductItem.css';
 import { useMediaQuery } from "react-responsive";
@@ -16,7 +16,7 @@ import { formatShortTimeAgo } from "../TimeContext";
 
 function ProductItem({ isAuthenticated, Review, productsItem, cart, AlertMessageMain }) {
 
-  const { handleCart, PostUserLikedState, UserLikedState, UpdateProduct, UserProductReviews, fetchProductReviews, ProductAvgRating, Theme } = useTheme();
+  const { category,handleCart,Heart,PostUserLikedState,setCurrentProductState, UpdateProduct, UserProductReviews, fetchProductReviews, ProductAvgRating, Theme } = useTheme();
 
 
   const reviews = UserProductReviews?.User || [];
@@ -53,7 +53,6 @@ function ProductItem({ isAuthenticated, Review, productsItem, cart, AlertMessage
   const [Editcomment, setEditcomment] = useState(false);
   const [AlreadyCommented, setAlreadyCommented] = useState(false);
   const Navigate = useNavigate();
-  const [Heart, setHeart] = useState(false);
   const [Loading,setLoading] = useState(true);
   const [SearchItem, setSearchItem] = useState("");
   const [AdditionalImages,setAdditionalImages] = useState(true);
@@ -80,6 +79,20 @@ function ProductItem({ isAuthenticated, Review, productsItem, cart, AlertMessage
     }));
   };
 
+  // Get offer for this product's category
+const offerPercent = useMemo(() => {
+  if (!category || !selectedProduct) return 0;
+  const matched = category.find(c => c.categoryId === Number(selectedProduct.categoryId));
+  return matched?.offer || 0; // default 0 if no offer found
+}, [category, selectedProduct]);
+
+// Calculate discounted price
+const discountedPrice = useMemo(() => {
+  const price = Number(selectedProduct?.price) || 0; // safely handle null or undefined
+  return price - (price * (offerPercent / 100));
+}, [selectedProduct, offerPercent]);
+
+
   const PlaceOrder=(productId, itemPrice, quantity, itemName, categoryId, userId, Description, Product_Url, Rating, likes, placeOrder)=>{
     setLoading(true);
     if(selectedProductStock<quantity){
@@ -87,8 +100,24 @@ function ProductItem({ isAuthenticated, Review, productsItem, cart, AlertMessage
       return setAlertMessage({message:'Out of Stock',state:false})}
     else{
     const Relocate = handleCart(productId, itemPrice, quantity, itemName, categoryId, userId, Description, Product_Url, Rating, likes, placeOrder);
-    if (Relocate) Navigate(`/CheckOut/${productId}`);
-    else Navigate(`/CheckOut`);
+
+    const productOrder = {
+    productId: productId,
+    itemName: itemName,
+    Product_Url: Product_Url,
+    itemPrice: offerPercent>0?discountedPrice.toFixed(2):itemPrice,
+    quantity: quantity,
+    total: offerPercent>0?(discountedPrice.toFixed(2)*quantity):(itemPrice.toFixed(2)*quantity),
+  };
+
+  const orderPayload = {
+    userId: isAuthenticated.userId,
+    products: productOrder,
+    subTotal:offerPercent>0?(discountedPrice.toFixed(2)*quantity):(itemPrice.toFixed(2)*quantity),
+  };
+
+    if (Relocate) Navigate(`/CheckOut/${productId}`, { state: orderPayload });
+    //else Navigate(`/CheckOut`);
     }
   };
 
@@ -96,16 +125,18 @@ function ProductItem({ isAuthenticated, Review, productsItem, cart, AlertMessage
     if(AlertMessageMain&&AlertMessageMain.message) return setLoading(false);
   },[AlertMessageMain]);
 
-  useEffect(() => {
-    if(isAuthenticated){
-      fetchProductReviews(id);
-    }
-    if (isAuthenticated && UserLikedState) {
-      const User = UserLikedState.find(u => u?.ProductId === id);
-      setHeart(!!User?.likedState); // Set to true or false accordingly
-    }
-    
-  }, [UserLikedState, id]);
+  const fetchUserLikedState = async (productId,User) => {
+  const userId = User?.userId;
+  if (!userId || !productId) return;
+  // Pass productId as a query param
+  const { Result, Error } = await ApiService.fetchData(`/user/State/${userId}/product?productId=${productId}`);
+  if (!Error && Result) {
+    //console.log("User liked state:", Result);
+    setCurrentProductState(Result.likedState); // if you want to update UI
+  } else {
+    console.error(Error || "Failed to fetch liked state");
+  }
+};
 
   const fetchProduct = async () => {
     try {
@@ -165,7 +196,10 @@ function ProductItem({ isAuthenticated, Review, productsItem, cart, AlertMessage
 
   useEffect(()=>{
     window.scrollTo(0, 0);
-    
+    if(isAuthenticated){
+      fetchProductReviews(id);
+      fetchUserLikedState(id,isAuthenticated);
+    }
   },[isAuthenticated,id]);
 
   useEffect(() => {
@@ -241,17 +275,17 @@ useEffect(()=>{
                       <p className=' fs-4'>( {UserProductReviews?.User?.length||0} {UserProductReviews?.User?.length>1?'Reviews':'Review'} )
                       </p>
                       </div>
-                      <h2>{selectedProduct.categoryId==1?<>₹<del>{(selectedProduct.price).toFixed(2)}</del> ₹{(selectedProduct.price/2).toFixed(2)}</>:<>₹{(selectedProduct.price).toFixed(2)}</>}</h2>
+                      <span className=' fs-3'>{discountedPrice&&offerPercent>0?<>₹<del>{(selectedProduct.price).toFixed(2)}</del> ₹{(discountedPrice).toFixed(2)}</>:<>₹{(selectedProduct.price).toFixed(2)}</>} <small className='text-success'>({offerPercent}% OFF)</small></span>
                       <div className="Categories bg-white w-100 h-auto py-1 d-inline-flex align-items-center gap-2"><i className="fa-solid fa-circle-exclamation"></i><p>Get next day delivery <span className=' fw-bold'>{new Date(Date.now() + 1 * 24 * 60 * 60 * 1000).toLocaleDateString()}</span></p></div>
                       <span className=' w-100 fs-4 fw-bold w-75 d-flex justify-content-center align-items-center gap-3'>
                         <h3 className=' fw-bold'>Quantity:</h3>{quantity==0||selectedProductStock==0?<button className='quantity-btn-All bg-body-secondary'>-</button>:<button className='quantity-btn-All' onClick={() => setquantity(quantity - 1)}>-</button>}{selectedProductStock!==0?quantity:0}{quantity<selectedProductStock?<button className='quantity-btn-All' onClick={() => setquantity(quantity + 1)}>+</button>:<button className='quantity-btn-All bg-body-secondary'>+</button>}
                       </span>
                       <div className=' w-100 d-flex align-items-center justify-content-between gap-2'>
-                        <button className={`Add-cart-btn-productItem ${!small&&'w-50'} flex-grow-1 py-2`} onClick={() => { if(selectedProductStock>=quantity){handleCart(selectedProduct._id, selectedProduct.price, quantity, selectedProduct.title, selectedProduct.categoryId, isAuthenticated.userId, selectedProduct.description, selectedProduct.url, selectedProduct.rating, Heart, false);setLoading(true)}else{return setAlertMessage({message:'Out of Stock',state:false})}}}>Add to Cart {!small&&<i className="fa-solid fa-cart-shopping ms-2"></i>}</button>{(cart?.items.length>0 || quantity!==0)&&<button className={`Add-cart-btn-productItem ${!small&&'w-50'} py-2`} onClick={() => { PlaceOrder(selectedProduct._id, selectedProduct.price, quantity, selectedProduct.title, selectedProduct.categoryId, isAuthenticated.userId, selectedProduct.description, selectedProduct.url, selectedProduct.rating, Heart, true);}}>Buy Now {!small&&<i className="fa-solid fa-truck ms-2"></i>}</button>}
+                        <button className={`Add-cart-btn-productItem ${!small&&'w-50'} flex-grow-1 py-2`} onClick={() => { if(selectedProductStock>=quantity){handleCart(selectedProduct._id, selectedProduct.price, quantity, selectedProduct.title, selectedProduct.categoryId, isAuthenticated.userId, selectedProduct.description, selectedProduct.url, selectedProduct.rating, Heart, false);setLoading(true)}else{return setAlertMessage({message:'Out of Stock',state:false})}}}>Add to Cart {!small&&<i className="fa-solid fa-cart-shopping ms-2"></i>}</button>{(cart?.items.length>0 || quantity!==0)&&<button className={`Add-cart-btn-productItem ${!small&&'w-50'} py-2`} onClick={() => { PlaceOrder(selectedProduct._id, selectedProduct.price, quantity, selectedProduct.title, selectedProduct.categoryId, isAuthenticated.userId, selectedProduct.description, selectedProduct.url, selectedProduct.rating, Heart, true);}}>{small?'Order Now':'Buy Now'} {!small&&<i className="fa-solid fa-truck ms-2"></i>}</button>}
                         {/* <span className={`material-symbols-outlined Product-icons heart ${Heart ? 'text-danger' : 'text-black'}`} onClick={() => PostUserLikedState(isAuthenticated.userId, selectedProduct._id, selectedProduct.title, selectedProduct.price, selectedProduct.description, selectedProduct.url, selectedProduct.categoryId, selectedProduct.rating, selectedProduct.ingredients, selectedProduct.features, selectedProduct.purchaseLink, !Heart && true, selectedProduct.comments)}>
                           favorite
                         </span> */}
-                        <i className={`fa-solid fa-heart Product-icons heart ${Heart ? 'text-danger' : 'text-black'} fs-4`} onClick={() => PostUserLikedState(isAuthenticated.userId, selectedProduct._id, selectedProduct.title, selectedProduct.price, selectedProduct.description, selectedProduct.url, selectedProduct.categoryId, selectedProduct.rating, selectedProduct.ingredients, selectedProduct.features, selectedProduct.purchaseLink, !Heart && true, selectedProduct.comments)} ></i>
+                        <i className={`fa-solid fa-heart Product-icons heart ${Heart ? 'text-danger' : 'text-black'} fs-4`} onClick={() => PostUserLikedState(isAuthenticated.userId, selectedProduct._id, !Heart && true)} ></i>
                       </div>
                       <div className=' d-flex flex-column gap-3'>
                         <div className='div Description'>
@@ -364,7 +398,7 @@ useEffect(()=>{
                   <ProductCard
                     key={e._id}
                     isAuthenticated={isAuthenticated}
-                    e={e}
+                    product={e}
                     Navigate={Navigate}
                   />
                 )
@@ -396,7 +430,7 @@ useEffect(()=>{
           <ProductCard
             key={e._id}
             isAuthenticated={isAuthenticated}
-            e={e}
+            product={e}
             Navigate={Navigate}
           />
         ) : (

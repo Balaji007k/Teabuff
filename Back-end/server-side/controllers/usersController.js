@@ -12,7 +12,7 @@ const { sendOtpMail } = require("../utils/sendEmail");
 
 let otpStore = {};
 
-// ✅ Check email domain
+// Check email domain
 exports.CheckEmail = (req, res) => {
   const { email } = req.body;
   const domain = email.split("@")[1];
@@ -359,57 +359,238 @@ exports.deleteUser = async (req, res) => {
 
 
 
-exports.GetUserSate = async(req,res)=>{
-    const UserState = await UserStateModel.find({})
-    res.json({
-        UserState
-    })
-}
+// exports.GetUserSate = async(req,res)=>{
+//     const UserState = await UserStateModel.find({})
+//     res.json({
+//         UserState
+//     })
+// }
 
-exports.GetSingleUserSate = async (req, res) => {
+// exports.GetSingleUserSate = async (req, res) => {
+//   try {
+//     const userIdParam = req.params.id.trim();
+
+//     const userState = await UserStateModel.findOne({ UserId: userIdParam });
+
+//     if (!userState) {
+//       return res.status(404).json({ message: "No UserState found" });
+//     }
+
+//     res.json({ UserState: userState.UserState });
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ message: "Internal Server Error" });
+//   }
+// };
+
+// exports.CreateUserState = async (req, res) => {
+//   try {
+//     const UserId = req.params.id;
+//     const { ProductId, title, price, description, url, categoryId, rating, ingredients, features, purchaseLink, likedState } = req.body;
+//     const State = { ProductId, title, price, description, url, categoryId, rating, ingredients, features, purchaseLink, likedState };
+
+//     let User = await UserStateModel.findOne({ UserId });
+
+//     if (!User) {
+//       const newUser = await UserStateModel.create({ UserId, UserState: [State] });
+//       return res.json({ newUser });
+//     }
+
+//     const ProductIndex = User.UserState.findIndex(p => p.ProductId === ProductId);
+
+//     if (ProductIndex === -1) {
+//       User.UserState.push(State);
+//     } else {
+//       User.UserState[ProductIndex] = State;
+//     }
+
+//     const NewState = await User.save();
+//     res.json({ NewState });
+
+//   } catch (error) {
+//     res.json({ message: error.message });
+//   }
+// };
+
+
+// Get all user liked states (for all users)
+exports.GetAllUserState = async (req, res) => {
   try {
-    const userIdParam = req.params.id.trim();
+    const userStates = await UserStateModel.find({});
+    res.json({ userStates });
+  } catch (error) {
+    res.status(500).json({ message: "Failed to fetch user states", error: error.message });
+  }
+};
 
+
+// Get liked state for a single user
+// exports.GetSingleUserState = async (req, res) => {
+//   try {
+//     const userIdParam = req.params.id.trim();
+
+//     const userState = await UserStateModel.findOne({ UserId: userIdParam });
+
+//     if (!userState) {
+//       return res.status(404).json({ message: "No user state found" });
+//     }
+
+//     res.json({ UserState: userState.UserState });
+//   } catch (error) {
+//     res.status(500).json({ message: "Internal Server Error", error: error.message });
+//   }
+// };
+
+// 1. Get all liked states for a user
+exports.GetAllSingleUserStates = async (req, res) => {
+  try {
+    const userId = req.params.id?.trim();
+
+    if (!userId) {
+      return res.status(400).json({ message: "UserId is required" });
+    }
+
+    const userState = await UserStateModel.findOne({ UserId: userId });
+
+    if (!userState) {
+      return res.status(404).json({ message: "No liked states found for this user" });
+    }
+
+    // Return all liked states (array)
+    res.json({
+      UserId: userState.UserId,
+      total: userState.UserState.length,
+      UserState: userState.UserState
+    });
+
+  } catch (error) {
+    res.status(500).json({
+      message: "Internal Server Error",
+      error: error.message
+    });
+  }
+};
+
+
+
+// 2. Get liked state for a specific product
+exports.GetSingleUserProductState = async (req, res) => {
+  try {
+    const userIdParam = req.params.id?.trim(); // userId
+    const productId = req.query.productId?.trim(); // productId as query param
+
+    if (!productId) {
+      return res.status(400).json({ message: "ProductId is required" });
+    }
+
+    // Find user record
     const userState = await UserStateModel.findOne({ UserId: userIdParam });
 
     if (!userState) {
-      return res.status(404).json({ message: "No UserState found" });
+      return res.status(404).json({ message: "User not found" });
     }
 
-    res.json({ UserState: userState.UserState });
+    // Find specific product in liked state array
+    const productState = userState.UserState.find(p => p.ProductId === productId);
+
+    if (!productState) {
+      return res.status(404).json({ message: "Product not found in user's state" });
+    }
+
+    res.json({
+      ProductId: productState.ProductId,
+      likedState: productState.likedState
+    });
+
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Internal Server Error" });
+    res.status(500).json({
+      message: "Internal Server Error",
+      error: error.message
+    });
   }
 };
 
-exports.CreateUserState = async (req, res) => {
+
+
+// Create or update user's liked state for a product
+exports.CreateOrUpdateUserState = async (req, res) => {
   try {
-    const UserId = req.params.id;
-    const { ProductId, title, price, description, url, categoryId, rating, ingredients, features, purchaseLink, likedState } = req.body;
-    const State = { ProductId, title, price, description, url, categoryId, rating, ingredients, features, purchaseLink, likedState };
+    const UserId = req.params.id.trim();
+    const { ProductId, likedState } = req.body;
 
-    let User = await UserStateModel.findOne({ UserId });
-
-    if (!User) {
-      const newUser = await UserStateModel.create({ UserId, UserState: [State] });
-      return res.json({ newUser });
+    if (!ProductId) {
+      return res.status(400).json({ message: "ProductId is required" });
     }
 
-    const ProductIndex = User.UserState.findIndex(p => p.ProductId === ProductId);
+    let user = await UserStateModel.findOne({ UserId });
 
-    if (ProductIndex === -1) {
-      User.UserState.push(State);
+    // Create new user entry if not exists
+    if (!user) {
+      const newUser = await UserStateModel.create({
+        UserId,
+        UserState: [{ ProductId, likedState }],
+      });
+
+      return res.json({
+        message: "New user state created",
+        productState: { ProductId, likedState },
+        allStates: newUser.UserState
+      });
+    }
+
+    // Find existing product
+    const productIndex = user.UserState.findIndex(p => p.ProductId === ProductId);
+
+    if (productIndex === -1) {
+      // Add new product entry
+      user.UserState.push({ ProductId, likedState });
     } else {
-      User.UserState[ProductIndex] = State;
+      // Update existing liked state
+      user.UserState[productIndex].likedState = likedState;
     }
 
-    const NewState = await User.save();
-    res.json({ NewState });
+    const updatedUser = await user.save();
+
+    // Extract the updated product state
+    const updatedProduct = updatedUser.UserState.find(p => p.ProductId === ProductId);
+
+    // Send both single and full data
+    res.json({
+      message: "User state updated successfully",
+      productState: updatedProduct,
+      allStates: updatedUser.UserState
+    });
 
   } catch (error) {
-    res.json({ message: error.message });
+    res.status(500).json({
+      message: "Failed to update user state",
+      error: error.message
+    });
   }
 };
 
+// Delete a user's liked product entry
+exports.DeleteUserState = async (req, res) => {
+  try {
+    const UserId = req.params.id.trim();
+    const { ProductId } = req.body;
 
+    if (!ProductId) {
+      return res.status(400).json({ message: "ProductId is required" });
+    }
+
+    const user = await UserStateModel.findOne({ UserId });
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Filter out the product being deleted
+    user.UserState = user.UserState.filter(p => p.ProductId !== ProductId);
+
+    await user.save();
+
+    res.json({ message: "Product removed from liked state", data: user });
+  } catch (error) {
+    res.status(500).json({ message: "Failed to delete user state", error: error.message });
+  }
+};
