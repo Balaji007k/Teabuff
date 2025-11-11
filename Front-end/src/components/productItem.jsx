@@ -18,7 +18,6 @@ function ProductItem({ isAuthenticated, Review, productsItem, cart, AlertMessage
 
   const { category,handleCart,Heart,PostUserLikedState,setCurrentProductState, UpdateProduct, UserProductReviews, fetchProductReviews, ProductAvgRating, Theme } = useTheme();
 
-
   const reviews = UserProductReviews?.User || [];
   const ratingCounts = [0, 0, 0, 0, 0]; // index 0 = 1-star, ..., index 4 = 5-star
 
@@ -100,24 +99,26 @@ const discountedPrice = useMemo(() => {
       return setAlertMessage({message:'Out of Stock',state:false})}
     else{
     const Relocate = handleCart(productId, itemPrice, quantity, itemName, categoryId, userId, Description, Product_Url, Rating, likes, placeOrder);
-
+    // build a single-product order payload that matches CheckOut expectations
+    const numericPrice = offerPercent > 0 ? Number(discountedPrice) : Number(itemPrice);
     const productOrder = {
-    productId: productId,
-    itemName: itemName,
-    Product_Url: Product_Url,
-    itemPrice: offerPercent>0?discountedPrice.toFixed(2):itemPrice,
-    quantity: quantity,
-    total: offerPercent>0?(discountedPrice.toFixed(2)*quantity):(itemPrice.toFixed(2)*quantity),
-  };
+      productId: productId,
+      itemName: itemName,
+      Product_Url: Product_Url,
+      itemPrice: numericPrice,
+      quantity: Number(quantity) || 0,
+      total: (Number(quantity) || 0) * numericPrice,
+    };
 
-  const orderPayload = {
-    userId: isAuthenticated.userId,
-    products: productOrder,
-    subTotal:offerPercent>0?(discountedPrice.toFixed(2)*quantity):(itemPrice.toFixed(2)*quantity),
-  };
+    const orderPayload = {
+      userId: isAuthenticated.userId,
+      // CheckOut expects an array at orderPayload.products
+      products: [productOrder],
+      subTotal: productOrder.total,
+    };
 
     if (Relocate) Navigate(`/CheckOut/${productId}`, { state: orderPayload });
-    //else Navigate(`/CheckOut`);
+    else Navigate(`/${isAuthenticated?.userName+"Cart"}/${isAuthenticated ? isAuthenticated?.userId : 'No_user'}`);
     }
   };
 
@@ -131,25 +132,28 @@ const discountedPrice = useMemo(() => {
   // Pass productId as a query param
   const { Result, Error } = await ApiService.fetchData(`/user/State/${userId}/product?productId=${productId}`);
   if (!Error && Result) {
-    //console.log("User liked state:", Result);
-    setCurrentProductState(Result.likedState); // if you want to update UI
+    // Normalize to object shape: { likedState, ProductId, productDetails }
+    setCurrentProductState({
+      likedState: !!Result.likedState,
+      ProductId: productId,
+      productDetails: Result.productDetails || null
+    });
   } else {
+    setCurrentProductState(false);
     console.error(Error || "Failed to fetch liked state");
   }
 };
 
   const fetchProduct = async () => {
+    setLoading(true);
     try {
       const { Result, Error } = await ApiService.fetchData(`/product/${id}`);
         setSelectedProduct(Result?.product);
-        if((selectedProduct)||(Error)) {
-          setLoading(false);
-        }
         if (Result&&productsItem&&productsItem.length) {
-          setLoading(false);
           const Filtered = Review.filter(reviews => reviews.review.toLowerCase().replace(/\s+/g, '').includes(Result?.product?.title.toLowerCase().replace(/\s+/g, '')))
           setselectedProductReview(Filtered);
-          const filtedCategory = productsItem.filter(group => group.categoryId === Result?.product?.categoryId)
+          // Normalize categoryId types when filtering suggested products
+          const filtedCategory = productsItem.filter(group => Number(group.categoryId) === Number(Result?.product?.categoryId));
           setSuggestedProducts(filtedCategory);
         }
         if (cart && Result) {
@@ -177,30 +181,26 @@ const discountedPrice = useMemo(() => {
       }
 
     useEffect(()=>{
-      setLoading(true);
       setSearchItem("");
-    },[id])
+      if(selectedProduct){
+        setLoading(false);
+        setAdditionalImages(true);
+      }
+    },[id,selectedProduct])
 
     useEffect(()=>{
       setAlreadyCommented((UserProductReviews&&UserProductReviews?.User?.length>0)&&UserProductReviews?.User.some(user=>user.UserId===isAuthenticated.userId));
     },[UserProductReviews])
 
-  useEffect(() => {
-    if(id&&isAuthenticated) setAdditionalImages(true);
-    if (isAuthenticated) {
-      fetchProduct();
-      fetchProductStock();
-    };
-    
-  }, [isAuthenticated,id,productsItem]);
-
   useEffect(()=>{
     window.scrollTo(0, 0);
     if(isAuthenticated){
+      fetchProduct();
+      fetchProductStock();
       fetchProductReviews(id);
       fetchUserLikedState(id,isAuthenticated);
     }
-  },[isAuthenticated,id]);
+  },[isAuthenticated,id,productsItem]);
 
   useEffect(() => {
   if (quantity < 0) setquantity(0);
@@ -281,11 +281,14 @@ useEffect(()=>{
                         <h3 className=' fw-bold'>Quantity:</h3>{quantity==0||selectedProductStock==0?<button className='quantity-btn-All bg-body-secondary'>-</button>:<button className='quantity-btn-All' onClick={() => setquantity(quantity - 1)}>-</button>}{selectedProductStock!==0?quantity:0}{quantity<selectedProductStock?<button className='quantity-btn-All' onClick={() => setquantity(quantity + 1)}>+</button>:<button className='quantity-btn-All bg-body-secondary'>+</button>}
                       </span>
                       <div className=' w-100 d-flex align-items-center justify-content-between gap-2'>
-                        <button className={`Add-cart-btn-productItem ${!small&&'w-50'} flex-grow-1 py-2`} onClick={() => { if(selectedProductStock>=quantity){handleCart(selectedProduct._id, selectedProduct.price, quantity, selectedProduct.title, selectedProduct.categoryId, isAuthenticated.userId, selectedProduct.description, selectedProduct.url, selectedProduct.rating, Heart, false);setLoading(true)}else{return setAlertMessage({message:'Out of Stock',state:false})}}}>Add to Cart {!small&&<i className="fa-solid fa-cart-shopping ms-2"></i>}</button>{(cart?.items.length>0 || quantity!==0)&&<button className={`Add-cart-btn-productItem ${!small&&'w-50'} py-2`} onClick={() => { PlaceOrder(selectedProduct._id, selectedProduct.price, quantity, selectedProduct.title, selectedProduct.categoryId, isAuthenticated.userId, selectedProduct.description, selectedProduct.url, selectedProduct.rating, Heart, true);}}>{small?'Order Now':'Buy Now'} {!small&&<i className="fa-solid fa-truck ms-2"></i>}</button>}
+                        <button className={`Add-cart-btn-productItem ${!small&&'w-50'} flex-grow-1 py-2`} onClick={() => { if(selectedProductStock>=quantity){handleCart(selectedProduct._id, selectedProduct.price, quantity, selectedProduct.title, selectedProduct.categoryId, isAuthenticated.userId, selectedProduct.description, selectedProduct.url, selectedProduct.rating, Heart?.likedState, false);setLoading(true)}else{return setAlertMessage({message:'Out of Stock',state:false})}}}>Add to Cart {!small&&<i className="fa-solid fa-cart-shopping ms-2"></i>}</button>{(cart?.items.length>0 || quantity!==0)&&<button className={`Add-cart-btn-productItem ${!small&&'w-50'} py-2`} onClick={() => { PlaceOrder(selectedProduct._id, selectedProduct.price, quantity, selectedProduct.title, selectedProduct.categoryId, isAuthenticated.userId, selectedProduct.description, selectedProduct.url, selectedProduct.rating, Heart?.likedState, true);}}>{small?'Order Now':'Buy Now'} {!small&&<i className="fa-solid fa-truck ms-2"></i>}</button>}
                         {/* <span className={`material-symbols-outlined Product-icons heart ${Heart ? 'text-danger' : 'text-black'}`} onClick={() => PostUserLikedState(isAuthenticated.userId, selectedProduct._id, selectedProduct.title, selectedProduct.price, selectedProduct.description, selectedProduct.url, selectedProduct.categoryId, selectedProduct.rating, selectedProduct.ingredients, selectedProduct.features, selectedProduct.purchaseLink, !Heart && true, selectedProduct.comments)}>
                           favorite
                         </span> */}
-                        <i className={`fa-solid fa-heart Product-icons heart ${Heart ? 'text-danger' : 'text-black'} fs-4`} onClick={() => PostUserLikedState(isAuthenticated.userId, selectedProduct._id, !Heart && true)} ></i>
+                        <i
+                          className={`fa-solid fa-heart Product-icons heart ${Heart?.likedState ? 'text-danger' : 'text-black'} fs-4`}
+                          onClick={() => PostUserLikedState(isAuthenticated.userId, selectedProduct._id, !Heart?.likedState)}
+                        ></i>
                       </div>
                       <div className=' d-flex flex-column gap-3'>
                         <div className='div Description'>

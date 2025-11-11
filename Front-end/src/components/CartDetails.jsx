@@ -22,11 +22,12 @@ function CartDetails({ isAuthenticated, cart }) {
     const [Order, setOrder] = useState(false);
 
     const getDiscountedPrice = (product) => {
-  const matchedCategory = category.find(c => c.categoryId === Number(product.categoryId));
-  const offerPercent = matchedCategory?.offer || 0;
-  const price = Number(product.itemPrice) || 0;
-  return price - (price * offerPercent / 100);
-};
+      const productData = product?.productDetails || product;
+      const matchedCategory = category.find(c => c.categoryId === Number(productData?.categoryId));
+      const offerPercent = matchedCategory?.offer || 0;
+      const price = Number(productData?.price || productData?.itemPrice) || 0;
+      return price - (price * offerPercent / 100);
+    };
 
 
     const handleCancelItem = async (productId) => {
@@ -66,38 +67,48 @@ function CartDetails({ isAuthenticated, cart }) {
   }
 
   PostSaveCart(cart,quantity);
-        setOrder(true);
+  setOrder(true);
 
   // 🧮 Prepare product list with offer price + totals
   const orderProducts = cart.items.map(item => {
     const matchedCategory = category?.find(c => c.categoryId === Number(item.categoryId));
     const offerPercent = matchedCategory?.offer || 0;
-    const offerPrice = Number(item.itemPrice) - (Number(item.itemPrice) * offerPercent / 100);
+    const basePrice = Number(item.itemPrice || 0);
+    const offerPrice = basePrice - (basePrice * offerPercent / 100);
     const qty = quantity[item.productId] ?? item.quantity;
     const total = offerPrice * qty;
 
     return {
-      productId: item.productId || item._id,
+      productId: item.productId,
       itemName: item.itemName,
       Product_Url: item.Product_Url,
+      categoryId: item.categoryId,
       itemPrice: offerPrice.toFixed(2),
       quantity: qty,
-      total: total.toFixed(2),
+      total: total.toFixed(2)
     };
   });
 
-  // 💰 Calculate subtotal
-  const subTotal = orderProducts.reduce((sum, item) => sum + Number(item.total), 0).toFixed(2);
+  // 💰 Calculate totals
+  const Subtotal = orderProducts.reduce((sum, item) => sum + Number(item.total), 0);
+  const Shipping = Subtotal > 0 ? 10 : 0;
+  const Tax = (Subtotal * 18) / 100;
+  const Total = (Subtotal + Tax + Shipping).toFixed(2);
 
   // 🧾 Prepare final order payload
   const orderPayload = {
     userId: isAuthenticated.userId,
     products: orderProducts,
-    subTotal,
+    subTotal: Subtotal.toFixed(2),
+    tax: Tax.toFixed(2),
+    shipping: Shipping.toFixed(2),
+    grandTotal: Total
   };
 
   // 🧭 Navigate to checkout and send the order data
-  Navigate('/CheckOut', { state: orderPayload });
+  Navigate('/CheckOut', { 
+    state: orderPayload
+  });
 };
 
     useEffect(()=>{
@@ -118,7 +129,8 @@ function CartDetails({ isAuthenticated, cart }) {
         if (cart?.items) {
             const initialQuantities = {};
             cart.items.forEach(item => {
-                initialQuantities[item.productId] = item.quantity;
+                const productId = item?.productDetails?.productId || item.productId;
+                initialQuantities[productId] = item.quantity;
             });
             setquantity(initialQuantities);
             setLoading(false);
@@ -159,9 +171,9 @@ function CartDetails({ isAuthenticated, cart }) {
       <div className="w-100 d-flex justify-content-center">
         <div className='Cart-Products w-100' style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(300px,1fr))', justifyItems: 'center' }}>
           {cart?.items.map((item) => (
-            <div key={item._id} className='selected-item d-flex flex-column align-items-center gap-4'>
+            <div key={item?.productDetails?.productId || item.productId} className='selected-item d-flex flex-column align-items-center gap-4'>
               <ProductCard 
-                key={item._id} 
+                key={item?.productDetails?.productId || item.productId}
                 isAuthenticated={isAuthenticated} 
                 product={item} 
                 Navigate={Navigate} 
@@ -170,16 +182,16 @@ function CartDetails({ isAuthenticated, cart }) {
               />
               <div className='w-100 d-flex flex-column gap-3 justify-content-between align-items-center'>
                 <span className='plus-cart fs-4 fw-bold w-75 d-flex justify-content-between align-items-center gap-2'>
-                  {quantity[item.productId] <= 1 
+                  {quantity[item?.productDetails?.productId || item.productId] <= 1 
                     ? <button className='quantity-btn-All bg-body-secondary'>-</button>
-                    : <button className='quantity-btn-All' onClick={() => handleQuantityChange(item.productId, -1)}>-</button>}
-                  {quantity[item.productId] ?? item.quantity}
-                  <button className='quantity-btn-All' onClick={() => handleQuantityChange(item.productId, 1)}>+</button>
+                    : <button className='quantity-btn-All' onClick={() => handleQuantityChange(item?.productDetails?.productId || item.productId, -1)}>-</button>}
+                  {quantity[item?.productDetails?.productId || item.productId] ?? item.quantity}
+                  <button className='quantity-btn-All' onClick={() => handleQuantityChange(item?.productDetails?.productId || item.productId, 1)}>+</button>
                 </span>
                 <div className='d-flex align-items-center fs-5 fw-bolder'>
                   Total - <h5 className='my-0'>
-  ₹{((quantity[item.productId] ?? item.quantity) * getDiscountedPrice(item)).toFixed(2)}
-</h5>
+                    ₹{((quantity[item?.productDetails?.productId || item.productId] ?? item.quantity) * getDiscountedPrice(item)).toFixed(2)}
+                  </h5>
                 </div>
               </div>
             </div>

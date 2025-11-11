@@ -19,7 +19,7 @@ export const ThemeProvider = ({ children }) => {
     const [ProductAvgRating, setProductAvgRating] = useState(0);
     const [isLoading, setIsLoading] = useState(true);
     const [UserLikedState, setUserLikedState] = useState(null);
-    const [Heart,setCurrentProductState] = useState(null);
+    const [Heart,setCurrentProductState] = useState(false);
     const [UpdatedProduct, setUpdatedProduct] = useState(null);
     const [AlertMessageTheme,setAlertMessage] = useState(null);
     const [OrderId,setOrderId] = useState(null);
@@ -100,14 +100,23 @@ export const ThemeProvider = ({ children }) => {
         else console.log(Error);
     };
 
-    const PostUserLikedState = async (UserId,ProductId,likedState) => {
-        const NewUserState = {ProductId,likedState};
-        const { Result, Error } = await ApiService.fetchData(`/users/State/${UserId}`,"POST",NewUserState);
-        if (Result){
-            setUserLikedState(Result.allStates||Result.newUser);
-            setCurrentProductState(Result.productState?.likedState);
+    const PostUserLikedState = async (UserId, ProductId, likedState) => {
+        const NewUserState = {ProductId, likedState};
+        const { Result, Error } = await ApiService.fetchData(`/users/State/${UserId}`, "POST", NewUserState);
+        if (Result) {
+            // Set the full array of user states including product details
+            setUserLikedState(Result.allStates);
+            // Set the current product's liked state
+            if (Result.productState) {
+                setCurrentProductState({
+                    likedState: Result.productState.likedState,
+                    ProductId: Result.productState.ProductId,
+                    productDetails: Result.productState.productDetails
+                });
+            }
+        } else {
+            console.log(Error);
         }
-        else console.log(Error);
     };
 
     const fetchShops = async () => {
@@ -160,25 +169,25 @@ export const ThemeProvider = ({ children }) => {
         setUpdatedProduct(Result.updatedProduct);
 
         // Update AllReview state
-        const newReview = {
-          Comments: Result.updatedProduct.comments[0],
-          avgRating: Result.avgRating
-        };
+        // const newReview = {
+        //   Comments: Result.updatedProduct.comments[0],
+        //   avgRating: Result.avgRating
+        // };
 
-        setAllReview(prevReviews => {
-          return prevReviews.map(product => {
-            // If this is the same product
-            if (product.comments.some(c => c.ProductId === Id)) {
-              const updatedComments = product.comments.map(commentItem => 
-                commentItem.ProductId === Id ? { ...commentItem, ...newReview.Comments } : commentItem
-              );
-              return { ...product, comments: updatedComments };
-            } else {
-              // If this product has no comments yet, append the new comment
-              return product;
-            }
-          });
-        });
+        // setAllReview(prevReviews => {
+        //   return prevReviews.map(product => {
+        //     // If this is the same product
+        //     if (product.comments.some(c => c.ProductId === Id)) {
+        //       const updatedComments = product.comments.map(commentItem => 
+        //         commentItem.ProductId === Id ? { ...commentItem, ...newReview.Comments } : commentItem
+        //       );
+        //       return { ...product, comments: updatedComments };
+        //     } else {
+        //       // If this product has no comments yet, append the new comment
+        //       return product;
+        //     }
+        //   });
+        // });
 
       } else {
         console.log(Error);
@@ -284,6 +293,7 @@ const contextValue = useMemo(() => {
     Theme,
     setTheme,
   AllReview,
+  fetchAllReviews,
   Review,
   image,
   productsItem,
@@ -311,6 +321,7 @@ const contextValue = useMemo(() => {
   Review,
   image,
   productsItem,
+  Heart,
   category,
   cart,
   UserLikedState,

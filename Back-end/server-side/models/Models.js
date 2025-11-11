@@ -150,15 +150,6 @@ const productStockModel = mongoose.model('productStock',ProductStockSchema)
 // Define the schema for each UserLikedState
 const UserLikedState = new mongoose.Schema({
   ProductId:{type:String,required:true},
-  // title: { type: String, required: true },
-  // price: { type: Number, required: true },
-  // description: { type: String, required: true },
-  // url: { type: String, required: true },
-  // categoryId: { type: Number, required: true },
-  // rating: { type: String, default:0, required: true },
-  // ingredients: { type: String, required: true },
-  // features: { type: String, required: true },
-  // purchaseLink: { type: String, required: true },
   likedState:{type:Boolean, default:false,required:true},
 });
 

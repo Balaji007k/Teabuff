@@ -16,7 +16,9 @@ export default function CheckOut({ isAuthenticated }) {
 
   // Unified order data for both single & cart checkouts
   const orderData = Location.state;
-  const orderPayload = orderData?.orderPayload||orderData;
+  
+  // Use the order data directly since we're using the old structure
+  const orderPayload = orderData;
 
   const [contactEmail, setcontactEmail] = useState(isAuthenticated?.userEmail || "");
   const [firstname, setfirstname] = useState("");
@@ -30,17 +32,20 @@ export default function CheckOut({ isAuthenticated }) {
   const [CheckoutReUse, setCheckoutReUse] = useState(false);
   const [UserCheckOutData, setUserCheckOutData] = useState(null);
   const [AlertMessageCheckOut, setAlertMessage] = useState([]);
-  const [Loading, setLoading] = useState(true);
+  const [Loading, setLoading] = useState(false);
   const [ProductStocks, setProductStocks] = useState([]);
   const [outOfStockItems, setOutOfStockItems] = useState([]);
-  const [stockLoading, setStockLoading] = useState(true);
+  const [stockLoading, setStockLoading] = useState(false);
   const [updatedCart, setupdatedCart] = useState(null);
 
   // 🧠 Extract product list (handles both single + multiple)
   const productList = useMemo(() => {
-    if (!orderPayload) return [];
-    if (Array.isArray(orderPayload.products)) return orderPayload.products;
-    return [orderPayload.products]; // wrap single product in array
+    if (!orderPayload?.products) {
+      console.log("No products in orderPayload:", orderPayload);
+      return [];
+    }
+    //console.log("Products found:", orderPayload.products);
+    return orderPayload.products;
   }, [orderPayload]);
 
   // 🧠 Fetch saved checkout address
@@ -111,16 +116,29 @@ export default function CheckOut({ isAuthenticated }) {
 
   // ✅ Fetch product stock data
   const fetchProductStock = async () => {
+    setStockLoading(true);
     try {
-      if (!productList?.length) return;
+      if (!productList?.length) {
+        setStockLoading(false);
+        setLoading(false);
+        return;
+      }
 
       const productIds = productList.map((p) => p.productId);
+      //console.log("Fetching stock for products:", productIds);
+      
       const { Result, Error } = await ApiService.fetchData("/productStocks", "POST", { productIds });
-
-      if (Result && Array.isArray(Result.productStocks)) {
-        setProductStocks(Result.productStocks);
+      if (Result?.productStocks) {
+        //console.log("Received stock data:", Result.productStocks);
+        // Add validation to ensure each item has the correct structure
+        const validatedStocks = Result.productStocks.map(stock => ({
+          ProductId: stock.ProductId,
+          Stock: parseInt(stock.Stock || 0)
+        }));
+        setProductStocks(validatedStocks);
+        //console.log("Validated stock data:", validatedStocks);
       } else {
-        console.error("Invalid productStocks format:", Error);
+        console.error("Invalid stock data received:", { Result, Error });
         setProductStocks([]);
       }
     } catch (err) {
@@ -128,58 +146,144 @@ export default function CheckOut({ isAuthenticated }) {
       setProductStocks([]);
     } finally {
       setStockLoading(false);
+      setLoading(false);
     }
   };
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    fetchCheckOut();
-    fetchProductStock();
-  }, []);
+    if (orderPayload && isAuthenticated?.userId) {
+      setLoading(true);
+      Promise.all([fetchCheckOut(), fetchProductStock()]).then(() => {
+        setLoading(false);
+      });
+    }
+  }, [orderPayload, isAuthenticated]);
 
   // ✅ Merge product + stock
   const CartItems = useMemo(() => {
-    if (!productList?.length || !ProductStocks.length) return [];
+    if (!productList?.length) {
+      console.log("No products in productList");
+      return [];
+    }
+    
+    // console.log("Processing products:", productList);
+    // console.log("Available stock data:", ProductStocks);
 
     return productList.map((item) => {
-      const stockData = ProductStocks.find((s) => s.ProductId === item.productId);
-      if (!stockData || stockData.Stock <= 0) {
-        return { ...item, outOfStock: true, availableQty: 0 };
-      }
-      const quantity = Math.min(item.quantity, stockData.Stock);
-      const subTotal = quantity * parseFloat(item.itemPrice);
+      const productId = item.productId || item._id;
+      
+      // Find stock data if available
+      const stockInfo = ProductStocks.find(s => s.ProductId === productId);
+      
+      // Validate available stock
+      const availableStock = stockInfo?.Stock ?? 0;
+      const requestedQty = parseInt(item.quantity) || 0;
+      
+      // Determine if item is out of stock
+      const isOutOfStock = !stockInfo || availableStock <= 0;
+      
+      // Calculate final quantity based on available stock
+      const finalQuantity = isOutOfStock ? 0 : Math.min(requestedQty, availableStock);
+      
+      // Calculate price and subtotal
+      const itemPrice = parseFloat(item.itemPrice || item.price || 0);
+      const subTotal = finalQuantity * itemPrice;
+      
+      // Log the calculations for debugging
+      // console.log("Item calculations:", {
+      //   name: item.itemName,
+      //   id: productId,
+      //   stockFound: !!stockInfo,
+      //   availableStock,
+      //   requestedQty,
+      //   finalQty: finalQuantity,
+      //   price: itemPrice,
+      //   total: subTotal,
+      //   isOutOfStock
+      // });
 
       return {
-        ...item,
-        outOfStock: false,
-        availableQty: stockData.Stock,
-        subTotal,
+        productId,
+        itemName: item.itemName,
+        Product_Url: item.Product_Url,
+        itemPrice,
+        quantity: finalQuantity,
+        requestedQuantity: requestedQty,
+        outOfStock: isOutOfStock,
+        availableQty: availableStock,
+        subTotal: subTotal || 0
       };
     });
   }, [ProductStocks, productList]);
 
-  useEffect(() => {
-    if (!CartItems.length) return;
+  // Calculate all totals in one place
+  const orderTotals = useMemo(() => {
+    const subtotal = CartItems.reduce((a, i) => a + (i.subTotal || 0), 0);
+    const shipping = subtotal > 0 ? 10 : 0;
+    const tax = (subtotal * 18) / 100;
+    const total = (subtotal + tax + shipping).toFixed(2);
 
-    const inStock = CartItems.filter((i) => !i.outOfStock);
-    const outStock = CartItems.filter((i) => i.outOfStock);
-
-    setupdatedCart({
-      products: inStock,
-      subTotal: inStock.reduce((a, i) => a + i.subTotal, 0).toFixed(2),
-      Grand_Total:Total,
-    });
-
-    setOutOfStockItems(outStock);
-    setLoading(false);
+    return {
+      subtotal,
+      shipping,
+      tax,
+      total
+    };
   }, [CartItems]);
 
-  const Subtotal = CartItems.reduce((a, i) => a + (i.subTotal || 0), 0);
-  const Shipping = Subtotal > 0 ? 10 : 0;
-  const Tax = (Subtotal * 18) / 100;
-  const Total = (Subtotal + Tax + Shipping).toFixed(2);
+  // ✅ Update cart summary based on stock
+  useEffect(() => {
+    if (!CartItems.length) {
+      console.log("No cart items to process");
+      setupdatedCart({
+        products: [],
+        subTotal: "0.00",
+        Grand_Total: "0.00"
+      });
+      setOutOfStockItems([]);
+      setLoading(false);
+      return;
+    }
 
-  if (!isAuthenticated?.userId || !orderPayload) {
+    // Split items by stock status
+    const inStock = CartItems.filter(i => !i.outOfStock && i.quantity > 0);
+    const outStock = CartItems.filter(i => i.outOfStock || i.quantity <= 0);
+
+    // console.log("Stock status:", {
+    //   inStock: inStock.length,
+    //   outOfStock: outStock.length
+    // });
+
+    // Calculate totals
+    const calculatedSubtotal = inStock.reduce((acc, item) => {
+      const itemTotal = parseFloat(item.subTotal) || 0;
+      //console.log(`Item ${item.itemName}: Quantity=${item.quantity}, Price=${item.itemPrice}, Total=${itemTotal}`);
+      return acc + itemTotal;
+    }, 0);
+    
+    const newCart = {
+      products: inStock,
+      subTotal: calculatedSubtotal.toFixed(2),
+      Grand_Total: orderTotals.total,
+    };
+    
+    // console.log("Updating cart with:", {
+    //   productCount: inStock.length,
+    //   subtotal: calculatedSubtotal,
+    //   grandTotal: orderTotals.total
+    // });
+
+    setupdatedCart(newCart);
+    setOutOfStockItems(outStock);
+    setLoading(false);
+  }, [CartItems, orderTotals]);
+
+  if (!isAuthenticated?.userId || !orderPayload || !orderPayload.products) {
+    console.log("Missing required data:", { 
+      isAuthenticated, 
+      orderPayload
+    });
     return (
       <div style={{ marginTop: "75px" }}>
         <PageNotFound Message={"Checkout Data"} />
@@ -225,12 +329,13 @@ export default function CheckOut({ isAuthenticated }) {
                           alt="product"
                           style={{ width: "80px", height: "80px", objectFit: "cover" }}
                         />
+                        <span>{item.itemName}</span>
                         {item.outOfStock && (
-                          <span className="text-danger fw-semibold">Out of Stock</span>
+                          <small className="text-danger fw-semibold">Out of Stock</small>
                         )}
                       </div>
                     </td>
-                    <td>{item.outOfStock ? 0 : item.quantity}</td>
+                    <td>{item.outOfStock ? 0 : item.quantity > item.availableQty ? item.availableQty : item.quantity}</td>
                     <td>₹{item.subTotal?.toFixed(2) || "0.00"}</td>
                   </tr>
                 ))}
@@ -252,19 +357,19 @@ export default function CheckOut({ isAuthenticated }) {
                 <tbody>
                   <tr>
                     <th>Subtotal</th>
-                    <td className="text-end">₹{Subtotal.toFixed(2)}</td>
+                    <td className="text-end">₹{orderTotals.subtotal.toFixed(2)}</td>
                   </tr>
                   <tr>
                     <th>Tax (18%)</th>
-                    <td className="text-end">₹{Tax.toFixed(2)}</td>
+                    <td className="text-end">₹{orderTotals.tax.toFixed(2)}</td>
                   </tr>
                   <tr>
                     <th>Shipping</th>
-                    <td className="text-end">₹{Shipping.toFixed(2)}</td>
+                    <td className="text-end">₹{orderTotals.shipping.toFixed(2)}</td>
                   </tr>
                   <tr className="border-top">
                     <th className="fs-5">Grand Total</th>
-                    <td className="fs-4 fw-bold text-end">₹{Total}</td>
+                    <td className="fs-4 fw-bold text-end">₹{orderTotals.total}</td>
                   </tr>
                 </tbody>
               </table>

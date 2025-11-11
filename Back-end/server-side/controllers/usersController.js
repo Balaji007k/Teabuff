@@ -442,6 +442,36 @@ exports.GetAllUserState = async (req, res) => {
 // };
 
 // 1. Get all liked states for a user
+// exports.GetAllSingleUserStates = async (req, res) => {
+//   try {
+//     const userId = req.params.id?.trim();
+
+//     if (!userId) {
+//       return res.status(400).json({ message: "UserId is required" });
+//     }
+
+//     const userState = await UserStateModel.findOne({ UserId: userId });
+
+//     if (!userState) {
+//       return res.status(404).json({ message: "No liked states found for this user" });
+//     }
+
+//     // Return all liked states (array)
+//     res.json({
+//       UserId: userState.UserId,
+//       total: userState.UserState.length,
+//       UserState: userState.UserState
+//     });
+
+//   } catch (error) {
+//     res.status(500).json({
+//       message: "Internal Server Error",
+//       error: error.message
+//     });
+//   }
+// };
+
+// 1. Get all liked states for a user with product details
 exports.GetAllSingleUserStates = async (req, res) => {
   try {
     const userId = req.params.id?.trim();
@@ -456,11 +486,29 @@ exports.GetAllSingleUserStates = async (req, res) => {
       return res.status(404).json({ message: "No liked states found for this user" });
     }
 
-    // Return all liked states (array)
+    // Get all product IDs from user's liked states
+    const productIds = userState.UserState.map(state => state.ProductId);
+
+    // Fetch all products that match these IDs
+    const products = await productsModel.find({ _id: { $in: productIds } });
+
+    // Create a map of products for easier lookup
+    const productMap = new Map(products.map(product => [product._id.toString(), product]));
+
+    // Combine user state with product details
+    const likedProductsWithDetails = userState.UserState.map(state => {
+      const product = productMap.get(state.ProductId);
+      return {
+        ...state.toObject(),
+        productDetails: product || null
+      };
+    });
+
+    // Return all liked states with product details
     res.json({
       UserId: userState.UserId,
-      total: userState.UserState.length,
-      UserState: userState.UserState
+      total: likedProductsWithDetails.length,
+      UserState: likedProductsWithDetails
     });
 
   } catch (error) {
@@ -470,7 +518,6 @@ exports.GetAllSingleUserStates = async (req, res) => {
     });
   }
 };
-
 
 
 // 2. Get liked state for a specific product
@@ -522,19 +569,36 @@ exports.CreateOrUpdateUserState = async (req, res) => {
       return res.status(400).json({ message: "ProductId is required" });
     }
 
+    // First, get the product details
+    const product = await productsModel.findById(ProductId);
+    if (!product) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+
     let user = await UserStateModel.findOne({ UserId });
 
     // Create new user entry if not exists
     if (!user) {
       const newUser = await UserStateModel.create({
         UserId,
-        UserState: [{ ProductId, likedState }],
+        UserState: [{
+          ProductId,
+          likedState,
+          productDetails: product
+        }],
+      });
+
+      // Normalize allStates to include productDetails as plain objects
+      const allStates = newUser.UserState.map(s => {
+        const obj = s.toObject ? s.toObject() : s;
+        if (obj.productDetails && obj.productDetails.toObject) obj.productDetails = obj.productDetails.toObject();
+        return obj;
       });
 
       return res.json({
         message: "New user state created",
-        productState: { ProductId, likedState },
-        allStates: newUser.UserState
+        productState: allStates[0],
+        allStates
       });
     }
 
@@ -542,23 +606,39 @@ exports.CreateOrUpdateUserState = async (req, res) => {
     const productIndex = user.UserState.findIndex(p => p.ProductId === ProductId);
 
     if (productIndex === -1) {
-      // Add new product entry
-      user.UserState.push({ ProductId, likedState });
+      // Add new product entry with product details
+      user.UserState.push({
+        ProductId,
+        likedState,
+        productDetails: product
+      });
     } else {
-      // Update existing liked state
+      // Update existing liked state and product details
       user.UserState[productIndex].likedState = likedState;
+      user.UserState[productIndex].productDetails = product;
     }
 
     const updatedUser = await user.save();
 
-    // Extract the updated product state
-    const updatedProduct = updatedUser.UserState.find(p => p.ProductId === ProductId);
+    // Ensure every entry in UserState has up-to-date productDetails
+    const productIds = updatedUser.UserState.map(s => s.ProductId);
+    const products = await productsModel.find({ _id: { $in: productIds } }).lean();
+    const productMap = new Map(products.map(p => [p._id.toString(), p]));
 
-    // Send both single and full data
+    const allStates = updatedUser.UserState.map(s => {
+      const obj = s.toObject ? s.toObject() : s;
+      const pd = productMap.get(String(obj.ProductId));
+      obj.productDetails = pd || obj.productDetails || null;
+      return obj;
+    });
+
+    const productState = allStates.find(s => s.ProductId === ProductId) || null;
+
+    // Send both single and full data with normalized productDetails
     res.json({
       message: "User state updated successfully",
-      productState: updatedProduct,
-      allStates: updatedUser.UserState
+      productState,
+      allStates
     });
 
   } catch (error) {

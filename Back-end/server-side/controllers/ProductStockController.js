@@ -12,6 +12,7 @@ exports.getAllProductStock = async(req,res)=>{
 }
 }
 
+
 exports.getCartProductStock = async (req, res) => {
   try {
     const productIds = Array.isArray(req.body?.productIds) ? req.body.productIds : [];
@@ -44,10 +45,6 @@ exports.getCartProductStock = async (req, res) => {
     });
   }
 };
-
-
-
-
 
 exports.getSingleProductStock = async(req,res)=>{
     try{

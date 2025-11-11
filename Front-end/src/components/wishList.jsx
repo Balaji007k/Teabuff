@@ -15,7 +15,13 @@ function Wishlist({ isAuthenticated }) {
     const [LikedProducts,setLikedProducts] = useState();
 
     useEffect(()=>{
-        const LikedProducts = UserLikedState?.filter(Product=>Product.likedState===true)
+        // Filter products and ensure they have the correct structure
+        const LikedProducts = UserLikedState?.filter(product => product.likedState === true)
+            ?.map(product => ({
+                ProductId: product.ProductId,
+                likedState: product.likedState,
+                productDetails: product.productDetails || product
+            }));
         setLikedProducts(LikedProducts);
     },[UserLikedState])
 
@@ -37,8 +43,14 @@ function Wishlist({ isAuthenticated }) {
             <h1 className={`fw-bold text-center ${Theme?'text-white':'text-black'}`}>Wishlist</h1>
                 <div className='Extra-products'>
                  <div className="scroll-items d-grid" style={{ justifyContent: small && 'space-around', flexWrap: small && 'wrap' }}>
-                {LikedProducts?.length>0?LikedProducts.map(e=>(
-                   <ProductCard key={e._id} isAuthenticated={isAuthenticated} LikedState={UserLikedState} Navigate={Navigate} product={e} />
+                {LikedProducts?.length>0 ? LikedProducts.map(product => (
+                   <ProductCard 
+                     key={product.productDetails?._id} 
+                     isAuthenticated={isAuthenticated} 
+                     LikedState={UserLikedState} 
+                     Navigate={Navigate} 
+                     product={product}  // This now contains {ProductId, likedState, productDetails}
+                   />
                 )) : (
                     <EmptyProductCard/>
                 )}
