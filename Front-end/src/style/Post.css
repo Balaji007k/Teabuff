@@ -5,7 +5,14 @@
 .card:hover {
   transform: translateY(-4px);
 }
-
+.card-body>.post-comment{
+  min-height: 100px;
+  max-height: 100px;
+  overflow-y: auto;
+}
+.card-body>.post-comment::-webkit-scrollbar{
+  display: none;
+}
 @media (max-width: 768px) {
   .card-body {
     padding: 1rem;
@@ -14,5 +21,9 @@
 
   .card-body h6 {
     font-size: 1rem;
+  }
+  .card-body>.post-comment{
+    min-height: auto;
+    max-height: auto;
   }
 }

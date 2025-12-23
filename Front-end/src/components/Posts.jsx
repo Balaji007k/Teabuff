@@ -11,7 +11,7 @@ function Posts() {
 
   useEffect(()=>{
     window.scrollTo(0,0);
-    fetchAllReviews();
+    if(isAuthenticated) fetchAllReviews();
   },[])
 
   useEffect(() => {
@@ -84,7 +84,7 @@ function Posts() {
                 </div>
 
                 {/* Comment */}
-                <p className="ps-1 mb-1">{review.comment}</p>
+                <p className="ps-1 mb-1 post-comment">{review.comment}</p>
 
                 {/* Actions */}
                 {/* <div className="d-flex justify-content-start gap-5 pt-2">

@@ -230,16 +230,16 @@ useEffect(() => {
           {errors === "User not found" && <p ref={errorTimerRef} className="text-danger">{errors}</p>}
 
           {/* Test Show email verification buttons */}
-{Location.pathname === '/Register' && step === 1 && (
+{/* {Location.pathname === '/Register' && step === 1 && (
   <button onClick={checkEmailDomain}>Verify Email</button>
-)}
+)} */}
 
-{step === 2 && (
+{/* {step === 2 && (
   <>
     <input type="text" value={otp} onChange={(e) => setOtp(e.target.value)} placeholder="Enter OTP" />
     <button onClick={verifyOTP}>Verify OTP</button>
   </>
-)}
+)} */}
 {/* Test Show email verification buttons */}
 
           <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" minLength={8} required />
@@ -252,7 +252,7 @@ useEffect(() => {
             </>
           )}
 
-          {Location.pathname === '/Register'&&!emailChange ? (
+          {Location.pathname === '/Register'||!emailChange ? (
             <button className="" onClick={() => newUser()}>Register</button>
           ) : Location.pathname === '/Login'&&(
             <button className="" onClick={() => handleLogin()}>Login</button>

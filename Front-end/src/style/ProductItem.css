@@ -161,7 +161,7 @@
 }
 .Comment-box{
     height: 175px;
-    overflow-y: scroll;
+    overflow-y: auto;
 }
 .Comment-box p{
   display: -webkit-box;

@@ -46,10 +46,10 @@ function Footer() {
                     <div className='Footer-Details Links d-flex justify-content-center align-items-start'>
                         <div className='w-100 d-flex flex-column justify-content-center align-items-start gap-2'>
                             <h5 className='head'>Social Media</h5>
-                            <h6>Twitter</h6>
-                            <h6>Instagram</h6>
-                            <h6>Youtube</h6>
-                            <h6>Facebook</h6>
+                            <h6><NavLink to="/">Twitter</NavLink></h6>
+                            <h6><NavLink to="/">Instagram</NavLink></h6>
+                            <h6><NavLink to="/">Youtube</NavLink></h6>
+                            <h6><NavLink to="/">Facebook</NavLink></h6>
                         </div>
                     </div>
                     <div className='Footer-Details d-flex justify-content-center align-items-start '>
@@ -57,7 +57,7 @@ function Footer() {
                             <h5 className='head'>News Letter</h5>
                             {/* <input type='email' className={`p-0 ${Theme?'text-black border-bottom border-1 border-black':'text-white border-bottom border-1 border-white'}`} placeholder='Enter your email id' /> */}
                             <h6 className='Mail'>teabuff@chennai.com</h6>
-                            <h6>+911234567890</h6>
+                            <h6>+91 1234567890</h6>
                         </div>
                     </div>
                 </div>

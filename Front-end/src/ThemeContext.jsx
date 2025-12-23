@@ -266,7 +266,7 @@ const createOrder = async(orderData)=> {
   const fetchData = async () => {
     try {
       const { Result } = await ApiService.fetchData('/dashboard');
-      if (Result.userId) {
+       if (Result?.userId) {
         setAuthenticated(Result);
         await fetchCart(Result.userId);
         await fetchUserLikedState(Result.userId);
@@ -293,7 +293,6 @@ const contextValue = useMemo(() => {
     Theme,
     setTheme,
   AllReview,
-  fetchAllReviews,
   Review,
   image,
   productsItem,
@@ -309,6 +308,7 @@ const contextValue = useMemo(() => {
   UpdateProduct,
   UserProductReviews,
   fetchProductReviews,
+  fetchAllReviews,
   ProductAvgRating,
   UpdatedProduct,
   AlertMessageTheme,

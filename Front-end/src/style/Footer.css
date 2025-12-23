@@ -9,7 +9,7 @@
    box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.5);
    overflow: hidden;
 }
-.footer-inner-box a{
+.footer-inner-box a,h6{
    cursor: pointer;
   text-decoration: none !important;
   color: inherit;
